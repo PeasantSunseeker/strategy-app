@@ -1,0 +1,103 @@
+
+From "Java Code Conventions" by Oracle, September 12, 1997:
+
+Java source files have the following ordering:
+	-Beginning comments (see “Beginning Comments” below)
+	-Package and Import statements; for example:
+
+		//package statement goes before import statements
+		package edu.wmich.whatever
+		import java.applet.Applet;
+		import java.awt.*;
+		import java.net.*;
+
+	-Class and interface declarations 
+
+1. Beginning Comments
+
+	Change intellij ActionScript file header to this:
+
+
+		/**
+		 * PROJECT: ${PROJECT_NAME}
+		 * AUTHOR: ${USER}
+		 * DATE: ${DATE}
+		 *
+		 * DESCRIPTION:
+		 *
+		 *
+		 * INPUTS:
+		 *
+		 * 
+		 * OUTPUTS:
+		 *
+		 */
+
+	Which will create this block comment above all new Java classes created.
+
+2. Class or Interface statement
+
+	public class MyClass {
+		//write code here
+	}
+
+3. Class Variables
+
+	Declare static variables before instance variables. 
+	Declare in the order public, protected, private.
+
+	Example:
+
+		public static int num1;
+		protected static int num2;
+		private static int num3;
+
+		public int num4;
+		protected int num5;
+		private int num6;
+
+4. Constructors 
+
+	Declared after Class Variables.
+
+5. Methods
+
+	From Oracle's "Java Code Conventions":
+
+		These methods should be grouped by functionality
+		rather than by scope or accessibility. For
+		example, a private class method can be in
+		between two public instance methods. The goal is
+		to make reading and understanding the code easier.
+
+Line Length
+
+	//the line below is 79 characters including the beginning tab
+	Avoid lines longer than 80 characters, since they’re not handled well by many 
+	terminals and tools
+
+Code Formatting
+
+	Press Ctrl + Alt + l in Intellij to use auto formatting. It should suffice in
+	most situations.
+
+	JFreeChart uses some constructors with many parameters, for clarity you can 
+	put each constructor parameter on its own line, preferably with comments.
+
+	Example:
+
+	        JFreeChart chart = ChartFactory.createXYLineChart(
+                title, //chart title
+                "Time of Day", //y-axis label
+                "Power", //x-axis label
+                data,
+                PlotOrientation.VERTICAL,
+                true, //include legend?
+                true, //include tooltips?
+                false); //include URLs?
+            //end constructor call
+
+Comments:
+
+
+
