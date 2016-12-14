@@ -1,0 +1,12 @@
+-JFreeChart: Free Java chart library
+	
+	http://www.jfree.org/jfreechart/
+
+-Sunseeker team's Java API
+
+	-RXTXcomm.jar
+	-rxtxSerial.dll
+	-Telemetry.jar
+
+-Weather Underground API key (free version)
+

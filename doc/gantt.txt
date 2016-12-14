@@ -1,0 +1,49 @@
+CS 490
+Gantt Chart items for project
+
+Here are some items that likely will be on a CS 4900 Gantt chart.
+For 4 months CS4900 and 4 months CS 4910 make a Gantt chart,
+clealrly showing what is expected at the end of CS 4900.
+Items with an (s) may be more then on item.  
+
+Using Weeks as the time unit, make a simple Gantt Chart for your project.
+
+Background
+  Security needs
+  Maintenance needs
+  Target Users and platforms
+----Ownership
+----Any Needed NDA
+Use Cases
+----Initial Stories
+----Stories
+----TPS Reports
+----Spikes(S)
+----Platform Choice Hardware/OS
+----Resources Acquired(s)
+----Version Control Standard
+----Source Directory Design
+Demonstration procedure(s)
+----Language choice(s)
+----Database choice
+----Database Design and Access
+----IDE choice(s)
+----Programming Standard(s)
+----Framework Choice(s)
+----Unit Testing Standard(s)
+--System Testing Standards
+----Documentation Standards
+Automation Standards
+Client Demonstrations and Feedback
+Mid Project Evaluation Meeting
+CORE Complete
+Maintenance Documentation
+User Documentation
+Security Assurance
+Release 1 Beta
+Release 1
+Presentation Slides initial
+Practice Presentation 1
+Practice Presentation 2
+Presentation
+Final Project Evaluation Meeting

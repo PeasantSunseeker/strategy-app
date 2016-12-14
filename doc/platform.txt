@@ -7,3 +7,8 @@ IDE: Intellij IDEA
 -The current software running telemetry in the chase car is currently written using Java on a windows client. 
 
 -Writing the new software with the same choices allows easier maintenance of the whole suite.
+
+Weather: Weather Underground API
+
+-Currently we will be using the free version, which allows 500 calls per day or 10 calls per minute maximum.
+This should allow us 8.33 hours of usage at a rate of one call per minute. 

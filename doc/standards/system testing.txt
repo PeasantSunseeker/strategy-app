@@ -1,0 +1,3 @@
+System Tests go in their own directory in the src/ folder.
+
+	Name: Tests.system
