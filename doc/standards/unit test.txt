@@ -1,0 +1,6 @@
+-Tests go in their own directory within the src/ folder. 
+
+-Naming convention: Tests.<packagename>
+
+	Example: Tests.models
+		 Tests.weather

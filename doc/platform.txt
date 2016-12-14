@@ -1,0 +1,9 @@
+Language: Java
+
+OS: Windows
+
+IDE: Intellij IDEA
+
+-The current software running telemetry in the chase car is currently written using Java on a windows client. 
+
+-Writing the new software with the same choices allows easier maintenance of the whole suite.

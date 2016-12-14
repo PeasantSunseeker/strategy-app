@@ -1,5 +1,7 @@
 
-From "Java Code Conventions" by Oracle, September 12, 1997:
+Many of these standards are described here:
+	http://www.oracle.com/technetwork/java/codeconventions-150003.pdf
+With modifications for our own purposes.
 
 Java source files have the following ordering:
 	-Beginning comments (see “Beginning Comments” below)
@@ -99,5 +101,44 @@ Code Formatting
 
 Comments:
 
+	From Oracle's "Java Code Conventions":
 
+		Comments should be used to give overviews of code and provide additional information that is not readily available in the code itself. Comments should contain only information that is relevant to reading and understanding the program. For example, information about how the corresponding package is built or in what directory it resides should not be included as a comment.
 
+	There are three styles of comment:
+
+		//this is a comment
+		
+		/* this is also a comment */
+
+		/*
+		 * This is a block comment
+		 */
+
+Declarations:
+
+	It is preferred that there is only one declaration per line. That is,
+
+		int level; // indentation level
+		int size; // size of table
+		Object currentEntry; // currently selected table entry
+
+	Is preferable to
+
+		int level, size;
+
+	Put delcarations only at the beginning of blocks. 
+
+		void myFunc() {
+			int num1;	//beginning of method block
+			if(condition) {
+				int num2;	//beginning of "if" block
+				...
+			} //end if
+		} //end myFunc
+
+	Declarations of for loop iterators can be declared in the for statement.
+
+		for(int i = 0; i < numLoops, i++) {
+
+		}
