@@ -1,0 +1,3 @@
+	For maintenance purposes we are going to keep a config file containing info that might change, such as battery capacity, car weight, rolling resistance. This will allow non-programmers to account for changes to the car, without having to dive into code.
+	For developers intent on tweaking and improving our programming in the future, we will strictly follow the coding standard and document our code well.
+	We will avoid hardcoding the route in so that if the route changes, the team won't be stuck without this program.
