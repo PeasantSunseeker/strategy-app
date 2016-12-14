@@ -1,0 +1,30 @@
+General
+	-Configure application to be used with several car configs
+
+
+
+UI
+	-Read a map with calculated optimal speed
+	-Read weather data for the race days
+	-Graph of estimated battery vs actual
+	-Graph of estimated distance vs actual
+	-Read estimation of energy saved by regenerative braking
+	-Read wind direction and velocity along route
+	-Graph of elevation
+	-Real-time charts of car data
+
+
+
+Weather
+	-Override weather data if forecast is wrong
+	-Temp, wind, sun, rain weather data
+	-Modify sun model for mornings (blue light)
+
+
+Road
+	-Update average roadcover for section of route (% shade)
+	-Read road data from GPS
+
+
+Models
+	-Calculate solar panel efficiency at several headings
