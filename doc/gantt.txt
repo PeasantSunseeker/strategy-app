@@ -36,7 +36,9 @@ Demonstration procedure(s)
 Automation Standards
 Client Demonstrations and Feedback
 Mid Project Evaluation Meeting
-CORE Complete
+
+***CORE Complete***
+
 Maintenance Documentation
 User Documentation
 Security Assurance
