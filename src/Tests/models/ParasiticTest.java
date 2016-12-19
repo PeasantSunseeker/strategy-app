@@ -3,8 +3,6 @@ package Tests.models;
 import models.Parasitic;
 import org.junit.Assert;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by broderick on 12/1/16.
  */
