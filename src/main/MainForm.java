@@ -25,5 +25,6 @@ public class MainForm {
         Object[][] data = Data.getData();
         MainTable = new JTable(data, columnNames);
         //MainTable.setFillsViewportHeight(true);
+        Data.computeByDistance();
     }
 }
