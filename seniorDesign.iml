@@ -18,5 +18,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="owm-japis-2.5.0.3" level="project" />
   </component>
 </module>
