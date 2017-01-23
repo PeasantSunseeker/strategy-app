@@ -74,10 +74,10 @@ public class Data {
         return returnData;
     }
 	
-	public static void computeByDistance() {
-    	double distance[] = { 0,  1,  2,  3,  4,  5,  6,  7,  8,   9};
-    	double grade[] =    { 1,  2,  3,  4,  5,  6, -7, -8, -9, -10};
-    	double velocity[] = {60, 60, 70, 60, 60, 60, 70, 80, 70, 100};
+	public static void main(String[] args){
+    	double distance[] = { 0,  1,  2,  3,  4,  5,  6,  7,   8,    9};
+    	double grade[] =    { 0,  2,  2,  2,  2, -4, -4, -4,  -4,   -4};
+    	double velocity[] = {60, 60, 60, 60, 60, 60, 60, 60,  60,   60};
     	
 //		double velocity = 80; // km/h
 		double weight = 2700; // Newtons
@@ -92,24 +92,26 @@ public class Data {
 		double previous;
 		
 
-		System.out.format("%5s | %5s | %6s | %3s | %5s | %6s | %5s | %8s | %8s | %7s | %6s | %8s | %5s | %5s\n",
-				"Distance", "Grade", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
+		System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s\n",
+				"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
 				"Solar", "Battery", "Batt Chg", "Tot Chg");
 
 		for (index = 1; index < distance.length; index++) {
 			previous = start;
+			double averageGrade = (grade[index] + grade[index - 1]) / 2;
+			double averageVelocity = (velocity[index] + velocity[index - 1]) / 2;
 			
 //			double deltaDistance = distance[index] - distance[index - 1];
-			double roadAngle = Gravitational.getRoadAngle(grade[index]);
-			double gravPower = Gravitational.gravityPower(velocity[index], weight, roadAngle);
+			double roadAngle = Gravitational.getRoadAngle(averageGrade);
+			double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
 			double kineticPower = Gravitational.kineticPower(velocity[index], velocity[index-1], distance[index], distance[index-1], weight);
-			double deltaTime = (distance[index] - distance[index - 1]) / velocity[index];
+			double deltaTime = (distance[index] - distance[index - 1]) / averageVelocity;
 			
 			double middleTime = previous + (deltaTime / 2);
 			double sunAngle = Solar.getAngle(middleTime);
 			double solarPower = Solar.solarPower(middleTime);
-			double aeroPower = Aerodynamic.aerodynamicPower(velocity[index]);
-			double rollingPower = Rolling.rollingPower(velocity[index], weight);
+			double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
+			double rollingPower = Rolling.rollingPower(averageVelocity, weight);
 			totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
 			double batteryPower = totalPower - solarPower;
 			double batteryCap = Battery.getCapacity(batteryPower);
@@ -118,8 +120,8 @@ public class Data {
 			totalCharge += batteryCharge;
 			start += deltaTime;
 
-			System.out.format("%8.2f | %5.2f | %6.1f | %4.0f | %5.1f | %6.1f | %5.1f | %8.2f | %8.2f | %7.2f | %6.0f | %8.2f | %8.2f | %8.2f\n",
-					distance[index], grade[index], velocity[index], gravPower, kineticPower, aeroPower, rollingPower, totalPower, previous, (previous + deltaTime),
+			System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %5.2f | %5.2f | %5.0f | %8.1f | %8.2f | %7.2f\n",
+					distance[index], roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, previous, (previous + deltaTime),
 					solarPower, batteryPower, batteryCharge, totalCharge);
 		}
 	}
