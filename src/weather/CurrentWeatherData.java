@@ -1,8 +1,8 @@
 package weather;
 
-import net.aksingh.owmjapis.*;
+import net.aksingh.owmjapis.CurrentWeather;
+import net.aksingh.owmjapis.OpenWeatherMap;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -56,7 +56,7 @@ public class CurrentWeatherData {
      */
     public void printOut() {
         System.out.println(cityName);
-        System.out.println(currentTime);
+        System.out.println("Last updated " + currentTime);
         System.out.println("=============================");
         System.out.println("Sunrise: " + sunrise.toString());
         System.out.println("Sunset: " + sunset.toString());
