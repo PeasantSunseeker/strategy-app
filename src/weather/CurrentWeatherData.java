@@ -5,6 +5,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 
 import java.util.Date;
 
+
 /**
  * PROJECT: seniordesign
  * AUTHOR: aaron
@@ -55,6 +56,7 @@ public class CurrentWeatherData {
      * Print out data to console
      */
     public void printOut() {
+
         System.out.println(cityName);
         System.out.println("Last updated " + currentTime);
         System.out.println("=============================");
@@ -63,6 +65,7 @@ public class CurrentWeatherData {
         System.out.printf("Temperature: %.3f C\n", temperature);
         System.out.println("Humidity: " + humidity + "%");
         System.out.printf("Pressure: %.3f hPa\n", pressure);
+
     }
 
     /**
