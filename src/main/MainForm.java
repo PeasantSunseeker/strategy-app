@@ -1,29 +1,63 @@
 package main;
 
-import javax.swing.*;
+import javafx.application.Application;
+import javafx.collections.ObservableList;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import utilities.MasterData;
 
 /**
  * Created by Broderick on 12/30/2016.
  */
-public class MainForm {
-    private JLabel Title;
+public class MainForm  extends Application {
+	
+	private TableView table = new TableView();
+	
+    @Override
+    public void start(Stage primaryStage) {
+	
+		table.setEditable(false);
+	
+//		TableColumn firstNameCol = new TableColumn("Time");
+		String[] titles = {"Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance"};
+		String[] columnNames = {"middleTime","sunAngle","solarPower","aeroPower","rollingPower","totalPower","batteryPower","batteryCap","batteryCharge","totalCharge","distance"};
+		TableColumn[] columns = new TableColumn[titles.length];
+		
+		for(int i = 0; i < titles.length; i++){
+			columns[i] = new TableColumn(titles[i]);
+			columns[i].setCellValueFactory(
+					new PropertyValueFactory<MasterData, String>(columnNames[i])
+			);
+		}
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("MainForm");
-        frame.setContentPane(new MainForm().Main);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+		ObservableList<MasterData> data = Data.getData();
+		table.setItems(data);
+		table.getColumns().addAll(columns);
+        
+        StackPane root = new StackPane();
+        root.getChildren().add(table);
+        
+        Scene scene = new Scene(root, 300, 250);
+	
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
+	
+		primaryStage.setX(bounds.getMinX());
+		primaryStage.setY(bounds.getMinY());
+		primaryStage.setWidth(bounds.getWidth());
+		primaryStage.setHeight(bounds.getHeight());
+        
+        primaryStage.setTitle("Solar Car Performance Application");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
-
-    private JPanel Main;
-    private JTable MainTable;
-
-    private void createUIComponents() {
-        // TODO: Make table columns dynamic and better
-        String[] columnNames = {"<html>Time<br>&nbsp;", "<html>Sun<br>Angle", "<html>Solar<br>Power", "<html>Aerodynamic<br>Drag", "<html>Rolling<br>Resistance", "<html>Total<br>Power", "<html>Battery<br>Coulombs?", "<html>Battery<br>Capacity", "<html>Battery<br>Charge", "<html>Total<br>Change", "<html>Distance<br>Driven"};
-        Object[][] data = Data.getData();
-        MainTable = new JTable(data, columnNames);
-        //MainTable.setFillsViewportHeight(true);
+    public static void main(String[] args) {
+        launch(args);
     }
 }
