@@ -1,9 +1,10 @@
 package weather;
 
-import net.aksingh.owmjapis.*;
+import net.aksingh.owmjapis.CurrentWeather;
+import net.aksingh.owmjapis.OpenWeatherMap;
 
-import java.io.IOException;
 import java.util.Date;
+
 
 /**
  * PROJECT: seniordesign
@@ -55,14 +56,16 @@ public class CurrentWeatherData {
      * Print out data to console
      */
     public void printOut() {
+
         System.out.println(cityName);
-        System.out.println(currentTime);
+        System.out.println("Last updated " + currentTime);
         System.out.println("=============================");
         System.out.println("Sunrise: " + sunrise.toString());
         System.out.println("Sunset: " + sunset.toString());
         System.out.printf("Temperature: %.3f C\n", temperature);
         System.out.println("Humidity: " + humidity + "%");
         System.out.printf("Pressure: %.3f hPa\n", pressure);
+
     }
 
     /**
