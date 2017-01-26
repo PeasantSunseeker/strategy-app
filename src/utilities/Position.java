@@ -10,6 +10,8 @@ package utilities;
  * -Latitude
  * -Longitude
  * -Elevation
+ * -Direction
+ * -Angle
  */
 public class Position {
 

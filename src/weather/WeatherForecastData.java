@@ -1,6 +1,5 @@
 package weather;
 
-import net.aksingh.owmjapis.DailyForecast;
 import net.aksingh.owmjapis.HourlyForecast;
 import net.aksingh.owmjapis.OpenWeatherMap;
 
@@ -13,13 +12,13 @@ import java.io.IOException;
  * <p>
  * DESCRIPTION:
  */
-public class WeatherForecast {
+public class WeatherForecastData {
 
     private OpenWeatherMap owm;
     private HourlyForecast hf;
 
 
-    public WeatherForecast(double latitude, double longitude) throws IOException {
+    public WeatherForecastData(double latitude, double longitude) throws IOException {
         owm = new OpenWeatherMap(ApiKey.getApiKey());
         owm.setUnits(OpenWeatherMap.Units.METRIC);
 

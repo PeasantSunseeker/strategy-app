@@ -16,7 +16,7 @@ public class Tester {
         CurrentWeatherData cw = new CurrentWeatherData(42.3042240,-85.5869350);
         cw.printOut();
 
-        WeatherForecast wf = new WeatherForecast(42.3042240,-85.5869350);
+        WeatherForecastData wf = new WeatherForecastData(42.3042240,-85.5869350);
         wf.printOut();
 
     }
