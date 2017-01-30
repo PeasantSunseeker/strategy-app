@@ -5,8 +5,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import main.Data;
@@ -33,22 +31,23 @@ public class DataTable {
         TableView table = new TableView();
 
         table.setEditable(false);
-
-//		TableColumn firstNameCol = new TableColumn("Time");
-        String[] titles = {"Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance"};
-        String[] columnNames = {"middleTime","sunAngle","solarPower","aeroPower","rollingPower","totalPower","batteryPower","batteryCap","batteryCharge","totalCharge","distance"};
-        TableColumn[] columns = new TableColumn[titles.length];
-
-        for(int i = 0; i < titles.length; i++){
-            columns[i] = new TableColumn(titles[i]);
-            columns[i].setCellValueFactory(
-                    new PropertyValueFactory<MasterData, String>(columnNames[i])
-            );
-        }
-
-        ObservableList<MasterData> data = Data.getData();
+	
+		ObservableList<MasterData> data = Data.getData();
+	
+		TableColumn<MasterData,String> timeColumn = new TableColumn("Time");
+		timeColumn.setCellValueFactory(temp -> temp.getValue().getMiddleTime());
+	
+		TableColumn<MasterData,String> batteryChargeColumn = new TableColumn("Bat Charge");
+		batteryChargeColumn.setCellValueFactory(temp -> temp.getValue().getBatteryCharge());
+	
+		TableColumn<MasterData,String> totalChargeColumn = new TableColumn("Total Charge Used");
+		totalChargeColumn.setCellValueFactory(temp -> temp.getValue().getTotalCharge());
+	
+		TableColumn<MasterData,String> distanceColumn = new TableColumn("Distance Driven");
+		distanceColumn.setCellValueFactory(temp -> temp.getValue().getDistance());
+		
         table.setItems(data);
-        table.getColumns().addAll(columns);
+        table.getColumns().addAll(timeColumn,batteryChargeColumn,totalChargeColumn,distanceColumn);
 
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();

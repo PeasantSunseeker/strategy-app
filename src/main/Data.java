@@ -27,15 +27,12 @@ public class Data {
         List<String> data = new ArrayList<>();
         int listCount = -1;
         int columns = 11;
-	
-//		List<String> list = new ArrayList<String>();
-	
+		
 		List<MasterData> rowData = new ArrayList<MasterData>();
     
 //        System.out.format("%5s | %5s | %6s | %3s | %5s | %6s | %5s | %5s | %4s | %5s | %3s\n", "Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance");
         
         for (double time = start; time < end; time += periodSize) {
-//            data.add(new String[columns]);
             listCount++;
 
             double middleTime = time + (periodSize / 2);
@@ -47,51 +44,19 @@ public class Data {
             batteryCharge *= -1;
             totalCharge += batteryCharge;
             distance += velocity * periodSize;
-
-            //TODO Make data list dynamic
-//            data.get(listCount)[0] = String.format("%2.0f:%2.0f", middleTime, middleTime%1*60);
-//            data.get(listCount)[1] = String.format("%5.2f", sunAngle);
-//            data.get(listCount)[2] = String.format("%6.1f", solarPower);
-//            data.get(listCount)[3] = String.format("%4.0f", aeroPower);
-//            data.get(listCount)[4] = String.format("%5.1f", rollingPower);
-//            data.get(listCount)[5] = String.format("%5.1f", totalPower);
-//            data.get(listCount)[6] = String.format("%7.1f", batteryPower);
-//            data.get(listCount)[7] = String.format("%8.2f", batteryCap);
-//            data.get(listCount)[8] = String.format("%8.2f", batteryCharge);
-//            data.get(listCount)[9] = String.format("%7.2f", totalCharge);
-//            data.get(listCount)[10] = String.format("%6.0f", distance);
-	
-//			data.add(String.format("%2.0f:%2.0f", middleTime, middleTime%1*60));
-//			data.add(String.format("%5.2f", sunAngle));
-//			data.add(String.format("%6.1f", solarPower));
-//			data.add(String.format("%4.0f", aeroPower));
-//			data.add(String.format("%5.1f", rollingPower));
-//			data.add(String.format("%5.1f", totalPower));
-//			data.add(String.format("%7.1f", batteryPower));
-//			data.add(String.format("%8.2f", batteryCap));
-//			data.add(String.format("%8.2f", batteryCharge));
-//			data.add(String.format("%7.2f", totalCharge));
-//			data.add(String.format("%6.0f", distance));
 			
-			//TODO Brodie: FIX ME
-			rowData.add(new MasterData(String.format("%2.0f:%2.0f", middleTime, middleTime%1*60),
-					String.format("%5.2f", sunAngle), String.format("%6.1f", solarPower),
-					String.format("%4.0f", aeroPower), String.format("%5.1f", rollingPower),
-					String.format("%5.1f", totalPower), String.format("%7.1f", batteryPower),
-					String.format("%8.2f", batteryCap), String.format("%8.2f", batteryCharge),
-					String.format("%7.2f", totalCharge), String.format("%6.0f", distance)));
-            
+			MasterData myData = new MasterData();
+			myData.setMiddleTime(middleTime);
+			myData.setBatteryCharge(batteryCharge);
+			myData.setTotalCharge(totalCharge);
+			myData.setDistance(distance);
+            rowData.add(myData);
             
 
 //            System.out.format("%5.2f | %5.2f | %6.1f | %4.0f | %5.1f | %5.1f | %7.1f | %8.2f | %8.2f | %7.2f | %6.0fkm\n",
 //                    middleTime, sunAngle, solarPower, aeroPower, rollingPower, totalPower, batteryPower, batteryCap, batteryCharge, totalCharge, distance);
         }
 
-//        String[][] returnData = new String[data.size()][columns];
-//
-//        for (int i = 0; i < data.size(); i++) {
-//            returnData[i] = data.get(i);
-//        }
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
 
         return returnData;
