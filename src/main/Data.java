@@ -74,7 +74,12 @@ public class Data {
 //			data.add(String.format("%6.0f", distance));
 			
 			//TODO Brodie: FIX ME
-			rowData.add(new MasterData(String.format("%2.0f:%2.0f", middleTime, middleTime%1*60), String.format("%5.2f", sunAngle), String.format("%6.1f", solarPower), String.format("%4.0f", aeroPower), String.format("%5.1f", rollingPower), String.format("%5.1f", totalPower), String.format("%7.1f", batteryPower), String.format("%8.2f", batteryCap), String.format("%8.2f", batteryCharge), String.format("%7.2f", totalCharge), String.format("%6.0f", distance)));
+			rowData.add(new MasterData(String.format("%2.0f:%2.0f", middleTime, middleTime%1*60),
+					String.format("%5.2f", sunAngle), String.format("%6.1f", solarPower),
+					String.format("%4.0f", aeroPower), String.format("%5.1f", rollingPower),
+					String.format("%5.1f", totalPower), String.format("%7.1f", batteryPower),
+					String.format("%8.2f", batteryCap), String.format("%8.2f", batteryCharge),
+					String.format("%7.2f", totalCharge), String.format("%6.0f", distance)));
             
             
 

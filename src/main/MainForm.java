@@ -24,6 +24,7 @@ import utilities.MasterData;
 public class MainForm extends Application {
 
     private TableView table = new TableView();
+    private static String[] arguments;
 
     //added by aaron b.
     private Stage currentStage;
@@ -65,47 +66,6 @@ public class MainForm extends Application {
         });
 
 
-
-
-    	/*
-        table.setEditable(false);
-	
-//		TableColumn firstNameCol = new TableColumn("Time");
-		String[] titles = {"Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance"};
-		String[] columnNames = {"middleTime","sunAngle","solarPower","aeroPower","rollingPower","totalPower","batteryPower","batteryCap","batteryCharge","totalCharge","distance"};
-		TableColumn[] columns = new TableColumn[titles.length];
-		
-		for(int i = 0; i < titles.length; i++){
-			columns[i] = new TableColumn(titles[i]);
-			columns[i].setCellValueFactory(
-					new PropertyValueFactory<MasterData, String>(columnNames[i])
-			);
-		}
-
-		ObservableList<MasterData> data = Data.getData();
-		table.setItems(data);
-		table.getColumns().addAll(columns);
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(table);
-        
-        Scene scene = new Scene(root, 300, 250);
-	
-		Screen screen = Screen.getPrimary();
-		Rectangle2D bounds = screen.getVisualBounds();
-	
-		primaryStage.setX(bounds.getMinX());
-		primaryStage.setY(bounds.getMinY());
-		primaryStage.setWidth(bounds.getWidth());
-		primaryStage.setHeight(bounds.getHeight());
-
-		StackPane root = new StackPane();
-		root.getChildren().add(table);
-
-
-        */
-
-
         //added by aaron b.
         VBox root = new VBox();
         root.getChildren().addAll(tableButton, weatherButton);
@@ -118,9 +78,14 @@ public class MainForm extends Application {
         primaryStage.setTitle("Solar Car Performance Application");
         primaryStage.setScene(scene);
         primaryStage.show();
+		
+        if(arguments.length > 0 && arguments[0].equals("brodie")) {
+			tableButton.fire();
+		}
     }
 
     public static void main(String[] args) {
+        arguments = args;
         launch(args);
     }
 }
