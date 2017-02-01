@@ -31,7 +31,7 @@
         <Menu fx:id="viewmenu" mnemonicParsing="false" text="View">
           <items>
             <MenuItem mnemonicParsing="false" text="Data Table" />
-            <MenuItem mnemonicParsing="false" onAction="#showWeatherChart" text="Weather" />
+            <MenuItem mnemonicParsing="false" onAction="#showTemperatureChart" text="Weather" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Cut" />
             <MenuItem mnemonicParsing="false" text="Copy" />
@@ -51,14 +51,9 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <LineChart fx:id="temperatureForecast" layoutX="70.0" layoutY="-38.0" prefHeight="362.0" prefWidth="640.0" title="Temperature Forecast" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <xAxis>
-                <CategoryAxis label="Date" side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis label="Temperature (C)" side="LEFT" />
-              </yAxis>
-            </LineChart>
+            <Button fx:id="temperature_forecast_button" layoutX="370.0" layoutY="65.0" mnemonicParsing="false" onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast" textAlignment="CENTER" />
+            <Button fx:id="data_table_button" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDataTable" text="Data Table" />
+            <Button fx:id="current_conditions_button" layoutX="370.0" layoutY="14.0" mnemonicParsing="false" onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions" />
          </children>
     </AnchorPane>
   </children>

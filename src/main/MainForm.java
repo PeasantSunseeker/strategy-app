@@ -1,22 +1,19 @@
 package main;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ui.DataTable;
 import ui.WeatherLineChart;
-import utilities.MasterData;
+
+import java.io.IOException;
 
 /**
  * Created by Broderick on 12/30/2016.
@@ -32,6 +29,18 @@ public class MainForm extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        primaryStage.setTitle("Solar Car Performance Application");
+        primaryStage.setScene(new Scene(root, 1024, 768));
+        primaryStage.show();
+
+        /*
         Button tableButton;
         Button weatherButton;
 
@@ -58,18 +67,15 @@ public class MainForm extends Application {
         weatherButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                WeatherLineChart weatherLineChart = new WeatherLineChart("Temperature Forecast", "Date",
+                WeatherLineChart temperatureForecastChart = new WeatherLineChart("Temperature Forecast", "Date",
                         "Temperature (C)");
-                currentStage = weatherLineChart.fillWeatherStage(currentStage);
+                currentStage = temperatureForecastChart.fillTemperatureChart(currentStage);
                 currentStage.show();
             }
         });
 
-
-        //added by aaron b.
         VBox root = new VBox();
         root.getChildren().addAll(tableButton, weatherButton);
-        //end add by aaron b.
 
 
         Scene scene = new Scene(root, 300, 250);
@@ -78,10 +84,11 @@ public class MainForm extends Application {
         primaryStage.setTitle("Solar Car Performance Application");
         primaryStage.setScene(scene);
         primaryStage.show();
-		
-        if(arguments.length > 0 && arguments[0].equals("brodie")) {
-			tableButton.fire();
-		}
+
+        if (arguments.length > 0 && arguments[0].equals("brodie")) {
+            tableButton.fire();
+        }
+        */
     }
 
     public static void main(String[] args) {
