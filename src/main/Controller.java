@@ -7,18 +7,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import net.aksingh.owmjapis.HourlyForecast;
-import net.aksingh.owmjapis.OpenWeatherMap;
 import ui.DataTable;
-import ui.WeatherLineChart;
 import ui.WeatherTable;
 
 /**
@@ -63,15 +59,33 @@ public class Controller {
     private Label city_label;
 
     @FXML
+    void exit(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
     void showTemperatureChart(ActionEvent event) {
 
-        //open temperature forecast chart in a new window
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/fxml/temperaturechart.fxml"));
+        StackPane newWindow = null;
+
+        try {
+            newWindow = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //WeatherTableController controller = fxmlLoader.getController();
+
 
         Stage stage = new Stage();
-        WeatherLineChart temperatureForecastChart = new WeatherLineChart("Temperature Forecast", "Date",
-                "Temperature (C)");
-        stage = temperatureForecastChart.fillTemperatureChart(stage);
+        stage.setTitle("Forecast");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(temperature_forecast_button.getScene().getWindow());
+        Scene scene = new Scene(newWindow);
+        stage.setScene(scene);
         stage.show();
+
     }
 
     @FXML
@@ -87,6 +101,7 @@ public class Controller {
 
         WeatherTable weatherTable = new WeatherTable("Current Conditions");
         Stage stage = new Stage();
+
 
         stage = weatherTable.getCurrentConditions(stage, "Kalamazoo");
         stage.show();
