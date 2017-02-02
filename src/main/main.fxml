@@ -21,11 +21,10 @@
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
             <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Preferences…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
+            <MenuItem mnemonicParsing="false" onAction="#exit" text="Quit" />
           </items>
         </Menu>
         <Menu fx:id="viewmenu" mnemonicParsing="false" text="View">
@@ -44,16 +43,16 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem mnemonicParsing="false" text="About" />
           </items>
         </Menu>
       </menus>
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button fx:id="temperature_forecast_button" layoutX="370.0" layoutY="65.0" mnemonicParsing="false" onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast" textAlignment="CENTER" />
-            <Button fx:id="data_table_button" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDataTable" text="Data Table" />
-            <Button fx:id="current_conditions_button" layoutX="370.0" layoutY="14.0" mnemonicParsing="false" onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions" />
+            <Button fx:id="temperatureForecastButton" layoutX="370.0" layoutY="65.0" mnemonicParsing="false" onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast" textAlignment="CENTER" />
+            <Button fx:id="dataTableButton" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDataTable" text="Data Table" />
+            <Button fx:id="currentConditionsButton" layoutX="370.0" layoutY="14.0" mnemonicParsing="false" onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions" />
          </children>
     </AnchorPane>
   </children>

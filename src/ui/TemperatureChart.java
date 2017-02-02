@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * OUTPUTS:
  */
-public class WeatherLineChart {
+public class TemperatureChart {
 
     private String title;
     private String xAxisLabel;
@@ -36,7 +36,7 @@ public class WeatherLineChart {
     private HourlyForecast.Forecast forecast;
 
 
-    public WeatherLineChart(String title, String xAxisLabel, String yAxisLabel) {
+    public TemperatureChart(String title, String xAxisLabel, String yAxisLabel) {
         this.title = title;
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;

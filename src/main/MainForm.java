@@ -1,17 +1,11 @@
 package main;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ui.DataTable;
-import ui.WeatherLineChart;
 
 import java.io.IOException;
 
@@ -23,8 +17,6 @@ public class MainForm extends Application {
     private TableView table = new TableView();
     private static String[] arguments;
 
-    //added by aaron b.
-    private Stage currentStage;
 
     @Override
     public void start(Stage primaryStage) {
@@ -61,13 +53,13 @@ public class MainForm extends Application {
         });
 
 
-        //weather chart is built in ui.WeatherLineChart
+        //weather chart is built in ui.TemperatureChart
         weatherButton = new Button();
         weatherButton.setText("Show temperature forecast");
         weatherButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                WeatherLineChart temperatureForecastChart = new WeatherLineChart("Temperature Forecast", "Date",
+                TemperatureChart temperatureForecastChart = new TemperatureChart("Temperature Forecast", "Date",
                         "Temperature (C)");
                 currentStage = temperatureForecastChart.fillTemperatureChart(currentStage);
                 currentStage.show();
