@@ -49,27 +49,12 @@ public class WeatherTable {
         stage = new Stage();
 
 
-
         try {
             root1 = FXMLLoader.load(getClass().getResource("weathertable.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-
-        //get the forecast
-        owm = new OpenWeatherMap(ApiKey.getApiKey());
-        owm.setUnits(OpenWeatherMap.Units.METRIC);
-        try {
-            cw = owm.currentWeatherByCityName(cityName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        temperature = cw.getMainInstance().getTemperature();
-        System.out.println(cityName);
-        System.out.println("Current temp: " + temperature + DEGREES + "C");
 
         //do the UI stuff
 

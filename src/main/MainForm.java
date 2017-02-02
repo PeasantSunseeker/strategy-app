@@ -17,8 +17,6 @@ public class MainForm extends Application {
     private TableView table = new TableView();
     private static String[] arguments;
 
-    //added by aaron b.
-    private Stage currentStage;
 
     @Override
     public void start(Stage primaryStage) {
