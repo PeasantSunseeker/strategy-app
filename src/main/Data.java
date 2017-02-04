@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.*;
 import utilities.MasterData;
+import utilities.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,8 @@ public class Data {
     	double distance[] = { 0,  1,  2,  3,  4,  5,  6,  7,   8,    9};
     	double grade[] =    { 0,  2,  2,  2,  2, -4, -4, -4,  -4,   -4};
     	double velocity[] = {60, 60, 60, 60, 60, 60, 60, 60,  60,   60};
+    	
+//    	Position[] positions = Position.loadPositions("leg-1-10_items");
     	
 //		double velocity = 80; // km/h
 		double weight = 2700; // Newtons
