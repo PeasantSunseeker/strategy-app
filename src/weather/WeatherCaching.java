@@ -27,6 +27,10 @@ public class WeatherCaching {
 
     private static Position[] positions;
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         //get current weather conditions
@@ -100,6 +104,11 @@ public class WeatherCaching {
         return true;
     }
 
+    /**
+     *
+     * @param fileName
+     * @return
+     */
     public static WeatherCurrent[] loadCurrent(String fileName) {
         fileName = fileName + ".csv";
         WeatherCurrent[] weatherCurrents;

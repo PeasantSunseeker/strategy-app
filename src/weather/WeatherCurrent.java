@@ -23,6 +23,16 @@ public class WeatherCurrent {
     String sunrise;
     String sunset;
 
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     * @param cloudsPercentage
+     * @param windSpeed
+     * @param windDirection
+     * @param sunrise
+     * @param sunset
+     */
     public WeatherCurrent(float latitude, float longitude, float cloudsPercentage,
                           float windSpeed, float windDirection, String sunrise, String sunset) {
         this.latitude = latitude;
@@ -65,6 +75,9 @@ public class WeatherCurrent {
         return sunset;
     }
 
+    /**
+     * Use if debugging
+     */
     public void printOut(){
         System.out.println(String.format("%f,%f,%f,%f,%f,%s,%s,\n",getLatitude(),getLongitude(),getCloudsPercentage()
         ,getWindSpeed(),getWindDirection(),getSunrise(),getSunset()));
