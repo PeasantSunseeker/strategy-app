@@ -91,7 +91,7 @@ public class Position implements Serializable {
 			while ((line = bufferedReader.readLine()) != null) {
 //				System.out.println(line);
 				items = line.split(",");
-				positionList.add(new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2])));
+				positionList.add(new Position(Float.valueOf(items[1]), Float.valueOf(items[0]), Float.valueOf(items[2])));
 			}
 			
 			fileReader.close();
@@ -146,8 +146,8 @@ public class Position implements Serializable {
 		if (exists) {
 //			System.out.println("File exists! - Manually delete to update");
 //			return false;
-		}
-		try {
+        }
+        try {
 //			FileOutputStream fos = new FileOutputStream(name);
 //			ObjectOutputStream oos = new ObjectOutputStream(fos);
 //
@@ -182,7 +182,7 @@ public class Position implements Serializable {
 		fileName = fileName + ".csv";
 		Position[] positions;
 //		System.out.println(fileName);
-		try {
+        try {
 //			FileInputStream fileInputStream = new FileInputStream(fileName);
 //			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 //
@@ -190,13 +190,13 @@ public class Position implements Serializable {
 //
 //			objectInputStream.close();
 //			fileInputStream.close();
-			
-			FileReader fileReader = new FileReader(fileName);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
-			String read = bufferedReader.readLine();
+
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String read = bufferedReader.readLine();
 //			System.out.println(read);
-			int length = Integer.valueOf(read);
+            int length = Integer.valueOf(read);
 //			System.out.println(length);
 			positions = new Position[length];
 			
