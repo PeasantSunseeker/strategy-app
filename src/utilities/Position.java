@@ -18,10 +18,10 @@ import java.util.List;
  * -Angle
  */
 public class Position implements Serializable {
-
+	private static float minElevation = -1000;
     private float latitude = 0f;
     private float longitude = 0f;
-    private float elevation = Float.MAX_VALUE;
+    private float elevation = Float.NaN;
     private float direction = 0f; //degrees clockwise from due north
     private float angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
     
@@ -107,6 +107,7 @@ public class Position implements Serializable {
 		Position[] positionsSmall = new Position[count];
 		for(int i = 0; i < count; i++){
 			positionsSmall[i] = positions[i * (positions.length / count)];
+			positionsSmall[i].elevation = Float.NaN;
 		}
 		for (Position pos: positionsSmall) {
 			System.out.println(pos);
@@ -122,6 +123,7 @@ public class Position implements Serializable {
 //			positions = loadPositions("leg1.ser");
 //			if(positions != null){
 				System.out.println(positionsSmall.length);
+		System.out.println(positionsSmall[0].elevation);
 //			}
 //		}
 	}
@@ -150,7 +152,7 @@ public class Position implements Serializable {
 			for(int i = 0; i < positions.length; i++){
 				Position pos = positions[i];
 				
-				String line = String.format("%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation);
+				String line = String.format("%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.direction, pos.angle);
 				bufferedWriter.write(line);
 			}
 			
