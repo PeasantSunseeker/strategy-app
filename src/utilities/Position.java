@@ -82,20 +82,20 @@ public class Position implements Serializable {
 		List<Position> positionList = new ArrayList<Position>();
 		String line;
 		String[] items;
-		String filename = "leg-1";
+		String fileName = "leg-1";
 		
 		try {
-			FileReader fis = new FileReader(filename+".csv");
-			BufferedReader ois = new BufferedReader(fis);
+			FileReader fileReader = new FileReader(fileName+".csv");
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			
-			while ((line = ois.readLine()) != null) {
+			while ((line = bufferedReader.readLine()) != null) {
 //				System.out.println(line);
 				items = line.split(",");
 				positionList.add(new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2])));
 			}
 			
-			fis.close();
-			ois.close();
+			fileReader.close();
+			bufferedReader.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -112,32 +112,51 @@ public class Position implements Serializable {
 			System.out.println(pos);
 		}
 	
-		savePositions(positions,filename+"-complete.ser");
-		savePositions(positionsSmall,filename+"-10_items.ser");
+		savePositions(positions,fileName+"-complete");
+		savePositions(positionsSmall,fileName+"-10_items");
+	
+		positionsSmall = loadPositions(fileName+"-10_items");
 		
 //		if(savePositions(positions,"leg1.ser")) {
 //			positions = null;
 //			positions = loadPositions("leg1.ser");
 //			if(positions != null){
-//				System.out.println(positions.length);
+				System.out.println(positionsSmall.length);
 //			}
 //		}
 	}
 	
-	public static boolean savePositions(Position[] positions, String name){
-		boolean exists = new File(name).isFile();
+	public static boolean savePositions(Position[] positions, String fileName){
+    	fileName = fileName + ".csv";
+		boolean exists = new File(fileName).isFile();
 		if(exists){
-			System.out.println("File exists! - Manually delete to update");
-			return false;
+//			System.out.println("File exists! - Manually delete to update");
+//			return false;
 		}
 		try {
-			FileOutputStream fos = new FileOutputStream(name);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
+//			FileOutputStream fos = new FileOutputStream(name);
+//			ObjectOutputStream oos = new ObjectOutputStream(fos);
+//
+//			oos.writeObject(positions);
+//
+//			oos.close();
+//			fos.close();
 			
-			oos.writeObject(positions);
+			FileWriter fileWriter = new FileWriter(fileName);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			
-			oos.close();
-			fos.close();
+			bufferedWriter.write(String.format("%s\n", positions.length));
+			
+			for(int i = 0; i < positions.length; i++){
+				Position pos = positions[i];
+				
+				String line = String.format("%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation);
+				bufferedWriter.write(line);
+			}
+			
+			bufferedWriter.close();
+			fileWriter.close();
+			
 			return true;
 		}
 		catch(Exception e){
@@ -146,16 +165,38 @@ public class Position implements Serializable {
 		}
 	}
 	
-	public static Position[] loadPositions(String name){
+	public static Position[] loadPositions(String fileName){
+		fileName = fileName + ".csv";
 		Position[] positions;
+//		System.out.println(fileName);
 		try {
-			FileInputStream fis = new FileInputStream(name);
-			ObjectInputStream ois = new ObjectInputStream(fis);
+//			FileInputStream fileInputStream = new FileInputStream(fileName);
+//			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+//
+//			positions = (Position[]) objectInputStream.readObject();
+//
+//			objectInputStream.close();
+//			fileInputStream.close();
 			
-			positions = (Position[]) ois.readObject();
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			
-			ois.close();
-			fis.close();
+			String read = bufferedReader.readLine();
+//			System.out.println(read);
+			int length = Integer.valueOf(read);
+//			System.out.println(length);
+			positions = new Position[length];
+			
+			for(int i = 0; i < length; i++){
+				String line = bufferedReader.readLine();
+				
+				String[] items = line.split(",");
+				positions[i] = new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2]));
+			}
+			
+			bufferedReader.close();
+			fileReader.close();
+			
 			return positions;
 		}
 		catch(Exception e){
