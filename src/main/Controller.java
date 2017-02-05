@@ -123,7 +123,10 @@ public class Controller {
         assert viewmenu != null : "fx:id=\"viewmenu\" was not injected: check your FXML file 'main.fxml'.";
         assert dataTableButton != null : "fx:id=\"dataTableButton\" was not injected: check your FXML file 'main.fxml'.";
         assert currentConditionsButton != null : "fx:id=\"currentConditionsButton\" was not injected: check your FXML file 'main.fxml'.";
-
+    
+//        if (MainForm.arguments.length > 0 && MainForm.arguments[0].equals("brodie")) {
+//            dataTableButton.fire();
+//        }
     }
 
 

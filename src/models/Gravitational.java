@@ -7,9 +7,9 @@ public class Gravitational {
         return unitConversion * weight * velocity * Math.sin(Math.toRadians(roadAngleDegrees));
     }
 
-    public static double kineticPower(double velocityCurrent, double velocityPrevious, double distanceCurrent, double distancePrevious, double weight) {
+    public static double kineticPower(double velocityCurrent, double velocityPrevious, double distance, double weight) {
         double enumerator = (Math.pow(velocityCurrent, 2) - Math.pow(velocityPrevious, 2)) * (velocityCurrent + velocityPrevious);
-        double denominator = distanceCurrent - distancePrevious;
+        double denominator = distance;
         return (5.46e-7) * (enumerator / denominator) * weight;
     }
 
