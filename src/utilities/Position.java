@@ -153,8 +153,8 @@ public class Position {
 		fileName = fileName + ".csv";
 		boolean exists = new File(fileName).isFile();
 		if (exists) {
-			System.out.println("File exists! - Manually delete to update");
-			return false;
+//			System.out.println("File exists! - Manually delete to update");
+//			return false;
         }
         try {
 //			FileOutputStream fos = new FileOutputStream(name);
