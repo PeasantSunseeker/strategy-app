@@ -84,7 +84,7 @@ public class Data {
 		for (index = 1; index < positions.length; index++) {
 			Position pos = positions[index];
 			Position prev = positions[index - 1];
-			double distance = Position.getDistance(pos, prev);
+			double distance = Position.getDistance(prev, pos);
 			float currentVelocity = 80;//pos.getVelocity();
 			float previousVelocity = 80;//prev.getVelocity();
 			
@@ -93,7 +93,7 @@ public class Data {
 			double averageVelocity = (currentVelocity + previousVelocity) / 2;
 
 //			double roadAngle = Gravitational.getRoadAngle(averageGrade);
-			double roadAngle = (pos.getAngle() + prev.getAngle()) / 2;
+			double roadAngle = Position.calculateAngle(prev, pos);
 			double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
 			double kineticPower = Gravitational.kineticPower(currentVelocity, previousVelocity, distance, weight);
 			double deltaTime = (distance) / averageVelocity;
