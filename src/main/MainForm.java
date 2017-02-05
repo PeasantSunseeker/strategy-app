@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MainForm extends Application {
 
     private TableView table = new TableView();
-    private static String[] arguments;
+    public static String[] arguments;
 
 
     @Override

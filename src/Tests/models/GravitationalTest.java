@@ -12,12 +12,13 @@ import static org.junit.Assert.*;
 public class GravitationalTest {
 	@Test
 	public void kineticPower() throws Exception {
-		Assert.assertEquals(68.25, Gravitational.kineticPower(50,0,1,0,1000),.5);
+		Assert.assertEquals(68.25, Gravitational.kineticPower(50,0,1,1000),.5);
 	}
 	
 	@Test
 	public void getRoadAngle() throws Exception {
-		Assert.assertEquals(19, Gravitational.getRoadAngle(35),.5);
+		Assert.assertEquals(19.2, Gravitational.getRoadAngle(35),.1);
+		Assert.assertEquals(11.3, Gravitational.getRoadAngle(20),.1);
 	}
 	
 	@Test

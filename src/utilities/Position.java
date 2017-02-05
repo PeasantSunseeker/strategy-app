@@ -17,13 +17,13 @@ import java.util.List;
  * -Direction
  * -Angle
  */
-public class Position implements Serializable {
+public class Position {
 	private float latitude = 0f;
 	private float longitude = 0f;
 	private float elevation = 0f;
 	private float direction = 0f; //degrees clockwise from due north
 	private float angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
-	private float speed = 55f;
+	private float velocity = 60f;
 	
 	//can change this data type if needed, hasn't been established yet
 	
@@ -66,6 +66,14 @@ public class Position implements Serializable {
 	
 	public void setElevation(float elevation) {
 		this.elevation = elevation;
+	}
+	
+	public float getVelocity() {
+		return velocity;
+	}
+	
+	public void setVelocity(float velocity) {
+		this.velocity = velocity;
 	}
 	
 	public Position(float latitude, float longitude, float elevation) {
@@ -116,36 +124,37 @@ public class Position implements Serializable {
 		savePositions(positionsSmall, fileName + "-10_items");
 		
 		positionsSmall = loadPositions(fileName + "-10_items");
-
-//		if(savePositions(positions,"leg1.ser")) {
-//			positions = null;
-//			positions = loadPositions("leg1.ser");
-//			if(positions != null){
+		
 		System.out.println(positionsSmall.length);
-		System.out.println(positionsSmall[0].speed);
-		System.out.println(Position.getDistance(positionsSmall[0],positionsSmall[1]));
-//			}
-//		}
+		System.out.println(positionsSmall[0].velocity);
+		System.out.println(Position.getDistance(positionsSmall[0],positionsSmall[9]));
 	}
 	
 	public static double getDistance(Position a, Position b) {
 		float radius = 6371.009f;
 		double deltaLatitude = b.latitude - a.latitude;
 		double deltaLongitude = b.longitude - a.longitude;
-		float meanLatitude = (b.latitude + a.latitude) / 2;
+		double meanLatitude = (b.latitude + a.latitude) / 2;
 		
 		deltaLatitude = Math.toRadians(deltaLatitude);
 		deltaLongitude = Math.toRadians(deltaLongitude);
+		meanLatitude = Math.toRadians(meanLatitude);
 		
 		return radius * Math.sqrt(Math.pow(deltaLatitude, 2) + Math.pow((Math.cos(meanLatitude) * deltaLongitude), 2));
+	}
+	
+	public static double calculateAngle(Position a, Position b){
+		double distance = getDistance(a, b);
+		double deltaElevation = b.elevation - a.elevation;
+		return Math.toDegrees(Math.atan(deltaElevation / distance));
 	}
 	
 	public static boolean savePositions(Position[] positions, String fileName) {
 		fileName = fileName + ".csv";
 		boolean exists = new File(fileName).isFile();
 		if (exists) {
-//			System.out.println("File exists! - Manually delete to update");
-//			return false;
+			System.out.println("File exists! - Manually delete to update");
+			return false;
         }
         try {
 //			FileOutputStream fos = new FileOutputStream(name);
@@ -164,7 +173,7 @@ public class Position implements Serializable {
 			for (int i = 0; i < positions.length; i++) {
 				Position pos = positions[i];
 				
-				String line = String.format("%s,%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.direction, pos.angle, pos.speed);
+				String line = String.format("%s,%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.direction, pos.angle, pos.velocity);
 				bufferedWriter.write(line);
 			}
 			
@@ -207,7 +216,7 @@ public class Position implements Serializable {
 				positions[i] = new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2]));
 				positions[i].direction = Float.valueOf(items[3]);
 				positions[i].angle = Float.valueOf(items[4]);
-				positions[i].speed = Float.valueOf(items[5]);
+				positions[i].velocity = Float.valueOf(items[5]);
 			}
 			
 			bufferedReader.close();
