@@ -169,7 +169,7 @@ public class Position {
 	
 	public static double calculateAngle(Position a, Position b) {
 		double distance = getDistance(a, b);
-		double deltaElevation = b.elevation - a.elevation;
+		double deltaElevation = (b.elevation - a.elevation) / 1000; //Convert meters to kilometers
 		return Math.toDegrees(Math.atan(deltaElevation / distance));
 	}
 	

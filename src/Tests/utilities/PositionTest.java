@@ -20,7 +20,7 @@ public class PositionTest {
 	@Before
 	public void create() {
 		a = new Position(10, 10, 0);
-		b = new Position(11, 10, 100);
+		b = new Position(11, 10, 1000);
 		c = new Position(10, 11, 0);
 	}
 	
@@ -32,7 +32,7 @@ public class PositionTest {
 	
 	@Test
 	public void calculateAngle() throws Exception {
-		Assert.assertEquals(41.9, Position.calculateAngle(a, b), .1);
+		Assert.assertEquals(0.51, Position.calculateAngle(a, b), .1);
 		Assert.assertEquals(0, Position.calculateAngle(a, c), .1);
 	}
 	

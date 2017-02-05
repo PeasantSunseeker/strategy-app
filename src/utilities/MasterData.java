@@ -50,7 +50,7 @@ public class MasterData {
 	}
 	
 	public void setRoadAngle(double roadAngle) {
-		String formatted = String.format("%2.0f%%", roadAngle);
+		String formatted = String.format("%5.02f%%", roadAngle);
 		this.roadAngle.set(formatted);
 	}
 	
