@@ -18,15 +18,36 @@ import java.util.List;
  * -Angle
  */
 public class Position {
+	public enum Flag {
+		EMPTY, AVERAGED, RETRIEVED
+	}
+	
 	private float latitude = 0f;
 	private float longitude = 0f;
 	private float elevation = 0f;
 	private float direction = 0f; //degrees clockwise from due north
 	private float angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
-	private float velocity = 60f;
+	private float velocity = 80f;
 	
-	//can change this data type if needed, hasn't been established yet
+	private Flag elevationFlag;
+	private Flag velocityFlag;
 	
+	//region Accessors
+	public Flag getVelocityFlag() {
+		return velocityFlag;
+	}
+	
+	public void setVelocityFlag(Flag velocityFlag) {
+		this.velocityFlag = velocityFlag;
+	}
+	
+	public Flag getElevationFlag() {
+		return elevationFlag;
+	}
+	
+	public void setElevationFlag(Flag elevationFlag) {
+		this.elevationFlag = elevationFlag;
+	}
 	
 	public float getDirection() {
 		return direction;
@@ -75,11 +96,14 @@ public class Position {
 	public void setVelocity(float velocity) {
 		this.velocity = velocity;
 	}
+	//endregion
 	
 	public Position(float latitude, float longitude, float elevation) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.elevation = elevation;
+		this.elevationFlag = Flag.EMPTY;
+		this.velocityFlag = Flag.EMPTY;
 	}
 	
 	public String toString() {
@@ -127,7 +151,7 @@ public class Position {
 		
 		System.out.println(positionsSmall.length);
 		System.out.println(positionsSmall[0].velocity);
-		System.out.println(Position.getDistance(positionsSmall[0],positionsSmall[9]));
+		System.out.println(Position.getDistance(positionsSmall[0], positionsSmall[9]));
 	}
 	
 	public static double getDistance(Position a, Position b) {
@@ -143,7 +167,7 @@ public class Position {
 		return radius * Math.sqrt(Math.pow(deltaLatitude, 2) + Math.pow((Math.cos(meanLatitude) * deltaLongitude), 2));
 	}
 	
-	public static double calculateAngle(Position a, Position b){
+	public static double calculateAngle(Position a, Position b) {
 		double distance = getDistance(a, b);
 		double deltaElevation = b.elevation - a.elevation;
 		return Math.toDegrees(Math.atan(deltaElevation / distance));
@@ -155,16 +179,8 @@ public class Position {
 		if (exists) {
 //			System.out.println("File exists! - Manually delete to update");
 //			return false;
-        }
-        try {
-//			FileOutputStream fos = new FileOutputStream(name);
-//			ObjectOutputStream oos = new ObjectOutputStream(fos);
-//
-//			oos.writeObject(positions);
-//
-//			oos.close();
-//			fos.close();
-			
+		}
+		try {
 			FileWriter fileWriter = new FileWriter(fileName);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			
@@ -173,7 +189,7 @@ public class Position {
 			for (int i = 0; i < positions.length; i++) {
 				Position pos = positions[i];
 				
-				String line = String.format("%s,%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.direction, pos.angle, pos.velocity);
+				String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.direction, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
 				bufferedWriter.write(line);
 			}
 			
@@ -191,21 +207,13 @@ public class Position {
 		fileName = fileName + ".csv";
 		Position[] positions;
 //		System.out.println(fileName);
-        try {
-//			FileInputStream fileInputStream = new FileInputStream(fileName);
-//			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-//
-//			positions = (Position[]) objectInputStream.readObject();
-//
-//			objectInputStream.close();
-//			fileInputStream.close();
-
-            FileReader fileReader = new FileReader(fileName);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            String read = bufferedReader.readLine();
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			String read = bufferedReader.readLine();
 //			System.out.println(read);
-            int length = Integer.valueOf(read);
+			int length = Integer.valueOf(read);
 //			System.out.println(length);
 			positions = new Position[length];
 			
@@ -217,6 +225,8 @@ public class Position {
 				positions[i].direction = Float.valueOf(items[3]);
 				positions[i].angle = Float.valueOf(items[4]);
 				positions[i].velocity = Float.valueOf(items[5]);
+				positions[i].elevationFlag = Position.Flag.valueOf(items[6]);
+				positions[i].velocityFlag = Position.Flag.valueOf(items[7]);
 			}
 			
 			bufferedReader.close();

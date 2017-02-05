@@ -36,7 +36,7 @@ public class elevation {
 		
 		for (int i = 0; i < positions.length; i++) {
 			Position pos = positions[i];
-			if (pos.getElevation() == 0) {
+			if (pos.getElevationFlag() != Position.Flag.RETRIEVED) {
 				locations.add(String.join(",", String.valueOf(pos.getLatitude()), String.valueOf(pos.getLongitude())));
 			}
 		}
@@ -94,6 +94,7 @@ public class elevation {
 //							System.out.println("Looking");
 							if (equalTolerance(pos.getLatitude(), latitude) && equalTolerance(pos.getLongitude(), longitude)) {
 								pos.setElevation((float) elevation);
+								pos.setElevationFlag(Position.Flag.RETRIEVED);
 //								System.out.println("Match");
 								matchCount++;
 								positionCounter = j + 1;

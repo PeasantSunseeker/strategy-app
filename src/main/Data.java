@@ -85,8 +85,8 @@ public class Data {
 			Position pos = positions[index];
 			Position prev = positions[index - 1];
 			double distance = Position.getDistance(prev, pos);
-			float currentVelocity = 80;//pos.getVelocity();
-			float previousVelocity = 80;//prev.getVelocity();
+			float currentVelocity = pos.getVelocity();
+			float previousVelocity = prev.getVelocity();
 			
 			previous = start;
 //			double averageGrade = (pos.getGrade() + prev.getGrade()) / 2;
