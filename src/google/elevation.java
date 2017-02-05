@@ -1,6 +1,5 @@
 package google;
 
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -25,8 +24,6 @@ import java.util.List;
 public class elevation {
 	
 	public static void main(String[] args) {
-		Gson gson = new Gson();
-		
 		String fileName = "leg-1-10_items";
 		Position[] positions = Position.loadPositions(fileName);
 		
@@ -36,13 +33,12 @@ public class elevation {
 			return;
 		}
 		List locations = new ArrayList();
-//		List<Position> reducedPositions = new ArrayList<>();
+		
 		for (int i = 0; i < positions.length; i++) {
 			Position pos = positions[i];
-//			if (pos.getElevation() == 0) {
-			locations.add(String.join(",", String.valueOf(pos.getLatitude()), String.valueOf(pos.getLongitude())));
-//				reducedPositions.add(pos);
-//			}
+			if (pos.getElevation() == 0) {
+				locations.add(String.join(",", String.valueOf(pos.getLatitude()), String.valueOf(pos.getLongitude())));
+			}
 		}
 		
 		if (locations.size() == 0) {
@@ -74,7 +70,7 @@ public class elevation {
 			
 			if (jsonResponse.getStatus() == 200) {
 				if (googleStatus.compareTo("OK") == 0) {
-					System.out.println("Good");
+					System.out.println("Google Request: " + googleStatus);
 					
 					JSONArray results = body.getJSONArray("results");
 					if (results.length() != locations.size()) {
@@ -82,8 +78,9 @@ public class elevation {
 						return;
 					}
 					int matchCount = 0;
+					int positionCounter = 0;
 					for (int i = 0; i < results.length(); i++) {
-						Position pos = positions[i];
+						
 						JSONObject item = results.getJSONObject(i);
 						JSONObject location = item.getJSONObject("location");
 						double latitude = location.getDouble("lat");
@@ -92,20 +89,25 @@ public class elevation {
 //						System.out.println(pos.toString());
 //						System.out.println(String.format("%f - %f - %f", latitude, longitude, elevation));
 						
-						if (equalTolerance(pos.getLatitude(), latitude) && equalTolerance(pos.getLongitude(), longitude)) {
-							pos.setElevation((float) elevation);
-//							System.out.println("Match");
-							matchCount++;
+						for (int j = positionCounter; j < positions.length; j++) {
+							Position pos = positions[j];
+//							System.out.println("Looking");
+							if (equalTolerance(pos.getLatitude(), latitude) && equalTolerance(pos.getLongitude(), longitude)) {
+								pos.setElevation((float) elevation);
+//								System.out.println("Match");
+								matchCount++;
+								positionCounter = j + 1;
+								break;
+							}
 						}
 					}
 					
 					if (matchCount == results.length()) {
 						System.out.println("All results matched");
 						Position.savePositions(positions, fileName);
-					}
-					else{
+					} else {
 						System.out.println("Position mismatch");
-						System.out.println("Locations: "+locations.size()+" results");
+						System.out.println("Locations: " + locations.size() + " results");
 					}
 					
 				} else {
@@ -116,9 +118,7 @@ public class elevation {
 				//TODO http request
 				System.out.println("jsonResponse: " + jsonResponse);
 			}
-		} catch (UnirestException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (UnirestException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
