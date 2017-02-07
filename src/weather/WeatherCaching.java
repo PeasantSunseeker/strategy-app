@@ -48,6 +48,7 @@ public class WeatherCaching {
 
         saveForecast("weather-forecast-10_locations");
 
+        /*
         forecasts = loadForecast("weather-forecast-10_locations");
 
         if (forecasts != null) {
@@ -57,6 +58,7 @@ public class WeatherCaching {
         } else {
             System.out.println("Error loading forecasts");
         }
+        */
 
     }
 
@@ -184,9 +186,11 @@ public class WeatherCaching {
 
             for (int i = 0; i < positions.length; i++) {
 
+
                 latitude = positions[i].getLatitude();
                 longitude = positions[i].getLongitude();
                 System.out.println(latitude + " " + longitude);
+                bufferedWriter.write(String.format("%d,%f,%f\n", (i + 1), latitude, longitude));
 
                 hf = owm.hourlyForecastByCoordinates(latitude, longitude);
 
@@ -196,8 +200,8 @@ public class WeatherCaching {
                     windDirection = hf.getForecastInstance(j).getWindInstance().getWindDegree();
                     forecastTime = hf.getForecastInstance(j).getDateTimeText();
 
-                    bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s\n", latitude, longitude, cloudsPercentage,
-                            windSpeed, windDirection, forecastTime));
+                    bufferedWriter.write(String.format("%f,%f,%f,%s\n", cloudsPercentage, windSpeed, windDirection,
+                            forecastTime));
 
                     count++;
                 }
@@ -216,7 +220,10 @@ public class WeatherCaching {
         return true;
     }
 
+    //TODO: rework for updated forecast file structure
     public static ArrayList<WeatherForecast> loadForecast(String fileName) {
+
+        /*
         fileName = fileName + ".csv";
         ArrayList<WeatherForecast> weatherForecasts = new ArrayList<WeatherForecast>();
 
@@ -282,6 +289,9 @@ public class WeatherCaching {
         }
 
         return weatherForecasts;
+        */
+
+        return null;
     }
 
 
