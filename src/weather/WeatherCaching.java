@@ -1,5 +1,6 @@
 package weather;
 
+import net.aksingh.owmjapis.AbstractWeather;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.HourlyForecast;
 import net.aksingh.owmjapis.OpenWeatherMap;
@@ -223,7 +224,7 @@ public class WeatherCaching {
     //TODO: rework for updated forecast file structure
     public static ArrayList<WeatherForecast> loadForecast(String fileName) {
 
-        /*
+
         fileName = fileName + ".csv";
         ArrayList<WeatherForecast> weatherForecasts = new ArrayList<WeatherForecast>();
 
@@ -234,6 +235,8 @@ public class WeatherCaching {
 
         String line;
         String[] items;
+        int curIndex = 0;
+
         float currentLat;
 
         try {
@@ -241,42 +244,58 @@ public class WeatherCaching {
             FileReader fileReader = new FileReader(fileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            int i = 0;
+
+
+            //while NOT EOF
+                //if it's an index,lat,long
+                    //while it's not a index,lat,long
+                        //add values to ArrayLists
+
+                        //when done with all values, add the wf to ArrayList
+                    //end while
+                //end if
+            //end while
+
+
+
+
+
+
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(i + " " + line);
-                i++;
+
+                WeatherForecast wf = null;
+
                 items = line.split(",");
+                if (items.length == 3) {
 
-                currentLat = Float.valueOf(items[0]);
-                WeatherForecast wf = new WeatherForecast(Float.valueOf(items[0]), Float.valueOf(items[1]));
+                    //a line with a position
+                    curIndex = Integer.parseInt(items[0]);
+                    weatherForecasts.get(curIndex).setLatitude(Float.valueOf(items[1]));
+                    weatherForecasts.get(curIndex).setLongitude(Float.valueOf(items[2]));
+                    wf = new WeatherForecast(Float.valueOf(items[1]), Float.valueOf(items[2]));
 
-                cloudPercentages = new ArrayList<Float>();
-                windSpeeds = new ArrayList<Float>();
-                windDegrees = new ArrayList<Float>();
-                time = new ArrayList<String>();
 
-                while (Float.valueOf(items[0]) == currentLat) {
+                } else {
+
+                    //a line with data
+
+                    assert (wf != null);
+                    cloudPercentages = new ArrayList<Float>();
+                    windSpeeds = new ArrayList<Float>();
+                    windDegrees = new ArrayList<Float>();
+                    time = new ArrayList<String>();
+
                     cloudPercentages.add(Float.valueOf(items[2]));
                     windSpeeds.add(Float.valueOf(items[3]));
                     windDegrees.add(Float.valueOf(items[4]));
                     time.add(items[5]);
 
-                    //get next line with this same lat
-                    line = bufferedReader.readLine();
-
-                    if (line != null) {
-                        items = line.split(",");
-                        currentLat = Float.valueOf(items[0]);
-                    }
 
                 }
 
-                wf.setCloudPercentages(cloudPercentages);
-                wf.setWindSpeeds(windSpeeds);
-                wf.setWindDegrees(windDegrees);
-                wf.setTime(time);
+                assert (wf != null);
 
-                weatherForecasts.add(wf);
+
             }
 
 
@@ -289,9 +308,7 @@ public class WeatherCaching {
         }
 
         return weatherForecasts;
-        */
 
-        return null;
     }
 
 
