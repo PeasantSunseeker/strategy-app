@@ -77,9 +77,9 @@ public class Data {
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 
-		System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s\n",
+		System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 				"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
-				"Solar", "Battery", "Batt Chg", "Tot Chg");
+				"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
 
 		for (index = 1; index < positions.length; index++) {
 			Position pos = positions[index];
@@ -115,9 +115,9 @@ public class Data {
 			String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previous), previous%1*60);
 			String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previous + deltaTime), (previous + deltaTime)%1*60);
 			
-			System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.2f | %7.2f\n",
+			System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
 					totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
-					solarPower, batteryPower, batteryCharge, totalCharge);
+					solarPower, batteryPower, batteryCap, batteryCharge, totalCharge);
 			
 			MasterData myData = new MasterData();
 			myData.setStartTime(previous);
