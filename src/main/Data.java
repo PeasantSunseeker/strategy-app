@@ -6,6 +6,7 @@ import models.*;
 import utilities.MasterData;
 import utilities.Position;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +34,14 @@ public class Data {
 
 //        System.out.format("%5s | %5s | %6s | %3s | %5s | %6s | %5s | %5s | %4s | %5s | %3s\n", "Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance");
 
+		int dayOfYear = LocalDate.now().getDayOfYear();
+		
         for (double time = start; time < end; time += periodSize) {
             listCount++;
 
             double middleTime = time + (periodSize / 2);
-            double sunAngle = Solar.getAngle(middleTime);
-            double solarPower = Solar.solarPower(middleTime);
+            double sunAngle = Solar.getAngle(dayOfYear, middleTime, 37);
+            double solarPower = Solar.solarPower(dayOfYear, middleTime, 37);
             double batteryPower = totalPower - solarPower;
             double batteryCap = Battery.getCapacity(batteryPower);
             double batteryCharge = batteryPower * periodSize / batteryCap * 100;
@@ -74,6 +77,7 @@ public class Data {
 		int index;
 		double totalDistance = 0;
 		double previous;
+		int dayOfYear = LocalDate.now().getDayOfYear();
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 
@@ -99,8 +103,8 @@ public class Data {
 			double deltaTime = (distance) / averageVelocity;
 			
 			double middleTime = previous + (deltaTime / 2);
-			double sunAngle = Solar.getAngle(middleTime);
-			double solarPower = Solar.solarPower(middleTime);
+			double sunAngle = Solar.getAngle(dayOfYear, middleTime, pos.getLatitude());
+			double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude());
 			double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
 			double rollingPower = Rolling.rollingPower(averageVelocity, weight);
 			totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
