@@ -301,6 +301,28 @@ public class WeatherCaching {
     }
 
 
+    //TODO: workflow on current vs future
+
+
+
+    //Wanted: February 09 2017, 8:00am
+    //if(wanted < current + 6hrs)
+        //call current
+        //get earliest forecast we can (9:00am?)
+        //average current + forecast
+    //else if(wanted < current + 3 days)
+        //call forecast()
+        //get the closest two forecasts (6:00am and 9:00am)
+        //average them
+    //else
+
+
+    //forecast()
+        //if you have internet
+            //if currentDate > list(0) + 1day  //our forecasts are more than 1 day old
+                //get new forecasts
+    //
+
 }
 
 
