@@ -192,6 +192,7 @@ public class Position {
                 bufferedWriter.write(line);
             }
 
+
             bufferedWriter.close();
             fileWriter.close();
 

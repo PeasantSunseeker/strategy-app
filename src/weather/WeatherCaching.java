@@ -4,6 +4,7 @@ import net.aksingh.owmjapis.AbstractWeather;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.HourlyForecast;
 import net.aksingh.owmjapis.OpenWeatherMap;
+import utilities.Flag;
 import utilities.Position;
 
 import java.io.BufferedReader;
@@ -49,7 +50,7 @@ public class WeatherCaching {
 
         saveForecast("weather-forecast-10_locations");
 
-        /*
+
         forecasts = loadForecast("weather-forecast-10_locations");
 
         if (forecasts != null) {
@@ -59,7 +60,7 @@ public class WeatherCaching {
         } else {
             System.out.println("Error loading forecasts");
         }
-        */
+
 
     }
 
@@ -102,8 +103,8 @@ public class WeatherCaching {
                 sunrise = cw.getSysInstance().getSunriseTime().toString();
                 sunset = cw.getSysInstance().getSunsetTime().toString();
 
-                bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s,%s\n", latitude, longitude, cloudsPercentage, windSpeed, windDirection,
-                        sunrise, sunset));
+                bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s,%s,%s\n", latitude, longitude, cloudsPercentage, windSpeed, windDirection,
+                        sunrise, sunset, Flag.RETRIEVED));
 
                 System.out.println(cw.getCityName().toString());
             }
@@ -150,7 +151,10 @@ public class WeatherCaching {
                         Float.valueOf(items[3]),
                         Float.valueOf(items[4]),
                         items[5],
-                        items[6]);
+                        items[6]
+                );
+
+                weatherCurrents[i].setFlag(Flag.valueOf(items[7]));
 
             }
 
@@ -201,8 +205,9 @@ public class WeatherCaching {
                     windDirection = hf.getForecastInstance(j).getWindInstance().getWindDegree();
                     forecastTime = hf.getForecastInstance(j).getDateTimeText();
 
-                    bufferedWriter.write(String.format("%f,%f,%f,%s\n", cloudsPercentage, windSpeed, windDirection,
-                            forecastTime));
+
+                    bufferedWriter.write(String.format("%f,%f,%f,%s,%s\n", cloudsPercentage, windSpeed, windDirection,
+                            forecastTime, Flag.RETRIEVED));
 
                     count++;
                 }
@@ -221,7 +226,7 @@ public class WeatherCaching {
         return true;
     }
 
-    //TODO: rework for updated forecast file structure
+
     public static ArrayList<WeatherForecast> loadForecast(String fileName) {
 
 
@@ -244,37 +249,21 @@ public class WeatherCaching {
             FileReader fileReader = new FileReader(fileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-
-
-            //while NOT EOF
-                //if it's an index,lat,long
-                    //while it's not a index,lat,long
-                        //add values to ArrayLists
-
-                        //when done with all values, add the wf to ArrayList
-                    //end while
-                //end if
-            //end while
-
-
-
-
-
-
             while ((line = bufferedReader.readLine()) != null) {
 
                 WeatherForecast wf = null;
 
                 items = line.split(",");
                 if (items.length == 3) {
-
+                    System.out.println("ID line");
                     //a line with a position
-                    curIndex = Integer.parseInt(items[0]);
-                    weatherForecasts.get(curIndex).setLatitude(Float.valueOf(items[1]));
-                    weatherForecasts.get(curIndex).setLongitude(Float.valueOf(items[2]));
-                    wf = new WeatherForecast(Float.valueOf(items[1]), Float.valueOf(items[2]));
+                    curIndex = Integer.parseInt(items[0]) - 1;
+                    weatherForecasts.add(curIndex, new WeatherForecast(Float.valueOf(items[1]), Float.valueOf(items[2])));
 
-
+                    weatherForecasts.get(curIndex).setCloudPercentages(new ArrayList<Float>());
+                    weatherForecasts.get(curIndex).setWindSpeeds(new ArrayList<Float>());
+                    weatherForecasts.get(curIndex).setWindDegrees(new ArrayList<Float>());
+                    weatherForecasts.get(curIndex).setTime(new ArrayList<String>());
                 } else {
 
                     //a line with data
@@ -285,10 +274,10 @@ public class WeatherCaching {
                     windDegrees = new ArrayList<Float>();
                     time = new ArrayList<String>();
 
-                    cloudPercentages.add(Float.valueOf(items[2]));
-                    windSpeeds.add(Float.valueOf(items[3]));
-                    windDegrees.add(Float.valueOf(items[4]));
-                    time.add(items[5]);
+                    weatherForecasts.get(curIndex).getCloudPercentages().add(Float.valueOf(items[0]));
+                    weatherForecasts.get(curIndex).getWindSpeeds().add(Float.valueOf(items[1]));
+                    weatherForecasts.get(curIndex).getWindDegrees().add(Float.valueOf(items[2]));
+                    weatherForecasts.get(curIndex).getTime().add(items[3]);
 
 
                 }

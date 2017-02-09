@@ -88,7 +88,7 @@ public class WeatherForecast {
         System.out.println(String.format("Lat: %f , Long: %f\n", latitude, longitude));
 
         for (int i = 0; i < cloudPercentages.size(); i++) {
-            System.out.println(String.format("%f,%f,%f,%s,\n", cloudPercentages.get(i),
+            System.out.println(String.format("%f,%f,%f,%s\n", cloudPercentages.get(i),
                     windDegrees.get(i), windSpeeds.get(i), time.get(i)));
         }
 
