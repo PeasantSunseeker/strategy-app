@@ -1,5 +1,7 @@
 package weather;
 
+import utilities.Flag;
+
 /**
  * PROJECT: seniordesign
  * AUTHOR: aaron  2/4/2017.
@@ -22,6 +24,7 @@ public class WeatherCurrent {
     float windDirection;
     String sunrise;
     String sunset;
+    private Flag flag;
 
     /**
      *
@@ -74,6 +77,10 @@ public class WeatherCurrent {
     public String getSunset() {
         return sunset;
     }
+
+
+
+
 
     /**
      * Use if debugging

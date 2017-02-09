@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utilities.Flag;
 import utilities.Position;
 
 import java.io.UnsupportedEncodingException;
@@ -21,7 +22,7 @@ import java.util.List;
  * <p>
  * DESCRIPTION:
  */
-public class elevation {
+public class Elevation {
 	
 	public static void main(String[] args) {
 		String fileName = "leg-1-10_items";
@@ -36,7 +37,7 @@ public class elevation {
 		
 		for (int i = 0; i < positions.length; i++) {
 			Position pos = positions[i];
-			if (pos.getElevationFlag() != Position.Flag.RETRIEVED) {
+			if (pos.getElevationFlag() != Flag.RETRIEVED) {
 				locations.add(String.join(",", String.valueOf(pos.getLatitude()), String.valueOf(pos.getLongitude())));
 			}
 		}
@@ -94,7 +95,7 @@ public class elevation {
 //							System.out.println("Looking");
 							if (equalTolerance(pos.getLatitude(), latitude) && equalTolerance(pos.getLongitude(), longitude)) {
 								pos.setElevation((float) elevation);
-								pos.setElevationFlag(Position.Flag.RETRIEVED);
+								pos.setElevationFlag(Flag.RETRIEVED);
 //								System.out.println("Match");
 								matchCount++;
 								positionCounter = j + 1;

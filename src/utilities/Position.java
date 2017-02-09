@@ -3,6 +3,7 @@ package utilities;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import utilities.Flag;
 
 /**
  * PROJECT: seniordesign
@@ -18,9 +19,7 @@ import java.util.List;
  * -Angle
  */
 public class Position {
-    public enum Flag {
-        EMPTY, AVERAGED, RETRIEVED
-    }
+
 
     private float latitude = 0f;
     private float longitude = 0f;
@@ -225,8 +224,8 @@ public class Position {
                 positions[i].direction = Float.valueOf(items[3]);
                 positions[i].angle = Float.valueOf(items[4]);
                 positions[i].velocity = Float.valueOf(items[5]);
-                positions[i].elevationFlag = Position.Flag.valueOf(items[6]);
-                positions[i].velocityFlag = Position.Flag.valueOf(items[7]);
+                positions[i].elevationFlag = Flag.valueOf(items[6]);
+                positions[i].velocityFlag = Flag.valueOf(items[7]);
             }
 
             bufferedReader.close();
