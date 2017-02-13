@@ -27,7 +27,6 @@ public class WeatherCurrent {
     private Flag flag;
 
     /**
-     *
      * @param latitude
      * @param longitude
      * @param cloudsPercentage
@@ -45,10 +44,11 @@ public class WeatherCurrent {
         this.windDirection = windDirection;
         this.sunrise = sunrise;
         this.sunset = sunset;
-
+        this.flag = Flag.EMPTY;
         //if debugging
-        printOut();
+        //printOut();
     }
+
 
     public float getLatitude() {
         return latitude;
@@ -78,15 +78,19 @@ public class WeatherCurrent {
         return sunset;
     }
 
+    public Flag getFlag() {
+        return flag;
+    }
 
-
-
+    public void setFlag(Flag flag) {
+        this.flag = flag;
+    }
 
     /**
      * Use if debugging
      */
-    public void printOut(){
-        System.out.println(String.format("%f,%f,%f,%f,%f,%s,%s,\n",getLatitude(),getLongitude(),getCloudsPercentage()
-        ,getWindSpeed(),getWindDirection(),getSunrise(),getSunset()));
+    public void printOut() {
+        System.out.println(String.format("%f,%f,%f,%f,%f,%s,%s,%s\n", getLatitude(), getLongitude(), getCloudsPercentage()
+                , getWindSpeed(), getWindDirection(), getSunrise(), getSunset(),getFlag()));
     }
 }
