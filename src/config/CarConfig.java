@@ -11,10 +11,10 @@ import java.util.Properties;
  * DESCRIPTION:
  *
  *
- * INPUTS:
+ * INPUTS: values for each part of car config
  *
  *
- * OUTPUTS:
+ * OUTPUTS: config.properties file containing the car config values
  */
 public class CarConfig {
 
@@ -22,6 +22,7 @@ public class CarConfig {
     private static double dragArea;
 
     /********** Battery **********/
+    static double batteryC;
     private static double peukert;
 
     /********** Motor **********/
@@ -40,13 +41,13 @@ public class CarConfig {
     private static double batteryDriving = 1.3;
 
 
-    public CarConfig(double dragArea, double peukert, double motorEfficiency,
+    public CarConfig(double dragArea, double batteryC, double peukert, double motorEfficiency,
                      double parasiticCharging, double parasiticDriving, double rollingCoefficient,
                      double batteryMaxPower, double batteryCharging, double batteryDriving) {
 
         this.dragArea = dragArea;
-        //TODO: add batteryC?
 
+        this.batteryC = batteryC;
         this.peukert = peukert;
         this.motorEfficiency = motorEfficiency;
         this.parasiticCharging = parasiticCharging;
@@ -58,7 +59,7 @@ public class CarConfig {
     }
 
     public static void main(String[] args) {
-        CarConfig c = new CarConfig(0.12, 1.08, 0.94, 10, 30, 0.0055, 1300, 0.3, 1.3);
+        CarConfig c = new CarConfig(0.12, 8078, 1.08, 0.94, 10, 30, 0.0055, 1300, 0.3, 1.3);
         c.saveCarConfig();
         c.loadCarConfig();
         c.printConfig();
@@ -112,7 +113,7 @@ public class CarConfig {
 
             input = new FileInputStream("config.properties");
 
-            // load a properties file
+            // load properties file
             prop.load(input);
 
             // get the property value and put it in memory
@@ -219,6 +220,9 @@ public class CarConfig {
     }
     //endregion
 
+    /**
+     * For debugging
+     */
     public static void printConfig() {
         System.out.println("dragArea=" + dragArea);
         System.out.println("peukert=" + peukert);

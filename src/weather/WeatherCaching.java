@@ -1,6 +1,5 @@
 package weather;
 
-import net.aksingh.owmjapis.AbstractWeather;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.HourlyForecast;
 import net.aksingh.owmjapis.OpenWeatherMap;
@@ -176,6 +175,7 @@ public class WeatherCaching {
         HourlyForecast hf;
 
 
+
         //read coordinates from csv file
         try {
 
@@ -191,15 +191,14 @@ public class WeatherCaching {
 
             for (int i = 0; i < positions.length; i++) {
 
-
                 latitude = positions[i].getLatitude();
                 longitude = positions[i].getLongitude();
                 System.out.println(latitude + " " + longitude);
                 bufferedWriter.write(String.format("%d,%f,%f\n", (i + 1), latitude, longitude));
-
                 hf = owm.hourlyForecastByCoordinates(latitude, longitude);
 
                 for (int j = 0; j < hf.getForecastCount(); j++) {
+
                     cloudsPercentage = hf.getForecastInstance(j).getCloudsInstance().getPercentageOfClouds();
                     windSpeed = hf.getForecastInstance(j).getWindInstance().getWindSpeed();
                     windDirection = hf.getForecastInstance(j).getWindInstance().getWindDegree();
@@ -233,11 +232,6 @@ public class WeatherCaching {
         fileName = fileName + ".csv";
         ArrayList<WeatherForecast> weatherForecasts = new ArrayList<WeatherForecast>();
 
-        ArrayList<Float> cloudPercentages;
-        ArrayList<Float> windSpeeds;
-        ArrayList<Float> windDegrees;
-        ArrayList<String> time;
-
         String line;
         String[] items;
         int curIndex = 0;
@@ -269,10 +263,6 @@ public class WeatherCaching {
                     //a line with data
 
                     assert (wf != null);
-                    cloudPercentages = new ArrayList<Float>();
-                    windSpeeds = new ArrayList<Float>();
-                    windDegrees = new ArrayList<Float>();
-                    time = new ArrayList<String>();
 
                     weatherForecasts.get(curIndex).getCloudPercentages().add(Float.valueOf(items[0]));
                     weatherForecasts.get(curIndex).getWindSpeeds().add(Float.valueOf(items[1]));
@@ -304,7 +294,6 @@ public class WeatherCaching {
     //TODO: workflow on current vs future
 
 
-
     //Wanted: February 09 2017, 8:00am
     //if(wanted < current + 6hrs)
         //call current
@@ -319,7 +308,7 @@ public class WeatherCaching {
 
     //forecast()
         //if you have internet
-            //if currentDate > list(0) + 1day  //our forecasts are more than 1 day old
+             //if currentDate > list(0) + 1day  //our forecasts are more than 1 day old
                 //get new forecasts
     //
 

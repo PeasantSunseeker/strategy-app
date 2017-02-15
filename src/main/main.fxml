@@ -53,6 +53,7 @@
             <Button fx:id="temperatureForecastButton" layoutX="370.0" layoutY="65.0" mnemonicParsing="false" onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast" textAlignment="CENTER" />
             <Button fx:id="dataTableButton" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDataTable" text="Data Table" />
             <Button fx:id="currentConditionsButton" layoutX="370.0" layoutY="14.0" mnemonicParsing="false" onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions" />
+            <Button fx:id="elevationGraphButton" layoutX="370.0" layoutY="122.0" mnemonicParsing="false" onAction="#showElevationChart" prefHeight="39.0" prefWidth="209.0" text="Elevation Graph" />
          </children>
     </AnchorPane>
   </children>

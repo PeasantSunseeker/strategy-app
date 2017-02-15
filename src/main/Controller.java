@@ -25,7 +25,7 @@ import ui.WeatherTable;
  *
  * DESCRIPTION:
  *
- *A
+ * A
  * INPUTS:
  *
  *
@@ -41,17 +41,20 @@ public class Controller {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="temperatureForecastButton"
-    private Button temperatureForecastButton; // Value injected by FXMLLoader
-
     @FXML // fx:id="viewmenu"
     private Menu viewmenu; // Value injected by FXMLLoader
 
-    @FXML // fx:id="dataTableButton"
-    private Button dataTableButton; // Value injected by FXMLLoader
-
     @FXML // fx:id="currentConditionsButton"
     private Button currentConditionsButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="elevationGraphButton"
+    private Button elevationGraphButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="temperatureForecastButton"
+    private Button temperatureForecastButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="dataTableButton"
+    private Button dataTableButton; // Value injected by FXMLLoader
 
     @FXML
     void exit(ActionEvent event) {
@@ -116,14 +119,42 @@ public class Controller {
 
     }
 
+
+    @FXML
+    void showElevationChart(ActionEvent event) {
+
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/fxml/elevationchart.fxml"));
+        StackPane newWindow = null;
+
+        try {
+            newWindow = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //WeatherTableController controller = fxmlLoader.getController();
+
+
+        Stage stage = new Stage();
+        stage.setTitle("Elevation");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(elevationGraphButton.getScene().getWindow());
+        Scene scene = new Scene(newWindow);
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert temperatureForecastButton != null : "fx:id=\"temperatureForecastButton\" was not injected: check your FXML file 'main.fxml'.";
         assert viewmenu != null : "fx:id=\"viewmenu\" was not injected: check your FXML file 'main.fxml'.";
-        assert dataTableButton != null : "fx:id=\"dataTableButton\" was not injected: check your FXML file 'main.fxml'.";
         assert currentConditionsButton != null : "fx:id=\"currentConditionsButton\" was not injected: check your FXML file 'main.fxml'.";
-    
+        assert elevationGraphButton != null : "fx:id=\"elevationGraphButton\" was not injected: check your FXML file 'main.fxml'.";
+        assert temperatureForecastButton != null : "fx:id=\"temperatureForecastButton\" was not injected: check your FXML file 'main.fxml'.";
+        assert dataTableButton != null : "fx:id=\"dataTableButton\" was not injected: check your FXML file 'main.fxml'.";
+
 //        if (MainForm.arguments.length > 0 && MainForm.arguments[0].equals("brodie")) {
 //            dataTableButton.fire();
 //        }

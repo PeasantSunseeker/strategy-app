@@ -50,10 +50,6 @@ public class TemperatureChartController {
     void initialize() {
         assert weatherLineChart != null : "fx:id=\"weatherLineChart\" was not injected: check your FXML file 'temperaturechart.fxml'.";
 
-
-        //TODO: is this where I put the data in the line chart?
-
-
         weatherLineChart.setTitle("Temperature Forecast");
 
         OpenWeatherMap owm = new OpenWeatherMap(ApiKey.getApiKey());
