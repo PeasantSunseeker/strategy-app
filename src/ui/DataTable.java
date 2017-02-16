@@ -49,6 +49,9 @@ public class DataTable {
 		TableColumn<MasterData, String> roadAngleColumn = new TableColumn("Road Angle");
 		roadAngleColumn.setCellValueFactory(temp -> temp.getValue().getRoadAngle());
 		
+		TableColumn<MasterData, String> elevationColumn = new TableColumn("Elevation");
+		elevationColumn.setCellValueFactory(temp -> temp.getValue().getElevation());
+		
 		TableColumn<MasterData, String> batteryChargeColumn = new TableColumn("Bat Charge");
 		batteryChargeColumn.setCellValueFactory(temp -> temp.getValue().getBatteryCharge());
 		
@@ -56,15 +59,15 @@ public class DataTable {
 		totalChargeColumn.setCellValueFactory(temp -> temp.getValue().getTotalCharge());
 		
 		table.setItems(data);
-		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, roadAngleColumn, batteryChargeColumn, totalChargeColumn);
+		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, elevationColumn, roadAngleColumn, batteryChargeColumn, totalChargeColumn);
 		
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		
-		dataTableStage.setX(bounds.getMinX());
-		dataTableStage.setY(bounds.getMinY());
-		dataTableStage.setWidth(bounds.getWidth());
-		dataTableStage.setHeight(bounds.getHeight());
+//		dataTableStage.setX(bounds.getMinX());
+//		dataTableStage.setY(bounds.getMinY());
+//		dataTableStage.setWidth(bounds.getWidth());
+//		dataTableStage.setHeight(bounds.getHeight());
 		
 		Scene scene = new Scene(table, 1024, 768);
 		dataTableStage.setScene(scene);

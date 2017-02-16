@@ -9,7 +9,7 @@ UI
 	-Graph of estimated battery vs actual
 	-Graph of estimated distance vs actual
 	-Read estimation of energy saved by regenerative braking
-	-Read wind direction and velocity along route
+	-Read wind heading and velocity along route
 	-Graph of elevation
 	-Real-time charts of car data
 

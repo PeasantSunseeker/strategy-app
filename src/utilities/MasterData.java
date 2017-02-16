@@ -18,6 +18,7 @@ public class MasterData {
 	public SimpleStringProperty distance;
 	public SimpleStringProperty velocity;
 	public SimpleStringProperty roadAngle;
+	public SimpleStringProperty elevation;
 	
 	public void setStartTime(double startTime) {
 		String formatted = String.format("%02.0f:%02.0f", Math.floor(startTime), startTime%1*60);
@@ -54,6 +55,11 @@ public class MasterData {
 		this.roadAngle.set(formatted);
 	}
 	
+	public void setElevation(double elevation) {
+		String formatted = String.format("%5.0f", elevation);
+		this.elevation.set(formatted);
+	}
+	
 	public StringProperty getStartTime() {
 		return startTime;
 	}
@@ -82,6 +88,10 @@ public class MasterData {
 		return roadAngle;
 	}
 	
+	public StringProperty getElevation() {
+		return elevation;
+	}
+	
 	public MasterData(){
 		this.startTime = new SimpleStringProperty("");
 		this.endTime = new SimpleStringProperty("");
@@ -90,5 +100,6 @@ public class MasterData {
 		this.distance = new SimpleStringProperty("");
 		this.velocity = new SimpleStringProperty("");
 		this.roadAngle = new SimpleStringProperty("");
+		this.elevation = new SimpleStringProperty("");
 	}
 }

@@ -131,6 +131,7 @@ public class Data {
 			myData.setDistance(totalDistance);
 			myData.setVelocity(averageVelocity);
 			myData.setRoadAngle(roadAngle);
+			myData.setElevation(pos.getElevation());
 			rowData.add(myData);
 		}
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
