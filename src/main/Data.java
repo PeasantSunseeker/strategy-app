@@ -11,63 +11,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-
-    public static ObservableList<MasterData> getHourlyData() {
-        double velocity = 80; // km/h
-        double weight = 2700; // Newtons
-
-        double aeroPower = Aerodynamic.aerodynamicPower(velocity);
-        double rollingPower = Rolling.rollingPower(velocity, weight);
-        double totalPower = (aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
-
-        double start = 9;
-        double end = 17;
-        double periodSize = 0.5;
-        double totalCharge = 0;
-        double distance = 0;
-
-        //List<String> data = new ArrayList<>();
-        int listCount = -1;
-        int columns = 11;
-
+	
+	public static ObservableList<MasterData> getHourlyData() {
+		double velocity = 80; // km/h
+		double weight = 2700; // Newtons
+		
+		double aeroPower = Aerodynamic.aerodynamicPower(velocity);
+		double rollingPower = Rolling.rollingPower(velocity, weight);
+		double totalPower = (aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
+		
+		double start = 9;
+		double end = 17;
+		double periodSize = 0.5;
+		double totalCharge = 0;
+		double distance = 0;
+		
+		//List<String> data = new ArrayList<>();
+		int listCount = -1;
+		int columns = 11;
+		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 
 //        System.out.format("%5s | %5s | %6s | %3s | %5s | %6s | %5s | %5s | %4s | %5s | %3s\n", "Time", "Angle", "Solar", "Aero", "Roll", "Total", "Battery", "Batt Cap", "Batt Chg", "Tot Chg", "Distance");
-
+		
 		int dayOfYear = LocalDate.now().getDayOfYear();
 		
-        for (double time = start; time < end; time += periodSize) {
-            listCount++;
-
-            double middleTime = time + (periodSize / 2);
-            double sunAngle = Solar.getAngle(dayOfYear, middleTime, 37);
-            double solarPower = Solar.solarPower(dayOfYear, middleTime, 37);
-            double batteryPower = totalPower - solarPower;
-            double batteryCap = Battery.getCapacity(batteryPower);
-            double batteryCharge = batteryPower * periodSize / batteryCap * 100;
-            batteryCharge *= -1;
-            totalCharge += batteryCharge;
-            distance += velocity * periodSize;
-
+		for (double time = start; time < end; time += periodSize) {
+			listCount++;
+			
+			double middleTime = time + (periodSize / 2);
+			double sunAngle = Solar.getAngle(dayOfYear, middleTime, 37);
+			double solarPower = Solar.solarPower(dayOfYear, middleTime, 37);
+			double batteryPower = totalPower - solarPower;
+			double batteryCap = Battery.getCapacity(batteryPower);
+			double batteryCharge = batteryPower * periodSize / batteryCap * 100;
+			batteryCharge *= -1;
+			totalCharge += batteryCharge;
+			distance += velocity * periodSize;
+			
 			MasterData myData = new MasterData();
 			myData.setStartTime(time);
 			myData.setBatteryCharge(batteryCharge);
 			myData.setTotalCharge(totalCharge);
 			myData.setDistance(distance);
-            rowData.add(myData);
+			rowData.add(myData);
 
 
 //            System.out.format("%5.2f | %5.2f | %6.1f | %4.0f | %5.1f | %5.1f | %7.1f | %8.2f | %8.2f | %7.2f | %6.0fkm\n",
 //                    middleTime, sunAngle, solarPower, aeroPower, rollingPower, totalPower, batteryPower, batteryCap, batteryCharge, totalCharge, distance);
-        }
-
+		}
+		
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
-
-        return returnData;
-    }
+		
+		return returnData;
+	}
 	
-	public static ObservableList<MasterData> getData(){
-    	Position[] positions = Position.loadPositions("leg-1-10_items");
+	public static ObservableList<MasterData> getData() {
+		Position[] positions = Position.loadPositions("leg-1-10_items");
 		
 		double weight = 2700; // Newtons
 		double totalPower;
@@ -80,11 +80,11 @@ public class Data {
 		int dayOfYear = LocalDate.now().getDayOfYear();
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
-
+		
 		System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 				"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
 				"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
-
+		
 		for (index = 1; index < positions.length; index++) {
 			Position pos = positions[index];
 			Position prev = positions[index - 1];
@@ -116,8 +116,8 @@ public class Data {
 			start += deltaTime;
 			totalDistance += distance;
 			
-			String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previous), previous%1*60);
-			String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previous + deltaTime), (previous + deltaTime)%1*60);
+			String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previous), previous % 1 * 60);
+			String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previous + deltaTime), (previous + deltaTime) % 1 * 60);
 			
 			System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
 					totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,

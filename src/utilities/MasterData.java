@@ -20,12 +20,12 @@ public class MasterData {
 	public SimpleStringProperty roadAngle;
 	
 	public void setStartTime(double startTime) {
-		String formatted = String.format("%02.0f:%02.0f", Math.floor(startTime), startTime%1*60);
+		String formatted = String.format("%02.0f:%02.0f", Math.floor(startTime), startTime % 1 * 60);
 		this.startTime.set(formatted);
 	}
 	
 	public void setEndTime(double endTime) {
-		String formatted = String.format("%02.0f:%02.0f", Math.floor(endTime), endTime%1*60);
+		String formatted = String.format("%02.0f:%02.0f", Math.floor(endTime), endTime % 1 * 60);
 		this.endTime.set(formatted);
 	}
 	
@@ -82,7 +82,7 @@ public class MasterData {
 		return roadAngle;
 	}
 	
-	public MasterData(){
+	public MasterData() {
 		this.startTime = new SimpleStringProperty("");
 		this.endTime = new SimpleStringProperty("");
 		this.batteryCharge = new SimpleStringProperty("");

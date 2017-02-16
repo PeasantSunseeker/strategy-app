@@ -23,13 +23,13 @@ public class SolarTest {
 	}
 	
 	@Test
-    public void solarPower() throws Exception {
-        Assert.assertEquals(1167.8, Solar.solarPower(224, 12.25, 37.0883), .1);
-    }
+	public void solarPower() throws Exception {
+		Assert.assertEquals(1167.8, Solar.solarPower(224, 12.25, 37.0883), .1);
+	}
 
-    @Test
-    public void getAngle() throws Exception {
-        Assert.assertEquals(22.96, Solar.getAngle(224, 12.25, 37.0883), .1);
-    }
+	@Test
+	public void getAngle() throws Exception {
+		Assert.assertEquals(22.96, Solar.getAngle(224, 12.25, 37.0883), .1);
+	}
 
 }

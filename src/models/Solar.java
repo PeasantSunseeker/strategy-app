@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Solar {
 	static double sunrise = 6.6167;
 	static double dayLength = 12.6167;
-//	static double noonAngle = 22;
+	//	static double noonAngle = 22;
 	static double maxPower = 1300;
 	static double charging = 0.3;
 	static double driving = 1.3;

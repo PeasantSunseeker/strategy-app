@@ -29,52 +29,52 @@ import weather.ApiKey;
  * OUTPUTS:
  */
 public class TemperatureChartController {
-
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private LineChart<?, ?> weatherLineChart;
-
-    @FXML
-    private NumberAxis temperatureAxis;
-
-    @FXML
-    private CategoryAxis dateAxis;
-
-    @FXML
-    void initialize() {
-        assert weatherLineChart != null : "fx:id=\"weatherLineChart\" was not injected: check your FXML file 'temperaturechart.fxml'.";
-
-        weatherLineChart.setTitle("Temperature Forecast");
-
-        OpenWeatherMap owm = new OpenWeatherMap(ApiKey.getApiKey());
-        owm.setUnits(OpenWeatherMap.Units.METRIC);
-        HourlyForecast hf = null;
-        HourlyForecast.Forecast forecast;
-
-        //here is the data that will fill in the chart
-        XYChart.Series series = new XYChart.Series();
-        //series.setName("data");
-
-        try {
-            hf = owm.hourlyForecastByCityName("Kalamazoo");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //fill the data series with date/value pairs
-        for (int i = 1; i <= hf.getForecastCount(); i++) {
-            forecast = hf.getForecastInstance(i - 1);
-            series.getData().add(new XYChart.Data(forecast.getDateTimeText(), forecast.getMainInstance().getTemperature()));
-        }
-
-        weatherLineChart.getData().add(series);
-
-
-    }
+	
+	
+	@FXML
+	private ResourceBundle resources;
+	
+	@FXML
+	private URL location;
+	
+	@FXML
+	private LineChart<?, ?> weatherLineChart;
+	
+	@FXML
+	private NumberAxis temperatureAxis;
+	
+	@FXML
+	private CategoryAxis dateAxis;
+	
+	@FXML
+	void initialize() {
+		assert weatherLineChart != null : "fx:id=\"weatherLineChart\" was not injected: check your FXML file 'temperaturechart.fxml'.";
+		
+		weatherLineChart.setTitle("Temperature Forecast");
+		
+		OpenWeatherMap owm = new OpenWeatherMap(ApiKey.getApiKey());
+		owm.setUnits(OpenWeatherMap.Units.METRIC);
+		HourlyForecast hf = null;
+		HourlyForecast.Forecast forecast;
+		
+		//here is the data that will fill in the chart
+		XYChart.Series series = new XYChart.Series();
+		//series.setName("data");
+		
+		try {
+			hf = owm.hourlyForecastByCityName("Kalamazoo");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//fill the data series with date/value pairs
+		for (int i = 1; i <= hf.getForecastCount(); i++) {
+			forecast = hf.getForecastInstance(i - 1);
+			series.getData().add(new XYChart.Data(forecast.getDateTimeText(), forecast.getMainInstance().getTemperature()));
+		}
+		
+		weatherLineChart.getData().add(series);
+		
+		
+	}
 }
