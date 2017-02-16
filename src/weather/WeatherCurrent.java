@@ -2,6 +2,9 @@ package weather;
 
 import utilities.Flag;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * PROJECT: seniordesign
  * AUTHOR: aaron  2/4/2017.
@@ -92,5 +95,17 @@ public class WeatherCurrent {
 	public void printOut() {
 		System.out.println(String.format("%f,%f,%f,%f,%f,%s,%s,%s\n", getLatitude(), getLongitude(), getCloudsPercentage()
 				, getWindSpeed(), getWindDirection(), getSunrise(), getSunset(), getFlag()));
+		
+		System.out.println("=== datetime stuff ===");
+		
+		LocalDateTime rightNow = LocalDateTime.now();
+		
+		//sunrise/sunset time stamp pattern
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MMM dd kk:mm:ss zzz uuuu");
+		LocalDateTime sunrise = LocalDateTime.parse(getSunrise(), dtf);
+		LocalDateTime sunset = LocalDateTime.parse(getSunset(), dtf);
+		
+		System.out.println("Two days from now is " + sunrise.plusDays(2));
 	}
+	
 }

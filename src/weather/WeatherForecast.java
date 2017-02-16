@@ -1,6 +1,8 @@
 package weather;
 
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -92,5 +94,16 @@ public class WeatherForecast {
 					windDegrees.get(i), windSpeeds.get(i), time.get(i)));
 		}
 		
+		/*
+		String timeFromFile = time.get(0);
+		LocalDateTime rightNow = LocalDateTime.now();
+		
+		//parse the time string from forecast file into a LocalDateTime
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
+		
+		LocalDateTime parsedTimeFromFile = LocalDateTime.parse(timeFromFile, dtf);
+		
+		System.out.println(parsedTimeFromFile.toString());
+		*/
 	}
 }

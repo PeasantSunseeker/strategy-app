@@ -56,7 +56,7 @@ public class WeatherCaching {
 		
 		if (forecasts != null) {
 			for (int i = 0; i < forecasts.size(); i++) {
-				forecasts.get(i).printOut();
+				//forecasts.get(i).printOut();
 			}
 		} else {
 			System.out.println("Error loading forecasts");
@@ -156,7 +156,7 @@ public class WeatherCaching {
 				);
 				
 				weatherCurrents[i].setFlag(Flag.valueOf(items[7]));
-				
+				weatherCurrents[i].printOut();
 			}
 			
 			bufferedReader.close();
@@ -250,7 +250,7 @@ public class WeatherCaching {
 				
 				items = line.split(",");
 				if (items.length == 3) {
-					System.out.println("ID line");
+					//System.out.println("ID line");
 					//a line with a position
 					curIndex = Integer.parseInt(items[0]) - 1;
 					weatherForecasts.add(curIndex, new WeatherForecast(Float.valueOf(items[1]), Float.valueOf(items[2])));
@@ -333,15 +333,15 @@ public class WeatherCaching {
 	
 	public void refreshForecasts() {
 		
-		LocalDateTime forecastRetrievedDate;
-		String timeOfRetreival;
-		timeOfRetreival = forecasts.get(0).getTime().get(0);
+		//LocalDateTime forecastRetrievedDate;
+		//String timeOfRetreival;
+		//timeOfRetreival = forecasts.get(0).getTime().get(0);
 		
 		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("")
 		
 		
-		forecastRetrievedDate =
-		if (LocalDateTime.now().)
+		//forecastRetrievedDate =
+		//if (LocalDateTime.now().)
 	}
 	//forecast()
 	//if you have internet
