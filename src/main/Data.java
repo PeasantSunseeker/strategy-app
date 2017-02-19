@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
+	
+	public static void main(String[] args){
+		getData();
+	}
 
     public static ObservableList<MasterData> getHourlyData() {
         double velocity = 80; // km/h
@@ -97,7 +101,7 @@ public class Data {
 			double averageVelocity = (currentVelocity + previousVelocity) / 2;
 
 //			double roadAngle = Gravitational.getRoadAngle(averageGrade);
-			double roadAngle = Position.calculateAngle(prev, pos);
+			double roadAngle = prev.getAngle();//Position.calculateAngle(prev, pos);
 			double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
 			double kineticPower = Gravitational.kineticPower(currentVelocity, previousVelocity, distance, weight);
 			double deltaTime = (distance) / averageVelocity;

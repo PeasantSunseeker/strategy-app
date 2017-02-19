@@ -24,7 +24,7 @@ public class Position {
 	private float longitude = 0f;
 	private float elevation = 0f;
 	private double heading = 0f; //degrees clockwise from due north
-	private float angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
+	private double angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
 	private float velocity = 80f;
 	
 	private Flag elevationFlag;
@@ -55,11 +55,11 @@ public class Position {
 		this.heading = heading;
 	}
 	
-	public float getAngle() {
+	public double getAngle() {
 		return angle;
 	}
 	
-	public void setAngle(float angle) {
+	public void setAngle(double angle) {
 		this.angle = angle;
 	}
 	
@@ -257,6 +257,17 @@ public class Position {
 				positions[i].velocity = Float.valueOf(items[5]);
 				positions[i].elevationFlag = Flag.valueOf(items[6].trim());
 				positions[i].velocityFlag = Flag.valueOf(items[7].trim());
+				if (i > 0){
+					if(positions[i-1].angle == 0) {
+//						System.out.println("Calc Heading");
+						//TODO Brodie: Calculate angle once upon request
+						positions[i - 1].setAngle(calculateAngle(positions[i-1], positions[i]));
+					}
+					if(positions[i-1].heading == 0) {
+						//TODO Brodie: Calculate heading once upon request
+						positions[i - 1].setHeading(calculateHeading(positions[i - 1], positions[i]));
+					}
+				}
 			}
 			
 			bufferedReader.close();
