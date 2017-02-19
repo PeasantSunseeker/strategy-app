@@ -31,5 +31,4 @@ public class SolarTest {
 	public void getAngle() throws Exception {
 		Assert.assertEquals(22.96, Solar.getAngle(224, 12.25, 37.0883), .1);
 	}
-	
 }

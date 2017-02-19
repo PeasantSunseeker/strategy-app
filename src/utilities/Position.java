@@ -18,8 +18,6 @@ import java.util.List;
  * -Angle
  */
 public class Position {
-	
-	
 	private float latitude = 0f;
 	private float longitude = 0f;
 	private float elevation = 0f;

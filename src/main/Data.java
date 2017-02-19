@@ -15,7 +15,7 @@ public class Data {
 	public static void main(String[] args) {
 		getData();
 	}
-	
+
 	public static ObservableList<MasterData> getHourlyData() {
 		double velocity = 80; // km/h
 		double weight = 2700; // Newtons

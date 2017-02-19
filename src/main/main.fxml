@@ -8,52 +8,61 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
-  <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#exit" text="Quit" />
-          </items>
-        </Menu>
-        <Menu fx:id="viewmenu" mnemonicParsing="false" text="View">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Data Table" />
-            <MenuItem mnemonicParsing="false" onAction="#showTemperatureChart" text="Weather" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-         <children>
-            <Button fx:id="temperatureForecastButton" layoutX="370.0" layoutY="65.0" mnemonicParsing="false" onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast" textAlignment="CENTER" />
-            <Button fx:id="dataTableButton" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" onAction="#showDataTable" text="Data Table" />
-            <Button fx:id="currentConditionsButton" layoutX="370.0" layoutY="14.0" mnemonicParsing="false" onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions" />
-         </children>
-    </AnchorPane>
-  </children>
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.Controller">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="New"/>
+                        <MenuItem mnemonicParsing="false" text="Open…"/>
+                        <Menu mnemonicParsing="false" text="Open Recent"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Close"/>
+                        <MenuItem mnemonicParsing="false" text="Save"/>
+                        <MenuItem mnemonicParsing="false" text="Save As…"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Preferences…"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#exit" text="Quit"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="viewmenu" mnemonicParsing="false" text="View">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Data Table"/>
+                        <MenuItem mnemonicParsing="false" onAction="#showTemperatureChart" text="Weather"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Cut"/>
+                        <MenuItem mnemonicParsing="false" text="Copy"/>
+                        <MenuItem mnemonicParsing="false" text="Paste"/>
+                        <MenuItem mnemonicParsing="false" text="Delete"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Select All"/>
+                        <MenuItem mnemonicParsing="false" text="Unselect All"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Button fx:id="temperatureForecastButton" layoutX="370.0" layoutY="65.0" mnemonicParsing="false"
+                        onAction="#showTemperatureChart" prefHeight="39.0" prefWidth="209.0" text="Temperature Forecast"
+                        textAlignment="CENTER"/>
+                <Button fx:id="dataTableButton" layoutX="202.0" layoutY="26.0" mnemonicParsing="false"
+                        onAction="#showDataTable" text="Data Table"/>
+                <Button fx:id="currentConditionsButton" layoutX="370.0" layoutY="14.0" mnemonicParsing="false"
+                        onAction="#showCurrentWeather" prefHeight="39.0" prefWidth="209.0" text="Current Conditions"/>
+                <Button fx:id="elevationGraphButton" layoutX="370.0" layoutY="122.0" mnemonicParsing="false"
+                        onAction="#showElevationChart" prefHeight="39.0" prefWidth="209.0" text="Elevation Graph"/>
+                <Button fx:id="energyGraphButton" layoutX="370.0" layoutY="179.0" mnemonicParsing="false"
+                        onAction="#showEnergyGraph" prefHeight="39.0" prefWidth="209.0" text="Energy Graph"/>
+            </children>
+        </AnchorPane>
+    </children>
 </VBox>

@@ -13,27 +13,27 @@ import java.io.IOException;
  * Created by Broderick on 12/30/2016.
  */
 public class MainForm extends Application {
-
-    private TableView table = new TableView();
-    public static String[] arguments;
-
-
-    @Override
-    public void start(Stage primaryStage) {
-
-
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        primaryStage.setTitle("Solar Car Performance Application");
-        primaryStage.setScene(new Scene(root, 1024, 768));
-        primaryStage.show();
+	
+	private TableView table = new TableView();
+	public static String[] arguments;
+	
+	
+	@Override
+	public void start(Stage primaryStage) {
+		
+		
+		Parent root = null;
+		try {
+			root = FXMLLoader.load(getClass().getResource("main.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		primaryStage.setTitle("Solar Car Performance Application");
+		primaryStage.setScene(new Scene(root, 1024, 768));
+		primaryStage.show();
 
         /*
-        Button tableButton;
+		Button tableButton;
         Button weatherButton;
 
         currentStage = new Stage();
@@ -81,10 +81,10 @@ public class MainForm extends Application {
             tableButton.fire();
         }
         */
-    }
-
-    public static void main(String[] args) {
-        arguments = args;
-        launch(args);
-    }
+	}
+	
+	public static void main(String[] args) {
+		arguments = args;
+		launch(args);
+	}
 }

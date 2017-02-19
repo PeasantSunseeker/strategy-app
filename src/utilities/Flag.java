@@ -14,7 +14,7 @@ package utilities;
  * OUTPUTS:
  */
 public enum Flag {
-    EMPTY, AVERAGED, RETRIEVED
+	EMPTY, AVERAGED, RETRIEVED
 }
 
 
