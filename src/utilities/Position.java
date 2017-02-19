@@ -111,6 +111,11 @@ public class Position {
 	}
 	
 	public static void main(String[] args) {
+//		makeSmall();
+		resave();
+	}
+	
+	public static void makeSmall(){
 		List<Position> positionList = new ArrayList<Position>();
 		String line;
 		String[] items;
@@ -154,12 +159,13 @@ public class Position {
 		
 		savePositions(positions, fileName + "-complete");
 		savePositions(positionsSmall, fileName + "-10_items");
-
-//        positionsSmall = loadPositions(fileName + "-10_items");
-
-//        System.out.println(positionsSmall.length);
-//        System.out.println(positionsSmall[0].velocity);
-//        System.out.println(Position.getDistance(positionsSmall[0], positionsSmall[9]));
+	}
+	
+	public static void resave(){
+		String fileName = "leg-1-10_items";
+		Position[] positionsSmall;
+		positionsSmall = loadPositions(fileName);
+		savePositions(positionsSmall, fileName);
 	}
 	
 	public static double getDistance(Position a, Position b) {
@@ -212,7 +218,7 @@ public class Position {
 			for (int i = 0; i < positions.length; i++) {
 				Position pos = positions[i];
 				
-				String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s\n", pos.latitude, pos.longitude, pos.elevation, pos.heading, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
+				String line = String.format("%-9s,%-10s,%-10s,%-19s,%-5s,%-5s,%-10s,%-10s\n", pos.latitude, pos.longitude, pos.elevation, pos.heading, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
 				bufferedWriter.write(line);
 			}
 			
@@ -249,8 +255,8 @@ public class Position {
 				positions[i].heading = Float.valueOf(items[3]);
 				positions[i].angle = Float.valueOf(items[4]);
 				positions[i].velocity = Float.valueOf(items[5]);
-				positions[i].elevationFlag = Flag.valueOf(items[6]);
-				positions[i].velocityFlag = Flag.valueOf(items[7]);
+				positions[i].elevationFlag = Flag.valueOf(items[6].trim());
+				positions[i].velocityFlag = Flag.valueOf(items[7].trim());
 			}
 			
 			bufferedReader.close();
