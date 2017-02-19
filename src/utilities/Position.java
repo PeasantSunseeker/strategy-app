@@ -115,7 +115,7 @@ public class Position {
 		resave();
 	}
 	
-	public static void makeSmall(){
+	public static void makeSmall() {
 		List<Position> positionList = new ArrayList<Position>();
 		String line;
 		String[] items;
@@ -161,7 +161,7 @@ public class Position {
 		savePositions(positionsSmall, fileName + "-10_items");
 	}
 	
-	public static void resave(){
+	public static void resave() {
 		String fileName = "leg-1-10_items";
 		Position[] positionsSmall;
 		positionsSmall = loadPositions(fileName);
@@ -257,13 +257,13 @@ public class Position {
 				positions[i].velocity = Float.valueOf(items[5]);
 				positions[i].elevationFlag = Flag.valueOf(items[6].trim());
 				positions[i].velocityFlag = Flag.valueOf(items[7].trim());
-				if (i > 0){
-					if(positions[i-1].angle == 0) {
+				if (i > 0) {
+					if (positions[i - 1].angle == 0) {
 //						System.out.println("Calc Heading");
 						//TODO Brodie: Calculate angle once upon request
-						positions[i - 1].setAngle(calculateAngle(positions[i-1], positions[i]));
+						positions[i - 1].setAngle(calculateAngle(positions[i - 1], positions[i]));
 					}
-					if(positions[i-1].heading == 0) {
+					if (positions[i - 1].heading == 0) {
 						//TODO Brodie: Calculate heading once upon request
 						positions[i - 1].setHeading(calculateHeading(positions[i - 1], positions[i]));
 					}
