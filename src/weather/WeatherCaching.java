@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class WeatherCaching {
 		
 		//get current weather conditions
 		
-		
+		/*
 		positions = Position.loadPositions("leg-1-10_items");
 		if (positions == null) {
 			System.out.println("Error loading positions");
@@ -61,7 +62,22 @@ public class WeatherCaching {
 		} else {
 			System.out.println("Error loading forecasts");
 		}
+		*/
 		
+		positions = Position.loadPositions("leg-1-10_items");
+		
+		
+		forecasts = loadForecast("weather-forecast-10_locations");
+		
+		if (refreshForecasts() == true) {
+			System.out.println("Weather forecasts either missing or outdated. Getting new forecasts...");
+			saveForecast("weather-forecast-10_locations");
+		}
+		
+		//try and find a forecast in the file, 2017-02-21	00:00
+		LocalDateTime search = LocalDateTime.of(2017, Month.FEBRUARY, 21, 0, 0);
+		AveragedWeather a = findForecastAtTime(search);
+		a.printOut();
 		
 	}
 	
@@ -180,7 +196,7 @@ public class WeatherCaching {
 		//read coordinates from csv file
 		try {
 			
-			FileWriter fw = new FileWriter(outFileName);
+			FileWriter fw = new FileWriter(outFileName, false);
 			BufferedWriter bufferedWriter = new BufferedWriter(fw);
 			
 			float latitude;
@@ -292,64 +308,96 @@ public class WeatherCaching {
 	}
 	
 	
-	public AveragedWeather findForecastAtTime(LocalDateTime time) {
+	public static AveragedWeather findForecastAtTime(LocalDateTime time) {
+		//TODO: workflow on current vs future
+		
+		//Wanted: February 09 2017, 8:00am
+		//if(wanted < current + 6hrs)
+		//call current
+		//get earliest forecast we can (9:00am?)
+		//average current + forecast
+		//else if(wanted < current + 3 days)
+		//call forecast()
+		//get the closest two forecasts (6:00am and 9:00am)
+		//average them
+		//else
+		
 		
 		boolean notFound = true;
 		int i = 0;
 		AveragedWeather avgd = null;
 		WeatherForecast wf;
 		
-		//so this reads from the file, but i'm reassigning the arraylist of forecasts... should I be doing that?
-		forecasts = loadForecast("weather-forecast-10_locations");
+		//this pattern matches a 'forecasted' time.
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
+		String rawTime;
+		LocalDateTime forecastTime;
+		
+		if (forecasts == null) {
+			forecasts = loadForecast("weather-forecast-10_locations");
+		}
+		
 		
 		while (notFound) {
 			
 			wf = forecasts.get(i);
-			//if we have a forecast for the time we're looking for
-			if (wf.getTime().get(i).equals(time.toString())) {
-				notFound = false;
+			
+			for (int j = 0; j < wf.getTime().size(); j++) {
 				
+				rawTime = wf.getTime().get(j);
+				forecastTime = LocalDateTime.parse(rawTime, dtf);
+				
+				//if we have a forecast for the time we're looking for, get that and we're done
+				if (time.isEqual(forecastTime)) {
+					System.out.println("Found");
+					notFound = false;
+					avgd = new AveragedWeather(wf.getCloudPercentages().get(j), wf.getWindDegrees().get(j), wf.getWindSpeeds().get(j));
+				}
 			}
 			
+			
+			i++;
 			
 		}
 		
 		return avgd;
 	}
 	
-	//TODO: workflow on current vs future
 	
-	//Wanted: February 09 2017, 8:00am
-	//if(wanted < current + 6hrs)
-	//call current
-	//get earliest forecast we can (9:00am?)
-	//average current + forecast
-	//else if(wanted < current + 3 days)
-	//call forecast()
-	//get the closest two forecasts (6:00am and 9:00am)
-	//average them
-	//else
-	
-	
-	public void refreshForecasts() {
+	/**
+	 * @return true- if the first forecast in the file is missing or old
+	 */
+	public static boolean refreshForecasts() {
 		
-		//LocalDateTime forecastRetrievedDate;
-		//String timeOfRetreival;
-		//timeOfRetreival = forecasts.get(0).getTime().get(0);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime firstForecast;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
 		
-		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("")
+		try {
+			firstForecast = LocalDateTime.parse(forecasts.get(0).getTime().get(0), dtf);
+		} catch (Exception e) {
+			System.out.println(e);
+			return true;
+		}
+		
+		System.out.println("Time of first forecast is " + firstForecast);
+		if (now.isAfter(firstForecast.plusDays(1))) {
+			//get new forecasts
+			return true;
+		}
 		
 		
-		//forecastRetrievedDate =
-		//if (LocalDateTime.now().)
+		return false;
 	}
-	//forecast()
-	//if you have internet
-	//if currentDate > list(0) + 1day  //our forecasts are more than 1 day old
-	//get new forecasts
-	//
 	
 }
+//forecast()
+//if you have internet
+//if currentDate > list(0) + 1day  //our forecasts are more than 1 day old
+//get new forecasts
+//
+	
+
 
 
 

@@ -3,6 +3,8 @@ package weather;
 import utilities.Flag;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -105,7 +107,11 @@ public class WeatherCurrent {
 		LocalDateTime sunrise = LocalDateTime.parse(getSunrise(), dtf);
 		LocalDateTime sunset = LocalDateTime.parse(getSunset(), dtf);
 		
+		System.out.println("Original sunrise in EST is " + sunrise);
 		System.out.println("Two days from now is " + sunrise.plusDays(2));
+		
+		//TODO: find a way to do this by specifying time zone instead of just subtracting
+		System.out.println("Sunrise time converted to PST is " + sunrise.minusHours(3));
 	}
 	
 }
