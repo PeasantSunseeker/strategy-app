@@ -47,4 +47,9 @@ public class AveragedWeather {
 	public float getAvgWindSpeed() {
 		return avgWindSpeed;
 	}
+	
+	public void printOut() {
+		System.out.format("Average Cloud Pct: %f \n Average Wind Degrees: %f \n Average Wind Speed: %f kph \n",
+				avgCloudPercentage, avgWindDegrees, avgWindSpeed);
+	}
 }
