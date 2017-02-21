@@ -185,20 +185,32 @@ public class Position {
 		return Math.toDegrees(Math.atan(deltaElevation / distance));
 	}
 	
-	private static double calculateHeading(Position a, Position b) {
-		double deltaLon = (b.longitude - a.longitude);
+	public static double calculateHeading(Position a, Position b) {
+		double longitudeA = Math.toRadians(a.longitude);
+		double longitudeB = Math.toRadians(b.longitude);
+		double latitudeA = Math.toRadians(a.latitude);
+		double latitudeB = Math.toRadians(b.latitude);
 		
-		double y = Math.sin(deltaLon) * Math.cos(b.latitude);
-		double x = Math.cos(a.latitude) * Math.sin(b.latitude) - Math.sin(a.latitude) * Math.cos(b.latitude) * Math.cos(deltaLon);
+		double deltaLon = (longitudeB - longitudeA);
 		
-		double heading = Math.atan2(y, x);
+		double y = Math.sin(deltaLon) * Math.cos(latitudeB);
+		double x = Math.cos(latitudeA) * Math.sin(latitudeB) - Math.sin(latitudeA) * Math.cos(latitudeB) * Math.cos(deltaLon);
 		
-		heading = Math.toDegrees(heading);
+		double heading = Math.toDegrees(Math.atan2(y, x));
+		
+//		heading = Math.toDegrees(heading);
 		heading = (heading + 360) % 360;
 //        heading = 360 - heading; // count degrees counter-clockwise - remove to make clockwise
 		
 		return heading;
 	}
+	
+//	public static double calculateHeadingNew(Position a, Position b) {
+//
+//		double heading =
+//
+//		return heading;
+//	}
 	
 	public static boolean savePositions(Position[] positions, String fileName) {
 		fileName = fileName + ".csv";
