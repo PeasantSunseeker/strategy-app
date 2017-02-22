@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.MockupController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+            <StackPane fx:id="tablePane" layoutX="14.0" layoutY="365.0" prefHeight="360.0" prefWidth="640.0">
+               <children>
+                  <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="C1" />
+                      <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                  </TableView>
+               </children>
+            </StackPane>
+            <GridPane layoutX="774.0" layoutY="58.0" prefHeight="120.0" prefWidth="555.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.0" minWidth="0.0" prefWidth="220.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="426.0" minWidth="10.0" prefWidth="201.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="159.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="27.0" prefWidth="316.0" text="Shade Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label prefHeight="27.0" prefWidth="324.0" text="Cloud Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label prefHeight="27.0" prefWidth="318.0" text="Speed Limit (MPH)" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="cloudPctOverride" onKeyPressed="#overrideClouds" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label text="Settings Current" />
+                  <Label prefHeight="27.0" prefWidth="167.0" text="Settings Overrides" textAlignment="CENTER" GridPane.columnIndex="2" />
+                  <Label fx:id="currentCloudPct" prefHeight="27.0" prefWidth="209.0" text="10%" GridPane.rowIndex="1" />
+                  <Label fx:id="currentShadePct" prefHeight="27.0" prefWidth="209.0" text="5%" GridPane.rowIndex="2" />
+                  <Label fx:id="currentSpeedLimit" prefHeight="27.0" prefWidth="209.0" text="55" GridPane.rowIndex="3" />
+                  <TextField fx:id="shadePctOverride" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="speedLimitOverride" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+            <StackPane layoutX="713.0" layoutY="368.0" prefHeight="353.0" prefWidth="677.0">
+               <children>
+                  <LineChart title="Energy, Speed, Distance Chart">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </StackPane>
+            <Label layoutX="106.0" layoutY="118.0" prefHeight="27.0" prefWidth="454.0" text="The map will go here" textAlignment="CENTER" />
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

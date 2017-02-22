@@ -24,7 +24,8 @@ public class MainForm extends Application {
 		
 		Parent root = null;
 		try {
-			root = FXMLLoader.load(getClass().getResource("main.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/ui/fxml/mockup.fxml"));
+			//root = FXMLLoader.load(getClass().getResource("main.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

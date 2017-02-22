@@ -82,8 +82,8 @@ public class WeatherCaching {
 	}
 	
 	/**
-	 * @param outFileName
-	 * @return
+	 * @param outFileName name of the .csv file to save to
+	 * @return false if there was an error
 	 */
 	public static boolean saveCurrent(String outFileName) {
 		
@@ -138,8 +138,8 @@ public class WeatherCaching {
 	}
 	
 	/**
-	 * @param fileName
-	 * @return
+	 * @param fileName the .csv file to load from
+	 * @return array of WeatherCurrent objects. Will be null if there was an error
 	 */
 	public static WeatherCurrent[] loadCurrent(String fileName) {
 		fileName = fileName + ".csv";
@@ -308,11 +308,15 @@ public class WeatherCaching {
 	}
 	
 	
-	public static AveragedWeather findForecastAtTime(LocalDateTime time) {
+	/**
+	 * @param wanted
+	 * @return an AveragedWeather, it will be null if something went wrong
+	 */
+	public static AveragedWeather findForecastAtTime(LocalDateTime wanted) {
 		//TODO: workflow on current vs future
 		
 		//Wanted: February 09 2017, 8:00am
-		//if(wanted < current + 6hrs)
+		//if(wanted < current + 6hrs)            wanted within the next 6 hours
 		//call current
 		//get earliest forecast we can (9:00am?)
 		//average current + forecast
@@ -322,6 +326,8 @@ public class WeatherCaching {
 		//average them
 		//else
 		
+		
+		System.out.println("Looking for forecast at " + wanted);
 		
 		boolean notFound = true;
 		int i = 0;
@@ -348,7 +354,7 @@ public class WeatherCaching {
 				forecastTime = LocalDateTime.parse(rawTime, dtf);
 				
 				//if we have a forecast for the time we're looking for, get that and we're done
-				if (time.isEqual(forecastTime)) {
+				if (wanted.isEqual(forecastTime)) {
 					System.out.println("Found");
 					notFound = false;
 					avgd = new AveragedWeather(wf.getCloudPercentages().get(j), wf.getWindDegrees().get(j), wf.getWindSpeeds().get(j));
