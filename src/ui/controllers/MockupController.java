@@ -7,7 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -15,13 +18,14 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Screen;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import main.Data;
 import utilities.MasterData;
 import weather.WeatherCaching;
 import weather.WeatherCurrent;
-import weather.WeatherForecast;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,56 +59,70 @@ public class MockupController {
 	
 	//region FXML declarations
 	
-	@FXML // ResourceBundle that was given to the FXMLLoader
-	private ResourceBundle resources;
+	@FXML
+	private Label currentSpeedLimit;
 	
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
+	@FXML
+	private StackPane tablePane;
 	
-	@FXML // fx:id="currentSpeedLimit"
-	private Label currentSpeedLimit; // Value injected by FXMLLoader
+	@FXML
+	private NumberAxis energyYAxis;
 	
-	@FXML // fx:id="tablePane"
-	private StackPane tablePane; // Value injected by FXMLLoader
+	@FXML
+	private MenuItem carConfig;
 	
-	@FXML // fx:id="energyYAxis"
-	private NumberAxis energyYAxis; // Value injected by FXMLLoader
+	@FXML
+	private TextField cloudPctOverride;
 	
-	@FXML // fx:id="cloudPctOverride"
-	private TextField cloudPctOverride; // Value injected by FXMLLoader
+	@FXML
+	private ComboBox chartSelector;
 	
-	@FXML // fx:id="chartSelector"
-	private ComboBox chartSelector; // Value injected by FXMLLoader
+	@FXML
+	private TextField shadePctOverride;
 	
-	@FXML // fx:id="shadePctOverride"
-	private TextField shadePctOverride; // Value injected by FXMLLoader
+	@FXML
+	private NumberAxis cloudYAxis;
 	
-	@FXML // fx:id="cloudYAxis"
-	private NumberAxis cloudYAxis; // Value injected by FXMLLoader
+	@FXML
+	private TextField speedLimitOverride;
 	
-	@FXML // fx:id="speedLimitOverride"
-	private TextField speedLimitOverride; // Value injected by FXMLLoader
+	@FXML
+	private LineChart cloudChart;
 	
-	@FXML // fx:id="cloudChart"
-	private LineChart<?, ?> cloudChart; // Value injected by FXMLLoader
+	@FXML
+	private CategoryAxis energyXAxis;
 	
-	@FXML // fx:id="energyXAxis"
-	private CategoryAxis energyXAxis; // Value injected by FXMLLoader
+	@FXML
+	private Label currentCloudPct;
 	
-	@FXML // fx:id="currentCloudPct"
-	private Label currentCloudPct; // Value injected by FXMLLoader
+	@FXML
+	private CategoryAxis cloudXAxis;
 	
-	@FXML // fx:id="cloudXAxis"
-	private CategoryAxis cloudXAxis; // Value injected by FXMLLoader
+	@FXML
+	private Label currentShadePct;
 	
-	@FXML // fx:id="currentShadePct"
-	private Label currentShadePct; // Value injected by FXMLLoader
+	@FXML
+	private LineChart energyChart;
 	
-	@FXML // fx:id="energyChart"
-	private LineChart<?, ?> energyChart; // Value injected by FXMLLoader
+	@FXML
+	private TableView table;
 	
-	@FXML // fx:id="table"
-	private TableView table; // Value injected by FXMLLoader
+	@FXML
+	void editCarConfig(ActionEvent event) {
+		
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("/ui/fxml/configEditor.fxml"));
+			Stage stage = new Stage();
+			stage.setTitle("Car Configuration");
+			stage.setScene(new Scene(root, 450, 450));
+			stage.show();
+			// Hide this current window (if this is what you want)
+			//((Node)(event.getSource())).getScene().getWindow().hide();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@FXML
 	void overrideClouds(ActionEvent event) {
@@ -284,27 +302,26 @@ public class MockupController {
 	private void showCloudCoverGraph() {
 		
 		
-		cloudXAxis.setLabel("Time");
-		cloudYAxis.setLabel("Cloud Cover (%)");
+		cloudXAxis.setLabel("Location");
+		cloudYAxis.setLabel("Current Cloud Cover (%)");
 		
 		cloudYAxis.setLowerBound(0);
 		cloudYAxis.setUpperBound(100);
 		
-
 		
 		if (cloudData.getData().isEmpty()) {
-			//TODO Aaron: add cloud cover data to graph
 			//forecasted, current, by location... etc?
 			for (int i = 0; i < currentWeather.length; i++) {
 				cloudData.getData().add(new XYChart.Data(String.valueOf(i), currentWeather[i].getCloudsPercentage()));
 			}
 			
-	
+			
 			cloudChart.getData().addAll(cloudData);
 		}
 		
 		
 		cloudData.getNode().setStyle("-fx-stroke: #0052cc");
+		
 		
 		cloudChart.setVisible(!cloudChart.isVisible());
 		energyChart.setVisible(false);
@@ -372,4 +389,44 @@ public class MockupController {
 		
 		
 	}
+	
+	//region getters and setters for overrides
+	
+	public String getClouds() {
+		return clouds.get();
+	}
+	
+	public StringProperty cloudsProperty() {
+		return clouds;
+	}
+	
+	public void setClouds(String clouds) {
+		this.clouds.set(clouds);
+	}
+	
+	public String getShade() {
+		return shade.get();
+	}
+	
+	public StringProperty shadeProperty() {
+		return shade;
+	}
+	
+	public void setShade(String shade) {
+		this.shade.set(shade);
+	}
+	
+	public String getSpeedLimit() {
+		return speedLimit.get();
+	}
+	
+	public StringProperty speedLimitProperty() {
+		return speedLimit;
+	}
+	
+	public void setSpeedLimit(String speedLimit) {
+		this.speedLimit.set(speedLimit);
+	}
+	
+	//endregion
 }

@@ -106,7 +106,7 @@ public class CarConfig {
 		}
 	}
 	
-	public static void loadCarConfig() {
+	public static Properties loadCarConfig() {
 		Properties prop = new Properties();
 		InputStream input = null;
 		
@@ -142,6 +142,8 @@ public class CarConfig {
 			
 			
 		}
+		
+		return prop;
 		
 		
 	}

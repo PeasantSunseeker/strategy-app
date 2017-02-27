@@ -40,7 +40,7 @@ public class WeatherCaching {
 		
 		//get current weather conditions
 		
-		/*
+		
 		positions = Position.loadPositions("leg-1-10_items");
 		if (positions == null) {
 			System.out.println("Error loading positions");
@@ -62,7 +62,7 @@ public class WeatherCaching {
 		} else {
 			System.out.println("Error loading forecasts");
 		}
-		*/
+		
 		
 		positions = Position.loadPositions("leg-1-10_items");
 		

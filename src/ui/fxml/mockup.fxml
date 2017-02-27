@@ -30,16 +30,10 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
           <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
+            <MenuItem fx:id="carConfig" mnemonicParsing="false" onAction="#editCarConfig" text="Car Configuration..." />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
             <MenuItem mnemonicParsing="false" text="Delete" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
@@ -102,8 +96,8 @@
                   </LineChart>
                </children>
             </StackPane>
-            <ComboBox fx:id="chartSelector" layoutX="885.0" layoutY="239.0" prefWidth="150.0" />
-            <Label layoutX="240.0" layoutY="58.0" text="Map" textAlignment="CENTER">
+            <ComboBox fx:id="chartSelector" layoutX="885.0" layoutY="239.0" prefWidth="150.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="239.0" />
+            <Label layoutX="240.0" layoutY="121.0" text="Map" textAlignment="CENTER" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="121.0">
                <font>
                   <Font size="94.0" />
                </font>
