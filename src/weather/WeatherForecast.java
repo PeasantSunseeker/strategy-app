@@ -2,6 +2,7 @@ package weather;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class WeatherForecast {
 	private ArrayList<Float> cloudPercentages;
 	private ArrayList<Float> windSpeeds;
 	private ArrayList<Float> windDegrees;
-	private ArrayList<String> time;
+	private ArrayList<ZonedDateTime> time;
 	
 	
 	public WeatherForecast(float latitude, float longitude) {
@@ -74,11 +75,11 @@ public class WeatherForecast {
 		this.windDegrees = windDegrees;
 	}
 	
-	public ArrayList<String> getTime() {
+	public ArrayList<ZonedDateTime> getTime() {
 		return time;
 	}
 	
-	public void setTime(ArrayList<String> time) {
+	public void setTime(ArrayList<ZonedDateTime> time) {
 		this.time = time;
 	}
 	
@@ -93,17 +94,6 @@ public class WeatherForecast {
 			System.out.println(String.format("%f,%f,%f,%s\n", cloudPercentages.get(i),
 					windDegrees.get(i), windSpeeds.get(i), time.get(i)));
 		}
-		
-		/*
-		String timeFromFile = time.get(0);
-		LocalDateTime rightNow = LocalDateTime.now();
-		
-		//parse the time string from forecast file into a LocalDateTime
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
-		
-		LocalDateTime parsedTimeFromFile = LocalDateTime.parse(timeFromFile, dtf);
-		
-		System.out.println(parsedTimeFromFile.toString());
-		*/
+
 	}
 }

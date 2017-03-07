@@ -53,6 +53,8 @@ public class WeatherCaching {
 	private static Position[] positions;
 	private static ArrayList<WeatherForecast> forecasts;
 	
+	private static ZonedDateTime now = ZonedDateTime.now();
+	
 	
 	/**
 	 * @param args
@@ -81,7 +83,7 @@ public class WeatherCaching {
 				//forecasts.get(i).printOut();
 			}
 		} else {
-			System.out.println("Error loading forecasts");
+			//System.out.println("Error loading forecasts");
 		}
 		
 		
@@ -93,12 +95,14 @@ public class WeatherCaching {
 		if (refreshForecasts() == true) {
 			System.out.println("Weather forecasts either missing or outdated. Getting new forecasts...");
 			saveForecast("weather-forecast-10_locations");
+		}else{
+			System.out.println("No need to refresh forecasts");
 		}
 		
 		//try and find a forecast in the file, 2017-02-21	00:00
 		LocalDateTime search = LocalDateTime.of(2017, Month.MARCH, 8, 0, 0);
-		AveragedWeather a = findForecastAtTime(search);
-		a.printOut();
+//		AveragedWeather a = findForecastAtTime(search);
+//		a.printOut();
 		
 	}
 	
@@ -217,7 +221,7 @@ public class WeatherCaching {
 				);
 				
 				weatherCurrents[i].setFlag(Flag.valueOf(items[9]));
-				weatherCurrents[i].printOut();
+				//weatherCurrents[i].printOut();
 			}
 			
 			bufferedReader.close();
@@ -249,14 +253,14 @@ public class WeatherCaching {
 			float cloudsPercentage;
 			float windSpeed;
 			float windDirection;
-			String forecastTime;
+			ZonedDateTime retrieved = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
 			
 			for (int i = 0; i < positions.length; i++) {
 				
 				latitude = positions[i].getLatitude();
 				longitude = positions[i].getLongitude();
 				System.out.println(latitude + " " + longitude);
-				bufferedWriter.write(String.format("%d,%f,%f\n", (i + 1), latitude, longitude));
+				bufferedWriter.write(String.format("%d,%f,%f,%s\n", (i + 1), latitude, longitude, retrieved));
 				hf = owm.hourlyForecastByCoordinates(latitude, longitude);
 				
 				for (int j = 0; j < hf.getForecastCount(); j++) {
@@ -264,11 +268,17 @@ public class WeatherCaching {
 					cloudsPercentage = hf.getForecastInstance(j).getCloudsInstance().getPercentageOfClouds();
 					windSpeed = hf.getForecastInstance(j).getWindInstance().getWindSpeed();
 					windDirection = hf.getForecastInstance(j).getWindInstance().getWindDegree();
-					forecastTime = hf.getForecastInstance(j).getDateTimeText();
+					//forecastTime = hf.getForecastInstance(j).getDateTimeText();
 					
+					Date forecastDate = hf.getForecastInstance(j).getDateTime();
+					int offset = hf.getForecastInstance(j).getDateTime().getTimezoneOffset();
+					//System.out.println("Timezoneoffset is "+hf.getForecastInstance(j).getDateTime().getTimezoneOffset());
+					
+					//TODO Aaron: convert forecast time to UTC ZonedDateTime and write to file
+					ZonedDateTime out = forecastDate.toInstant().atZone(ZoneId.of("UTC")).plusMinutes(offset);
 					
 					bufferedWriter.write(String.format("%f,%f,%f,%s,%s\n", cloudsPercentage, windSpeed, windDirection,
-							forecastTime, Flag.RETRIEVED));
+							out, Flag.RETRIEVED));
 					
 					count++;
 				}
@@ -310,7 +320,7 @@ public class WeatherCaching {
 				WeatherForecast wf = null;
 				
 				items = line.split(",");
-				if (items.length == 3) {
+				if (items.length == 4) {
 					//System.out.println("ID line");
 					//a line with a position
 					curIndex = Integer.parseInt(items[0]) - 1;
@@ -319,7 +329,7 @@ public class WeatherCaching {
 					weatherForecasts.get(curIndex).setCloudPercentages(new ArrayList<Float>());
 					weatherForecasts.get(curIndex).setWindSpeeds(new ArrayList<Float>());
 					weatherForecasts.get(curIndex).setWindDegrees(new ArrayList<Float>());
-					weatherForecasts.get(curIndex).setTime(new ArrayList<String>());
+					weatherForecasts.get(curIndex).setTime(new ArrayList<ZonedDateTime>());
 				} else {
 					
 					//a line with data
@@ -329,7 +339,7 @@ public class WeatherCaching {
 					weatherForecasts.get(curIndex).getCloudPercentages().add(Float.valueOf(items[0]));
 					weatherForecasts.get(curIndex).getWindSpeeds().add(Float.valueOf(items[1]));
 					weatherForecasts.get(curIndex).getWindDegrees().add(Float.valueOf(items[2]));
-					weatherForecasts.get(curIndex).getTime().add(items[3]);
+					weatherForecasts.get(curIndex).getTime().add(ZonedDateTime.parse(items[3]));
 					
 					
 				}
@@ -375,45 +385,8 @@ public class WeatherCaching {
 		System.out.println("Looking for forecast at " + wanted);
 		
 		boolean notFound = true;
-		int i = 0;
-		AveragedWeather avgd = null;
-		WeatherForecast wf;
 		
-		//this pattern matches a 'forecasted' time.
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
-		String rawTime;
-		LocalDateTime forecastTime;
-		
-		if (forecasts == null) {
-			forecasts = loadForecast("weather-forecast-10_locations");
-		}
-		
-		
-		while (notFound) {
-			
-			notFound = true;
-			
-			wf = forecasts.get(i);
-			
-			for (int j = 0; j < wf.getTime().size(); j++) {
-				
-				rawTime = wf.getTime().get(j);
-				forecastTime = LocalDateTime.parse(rawTime, dtf);
-				
-				//if we have a forecast for the time we're looking for, get that and we're done
-				if (wanted.isEqual(forecastTime)) {
-					System.out.println("Found");
-					notFound = false;
-					avgd = new AveragedWeather(wf.getCloudPercentages().get(j), wf.getWindDegrees().get(j), wf.getWindSpeeds().get(j));
-				}
-			}
-			
-			
-			i++;
-			
-		}
-		
-		return avgd;
+		return null;
 	}
 	
 	
@@ -422,13 +395,13 @@ public class WeatherCaching {
 	 */
 	public static boolean refreshForecasts() {
 		
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime firstForecast;
+	
+		ZonedDateTime firstForecast;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
 		
 		
 		try {
-			firstForecast = LocalDateTime.parse(forecasts.get(0).getTime().get(0), dtf);
+			firstForecast = forecasts.get(0).getTime().get(0);
 		} catch (Exception e) {
 			System.out.println(e);
 			return true;
