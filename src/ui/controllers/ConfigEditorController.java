@@ -28,6 +28,7 @@ import javafx.scene.control.TextField;
  */
 public class ConfigEditorController {
 	
+	private Properties currentConfig;
 	
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -101,7 +102,45 @@ public class ConfigEditorController {
 	
 	@FXML
 	void saveCarConfig(ActionEvent event) {
+		//TODO Aaron: update left side labels when user presses "save" button
+		if(validateInt(dragAreaTextField.textProperty())) {
+			dragAreaLabel.textProperty().setValue(dragAreaTextField.textProperty().getValue());
+			currentConfig.setProperty("dragArea", dragAreaTextField.textProperty().getValue());
+		}
 		
+		if(validateInt(peukertTextField.textProperty())) {
+			peukertLabel.textProperty().setValue(peukertTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(motorEfficiencyTextField.textProperty())) {
+			motorEfficiencyLabel.textProperty().setValue(motorEfficiencyTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(parasiticChargingTextField.textProperty())) {
+			parasiticChargingLabel.textProperty().setValue(parasiticChargingTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(parasiticDrivingTextField.textProperty())) {
+			parasiticDrivingLabel.textProperty().setValue(parasiticDrivingTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(rollingTextField.textProperty())) {
+			rollingLabel.textProperty().setValue(rollingTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(solarMaxPowerTextField.textProperty())) {
+			solarMaxPowerLabel.textProperty().setValue(solarMaxPowerTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(solarChargingTextField.textProperty())) {
+			solarChargingLabel.textProperty().setValue(solarChargingTextField.textProperty().getValue());
+		}
+		
+		if(validateInt(solarDrivingTextField.textProperty())) {
+			solarDrivingLabel.textProperty().setValue(solarDrivingTextField.textProperty().getValue());
+		}
+		
+		CarConfig.saveCarConfig();
 	}
 	
 	@FXML
@@ -119,7 +158,7 @@ public class ConfigEditorController {
 		assert parasiticDrivingTextField != null : "fx:id=\"parasiticDrivingTextField\" was not injected: check your FXML file 'configEditor.fxml'.";
 		
 		//load current config and display on left side
-		Properties currentConfig = new Properties();
+		currentConfig = new Properties();
 		currentConfig = CarConfig.loadCarConfig();
 		
 		//region initialize left side values to current config values

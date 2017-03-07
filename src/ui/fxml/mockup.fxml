@@ -45,12 +45,17 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <StackPane fx:id="tablePane" layoutX="14.0" layoutY="365.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0">
+            <Label layoutX="240.0" layoutY="121.0" text="Map" textAlignment="CENTER" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="121.0">
+               <font>
+                  <Font size="94.0" />
+               </font>
+            </Label>
+            <StackPane fx:id="tablePane" layoutX="14.0" layoutY="365.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="626.0" AnchorPane.topAnchor="331.0">
                <children>
                   <TableView fx:id="table" prefHeight="360.0" prefWidth="620.0" />
                </children>
             </StackPane>
-            <GridPane layoutX="774.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="120.0" prefWidth="555.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="58.0">
+            <GridPane layoutX="774.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="120.0" prefWidth="555.0" AnchorPane.bottomAnchor="503.0" AnchorPane.leftAnchor="664.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="58.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.0" minWidth="0.0" prefWidth="220.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="426.0" minWidth="10.0" prefWidth="201.0" />
@@ -76,7 +81,7 @@
                   <TextField fx:id="speedLimitOverride" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                </children>
             </GridPane>
-            <StackPane layoutX="713.0" layoutY="368.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <StackPane layoutX="713.0" layoutY="368.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="640.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="331.0">
                <children>
                   <LineChart fx:id="energyChart" prefHeight="360.0" prefWidth="620.0" title="Energy" visible="false">
                     <xAxis>
@@ -97,11 +102,6 @@
                </children>
             </StackPane>
             <ComboBox fx:id="chartSelector" layoutX="885.0" layoutY="239.0" prefWidth="150.0" AnchorPane.rightAnchor="245.0" AnchorPane.topAnchor="239.0" />
-            <Label layoutX="240.0" layoutY="121.0" text="Map" textAlignment="CENTER" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="121.0">
-               <font>
-                  <Font size="94.0" />
-               </font>
-            </Label>
       </children>
     </AnchorPane>
   </children>

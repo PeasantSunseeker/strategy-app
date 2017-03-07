@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -18,7 +17,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.Data;
 import utilities.MasterData;
@@ -26,8 +24,6 @@ import weather.WeatherCaching;
 import weather.WeatherCurrent;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * PROJECT: seniordesign
@@ -250,7 +246,6 @@ public class MockupController {
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				System.out.println(newValue.toString());
 				
-				//TODO Aaron: change which chart is displayed depending on combobox value
 				String choice = newValue.toString();
 				switch (choice) {
 					case "Energy":
