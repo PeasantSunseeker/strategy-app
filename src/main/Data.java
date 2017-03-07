@@ -15,7 +15,7 @@ public class Data {
 	public static void main(String[] args) {
 		getData();
 	}
-
+	
 	public static ObservableList<MasterData> getHourlyData() {
 		double velocity = 80; // km/h
 		double weight = 2700; // Newtons
@@ -78,11 +78,12 @@ public class Data {
 		double totalPower;
 		double start = 9;
 		double end = 17;
-		double totalCharge = 0;
+		double totalCharge = 60;
 		int index;
 		double totalDistance = 0;
 		double previous;
 		int dayOfYear = LocalDate.now().getDayOfYear();
+		double batteryCap;
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 		
@@ -94,8 +95,8 @@ public class Data {
 			Position pos = positions[index];
 			Position prev = positions[index - 1];
 			double distance = Position.getDistance(prev, pos);
-			float currentVelocity = pos.getVelocity();
-			float previousVelocity = prev.getVelocity();
+			float currentVelocity = 60;//pos.getVelocity();
+			float previousVelocity = currentVelocity;//prev.getVelocity();
 			
 			previous = start;
 //			double averageGrade = (pos.getGrade() + prev.getGrade()) / 2;
@@ -116,7 +117,14 @@ public class Data {
 			double rollingPower = Rolling.rollingPower(averageVelocity, weight);
 			totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
 			double batteryPower = totalPower - solarPower;
-			double batteryCap = Battery.getCapacity(batteryPower);
+			
+			if (batteryPower < 0) {
+				// TODO Brodie: insert charge efficiency
+				batteryCap = Battery.getCapacity(batteryPower * -1);
+			} else {
+				batteryCap = Battery.getCapacity(batteryPower);
+			}
+			
 			double batteryCharge = batteryPower * deltaTime / batteryCap * 100;
 			batteryCharge *= -1;
 			totalCharge += batteryCharge;
