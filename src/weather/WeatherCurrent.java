@@ -74,24 +74,8 @@ public class WeatherCurrent {
 	public void printOut() {
 		System.out.println(String.format("Lat: %f \nLong: %f \nCloudPct: %f \nWindspeed: %f\n" +
 						"Windegrees: %f \nSunrise: %s \nSunset: %s \nLast Updated %s \nRetrieved %s \n%s\n", getLatitude(), getLongitude(), getCloudsPercentage()
-				, getWindSpeed(), getWindDirection(), getSunrise(), getSunset(), getLastUpdated(), getRetrievedAt(),getFlag()));
+				, getWindSpeed(), getWindDirection(), getSunrise(), getSunset(), getLastUpdated(), getRetrievedAt(), getFlag()));
 		
-		/*
-		System.out.println("=== datetime stuff ===");
-		
-		LocalDateTime rightNow = LocalDateTime.now();
-		
-		//sunrise/sunset time stamp pattern
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MMM dd kk:mm:ss zzz uuuu");
-		LocalDateTime sunrise = LocalDateTime.parse(getSunrise(), dtf);
-		LocalDateTime sunset = LocalDateTime.parse(getSunset(), dtf);
-		
-		System.out.println("Original sunrise in EST is " + sunrise);
-		System.out.println("Two days from now is " + sunrise.plusDays(2));
-		
-		//TODO: find a way to do this by specifying time zone instead of just subtracting
-		System.out.println("Sunrise time converted to PST is " + sunrise.minusHours(3));
-		*/
 	}
 	
 	
