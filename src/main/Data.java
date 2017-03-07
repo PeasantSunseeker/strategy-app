@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
+	static boolean debug = false;
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig();
@@ -94,15 +95,17 @@ public class Data {
 		while(!equalTolerance(finalEnergy, endingEnergy, 1) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
-			System.out.format("Speed Guess: %f\n", speedGuess);
 			totalBatteryCharge = 100;
 			startTime = 9;
 			totalDistance = 0;
 			rowData = new ArrayList<MasterData>();
 			
-			System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
-					"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
-					"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
+			if(debug) {
+				System.out.format("Speed Guess: %f\n", speedGuess);
+				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
+						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
+						"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
+			}
 			
 			// Loop through positions
 			for (index = 1; index < positions.length; index++) {
@@ -157,9 +160,11 @@ public class Data {
 				String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previousTime), previousTime % 1 * 60);
 				String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previousTime + deltaTime), (previousTime + deltaTime) % 1 * 60);
 				
-				System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
-						totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
-						solarPower, batteryPower, batteryCapacity, batteryCharge, totalBatteryCharge);
+				if(debug) {
+					System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
+							totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
+							solarPower, batteryPower, batteryCapacity, batteryCharge, totalBatteryCharge);
+				}
 				
 				// Insert segment data into array
 				MasterData myData = new MasterData();
