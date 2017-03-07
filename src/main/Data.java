@@ -15,7 +15,7 @@ public class Data {
 	public static void main(String[] args) {
 		getData();
 	}
-
+	
 	public static ObservableList<MasterData> getHourlyData() {
 		double velocity = 80; // km/h
 		double weight = 2700; // Newtons
@@ -71,78 +71,132 @@ public class Data {
 		return returnData;
 	}
 	
-	public static ObservableList<MasterData> getData() {
-		Position[] positions = Position.loadPositions("leg-1-10_items");
-		
+	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy){
 		double weight = 2700; // Newtons
-		double totalPower;
-		double start = 9;
-		double end = 17;
-		double totalCharge = 0;
+		double totalPower; // Segment power usage
+		double startTime; // Start time
+		double endTime = 17; // End time
+		double totalBatteryCharge; // Total battery charge %
 		int index;
-		double totalDistance = 0;
-		double previous;
+		double totalDistance; // Total run distance
+		double previousTime;
 		int dayOfYear = LocalDate.now().getDayOfYear();
+		double batteryCapacity;
+		float speedGuess = 90;
+		float currentVelocity, previousVelocity;
+		double finalEnergy = 100;
+		boolean speedModified = true;
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 		
-		System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
-				"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
-				"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
-		
-		for (index = 1; index < positions.length; index++) {
-			Position pos = positions[index];
-			Position prev = positions[index - 1];
-			double distance = Position.getDistance(prev, pos);
-			float currentVelocity = pos.getVelocity();
-			float previousVelocity = prev.getVelocity();
+		while(!equalTolerance(finalEnergy, endingEnergy, 1) && speedModified) {
+			//Reset run calculations
+			speedModified = false;
+			System.out.format("Speed Guess: %f\n", speedGuess);
+			totalBatteryCharge = 100;
+			startTime = 9;
+			totalDistance = 0;
+			rowData = new ArrayList<MasterData>();
 			
-			previous = start;
+			System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
+					"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
+					"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
+			
+			// Loop through positions
+			for (index = 1; index < positions.length; index++) {
+				Position pos = positions[index];
+				Position prev = positions[index - 1];
+				double distance = Position.getDistance(prev, pos);
+				
+				currentVelocity = pos.getVelocity();
+				if (currentVelocity > speedGuess) {
+					currentVelocity = speedGuess;
+					speedModified = true;
+				}
+				previousVelocity = prev.getVelocity();
+				if (previousVelocity > speedGuess) {
+					previousVelocity = speedGuess;
+					speedModified = true;
+				}
+				
+				previousTime = startTime;
 //			double averageGrade = (pos.getGrade() + prev.getGrade()) / 2;
-			double averageVelocity = (currentVelocity + previousVelocity) / 2;
+				double averageVelocity = (currentVelocity + previousVelocity) / 2;
 
 //			double roadAngle = Gravitational.getRoadAngle(averageGrade);
-			double roadAngle = prev.getAngle();//Position.calculateAngle(prev, pos);
-			double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
-			double kineticPower = Gravitational.kineticPower(currentVelocity, previousVelocity, distance, weight);
-			double deltaTime = (distance) / averageVelocity;
-			
-			double middleTime = previous + (deltaTime / 2);
-			double sunAngle = Solar.getAngle(dayOfYear, middleTime, pos.getLatitude());
-			//TODO Brodie: update solar power to use cloud cover when available
-			double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude(), 0);
-			//TODO Brodie: update aerodynamic power to use wind when available
-			double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
-			double rollingPower = Rolling.rollingPower(averageVelocity, weight);
-			totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
-			double batteryPower = totalPower - solarPower;
-			double batteryCap = Battery.getCapacity(batteryPower);
-			double batteryCharge = batteryPower * deltaTime / batteryCap * 100;
-			batteryCharge *= -1;
-			totalCharge += batteryCharge;
-			start += deltaTime;
-			totalDistance += distance;
-			
-			String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previous), previous % 1 * 60);
-			String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previous + deltaTime), (previous + deltaTime) % 1 * 60);
-			
-			System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
-					totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
-					solarPower, batteryPower, batteryCap, batteryCharge, totalCharge);
-			
-			MasterData myData = new MasterData();
-			myData.setStartTime(previous);
-			myData.setEndTime(previous + deltaTime);
-			myData.setBatteryCharge(batteryCharge);
-			myData.setTotalCharge(totalCharge);
-			myData.setDistance(totalDistance);
-			myData.setVelocity(averageVelocity);
-			myData.setRoadAngle(roadAngle);
-			myData.setElevation(pos.getElevation());
-			rowData.add(myData);
+				double roadAngle = prev.getAngle();//Position.calculateAngle(prev, pos);
+				double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
+				double kineticPower = Gravitational.kineticPower(currentVelocity, previousVelocity, distance, weight);
+				double deltaTime = (distance) / averageVelocity;
+				
+				double middleTime = previousTime + (deltaTime / 2);
+				double sunAngle = Solar.getAngle(dayOfYear, middleTime, pos.getLatitude());
+				//TODO Brodie: update solar power to use cloud cover when available
+				double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude(), 0);
+				//TODO Brodie: update aerodynamic power to use wind when available
+				double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
+				double rollingPower = Rolling.rollingPower(averageVelocity, weight);
+				totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
+				double batteryPower = totalPower - solarPower;
+				
+				if (batteryPower < 0) {
+					// TODO Brodie: insert charge efficiency
+					batteryCapacity = Battery.getCapacity(batteryPower * -1);
+				} else {
+					batteryCapacity = Battery.getCapacity(batteryPower);
+				}
+				
+				double batteryCharge = batteryPower * deltaTime / batteryCapacity * 100;
+				batteryCharge *= -1;
+				totalBatteryCharge += batteryCharge;
+				startTime += deltaTime;
+				totalDistance += distance;
+				
+				String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previousTime), previousTime % 1 * 60);
+				String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previousTime + deltaTime), (previousTime + deltaTime) % 1 * 60);
+				
+				System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
+						totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
+						solarPower, batteryPower, batteryCapacity, batteryCharge, totalBatteryCharge);
+				
+				// Insert segment data into array
+				MasterData myData = new MasterData();
+				myData.setStartTime(previousTime);
+				myData.setEndTime(previousTime + deltaTime);
+				myData.setBatteryCharge(batteryCharge);
+				myData.setTotalCharge(totalBatteryCharge);
+				myData.setDistance(totalDistance);
+				myData.setVelocity(averageVelocity);
+				myData.setRoadAngle(roadAngle);
+				myData.setElevation(pos.getElevation());
+				rowData.add(myData);
+			}
+			finalEnergy = totalBatteryCharge;
+			if(finalEnergy < endingEnergy){
+				speedGuess -= 1;
+			}
+			else{
+				speedGuess += 1;
+			}
+//			if(Double.isNaN(finalEnergy)){
+//				finalEnergy = 100;
+//			}
+//			speedGuess = (float) (speedGuess * ((finalEnergy - endingEnergy) / endingEnergy));
 		}
+		return rowData;
+	}
+	
+	public static ObservableList<MasterData> getData() {
+		Position[] positions = Position.loadPositions("leg-1-10_items");
+		
+		List<MasterData> rowData = optimizeRun(positions, 20);
+		
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
 		
 		return returnData;
+	}
+	
+	private static boolean equalTolerance(double a, double b, double tolerance) {
+		return Math.abs(b - a) < tolerance;
 	}
 }
