@@ -1,7 +1,9 @@
 package models;
 
+import config.CarConfig;
+
 public class Rolling {
-	static double rollingCoefficient = 0.0055;
+	static double rollingCoefficient = CarConfig.getRollingCoefficient();
 	static double unitConversion = 0.278;
 	
 	public static double rollingPower(double velocity, double weight) {

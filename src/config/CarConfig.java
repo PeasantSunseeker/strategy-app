@@ -36,14 +36,16 @@ public class CarConfig {
 	private static double rollingCoefficient;
 	
 	/********** Solar **********/
-	private static double batteryMaxPower;
-	private static double batteryCharging;
-	private static double batteryDriving;
+	private static double solarMaxPower;
+	private static double solarCharging;
+	private static double solarDriving;
 	
+	/********** Misc **********/
+	private static double carWeight;
 	
 	public CarConfig(double dragArea, double batteryC, double peukert, double motorEfficiency,
 					 double parasiticCharging, double parasiticDriving, double rollingCoefficient,
-					 double batteryMaxPower, double batteryCharging, double batteryDriving) {
+					 double solarMaxPower, double solarCharging, double solarDriving, double carWeight) {
 		
 		this.dragArea = dragArea;
 		
@@ -53,14 +55,15 @@ public class CarConfig {
 		this.parasiticCharging = parasiticCharging;
 		this.parasiticDriving = parasiticDriving;
 		this.rollingCoefficient = rollingCoefficient;
-		this.batteryMaxPower = batteryMaxPower;
-		this.batteryCharging = batteryCharging;
-		this.batteryDriving = batteryDriving;
+		this.solarMaxPower = solarMaxPower;
+		this.solarCharging = solarCharging;
+		this.solarDriving = solarDriving;
+		this.carWeight = carWeight;
 	}
 	
 	public static void main(String[] args) {
 		CarConfig c = new CarConfig(0.12, 8078, 1.08, 0.94,
-				10, 30, 0.0055, 1300, 0.3, 1.3);
+				10, 30, 0.0055, 1300, 0.3, 1.3, 2700);
 		c.saveCarConfig();
 		c.loadCarConfig();
 		c.printConfig();
@@ -86,9 +89,11 @@ public class CarConfig {
 			properties.setProperty("parasiticCharging", Double.toString(parasiticCharging));
 			properties.setProperty("parasiticDriving", Double.toString(parasiticDriving));
 			properties.setProperty("rollingCoefficient", Double.toString(rollingCoefficient));
-			properties.setProperty("batteryMaxPower", Double.toString(batteryMaxPower));
-			properties.setProperty("batteryCharging", Double.toString(batteryCharging));
-			properties.setProperty("batteryDriving", Double.toString(batteryDriving));
+			properties.setProperty("solarMaxPower", Double.toString(solarMaxPower));
+			properties.setProperty("solarCharging", Double.toString(solarCharging));
+			properties.setProperty("solarDriving", Double.toString(solarDriving));
+			properties.setProperty("batteryC", Double.toString(batteryC));
+			properties.setProperty("carWeight", Double.toString(carWeight));
 			
 			properties.store(output, null);
 			
@@ -124,9 +129,11 @@ public class CarConfig {
 			parasiticCharging = Double.parseDouble(prop.getProperty("parasiticCharging"));
 			parasiticDriving = Double.parseDouble(prop.getProperty("parasiticDriving"));
 			rollingCoefficient = Double.parseDouble(prop.getProperty("rollingCoefficient"));
-			batteryMaxPower = Double.parseDouble(prop.getProperty("batteryMaxPower"));
-			batteryCharging = Double.parseDouble(prop.getProperty("batteryCharging"));
-			batteryDriving = Double.parseDouble(prop.getProperty("batteryDriving"));
+			solarMaxPower = Double.parseDouble(prop.getProperty("solarMaxPower"));
+			solarCharging = Double.parseDouble(prop.getProperty("solarCharging"));
+			solarDriving = Double.parseDouble(prop.getProperty("solarDriving"));
+			batteryC = Double.parseDouble(prop.getProperty("batteryC"));
+			carWeight = Double.parseDouble(prop.getProperty("carWeight"));
 			
 			
 		} catch (IOException ex) {
@@ -198,28 +205,44 @@ public class CarConfig {
 		CarConfig.rollingCoefficient = rollingCoefficient;
 	}
 	
-	public static double getBatteryMaxPower() {
-		return batteryMaxPower;
+	public static double getSolarMaxPower() {
+		return solarMaxPower;
 	}
 	
-	public static void setBatteryMaxPower(double batteryMaxPower) {
-		CarConfig.batteryMaxPower = batteryMaxPower;
+	public static void setSolarMaxPower(double solarMaxPower) {
+		CarConfig.solarMaxPower = solarMaxPower;
 	}
 	
-	public static double getBatteryCharging() {
-		return batteryCharging;
+	public static double getSolarCharging() {
+		return solarCharging;
 	}
 	
-	public static void setBatteryCharging(double batteryCharging) {
-		CarConfig.batteryCharging = batteryCharging;
+	public static void setSolarCharging(double solarCharging) {
+		CarConfig.solarCharging = solarCharging;
 	}
 	
-	public static double getBatteryDriving() {
-		return batteryDriving;
+	public static double getSolarDriving() {
+		return solarDriving;
 	}
 	
-	public static void setBatteryDriving(double batteryDriving) {
-		CarConfig.batteryDriving = batteryDriving;
+	public static void setSolarDriving(double solarDriving) {
+		CarConfig.solarDriving = solarDriving;
+	}
+	
+	public static double getBatteryC() {
+		return batteryC;
+	}
+	
+	public static void setBatteryC(double batteryC) {
+		CarConfig.batteryC = batteryC;
+	}
+	
+	public static double getCarWeight() {
+		return carWeight;
+	}
+	
+	public static void setCarWeight(double carWeight) {
+		CarConfig.carWeight = carWeight;
 	}
 	//endregion
 	
@@ -233,8 +256,10 @@ public class CarConfig {
 		System.out.println("parasiticCharging=" + parasiticCharging);
 		System.out.println("parasiticDriving=" + parasiticDriving);
 		System.out.println("rollingCoefficient=" + rollingCoefficient);
-		System.out.println("batteryMaxPower=" + batteryMaxPower);
-		System.out.println("batteryCharging=" + batteryCharging);
-		System.out.println("batteryDriving=" + batteryDriving);
+		System.out.println("solarMaxPower=" + solarMaxPower);
+		System.out.println("solarCharging=" + solarCharging);
+		System.out.println("solarDriving=" + solarDriving);
+		System.out.println("batteryC=" + batteryC);
+		System.out.println("carWeight=" + carWeight);
 	}
 }

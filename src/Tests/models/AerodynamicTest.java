@@ -1,7 +1,9 @@
 package Tests.models;
 
+import config.CarConfig;
 import models.Aerodynamic;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,6 +12,11 @@ import static org.junit.Assert.*;
  * Created by broderick on 12/19/16.
  */
 public class AerodynamicTest {
+	@Before
+	public void create() {
+		CarConfig.loadCarConfig();
+	}
+	
 	@Test
 	public void aerodynamicPower() throws Exception {
 		Assert.assertEquals(12, Aerodynamic.aerodynamicPower(20), .1);

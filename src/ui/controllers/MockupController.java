@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import config.CarConfig;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -151,7 +152,7 @@ public class MockupController {
 		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
-		
+		CarConfig.loadCarConfig();
 		
 		data = Data.getData();
 		currentWeather = WeatherCaching.loadCurrent("weather-10_locations");

@@ -1,5 +1,6 @@
 package main;
 
+import config.CarConfig;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.*;
@@ -13,12 +14,13 @@ import java.util.List;
 public class Data {
 	
 	public static void main(String[] args) {
+		CarConfig.loadCarConfig();
 		getData();
 	}
 	
 	public static ObservableList<MasterData> getHourlyData() {
 		double velocity = 80; // km/h
-		double weight = 2700; // Newtons
+		double weight = CarConfig.getCarWeight(); // Newtons
 		
 		double aeroPower = Aerodynamic.aerodynamicPower(velocity);
 		double rollingPower = Rolling.rollingPower(velocity, weight);
@@ -72,7 +74,7 @@ public class Data {
 	}
 	
 	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy){
-		double weight = 2700; // Newtons
+		double weight = CarConfig.getCarWeight(); // Newtons
 		double totalPower; // Segment power usage
 		double startTime; // Start time
 		double endTime = 17; // End time

@@ -1,7 +1,9 @@
 package Tests.models;
 
+import config.CarConfig;
 import models.Solar;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,11 @@ import java.time.LocalDateTime;
  * Created by broderick on 12/19/16.
  */
 public class SolarTest {
+	@Before
+	public void create() {
+		CarConfig.loadCarConfig();
+	}
+	
 	@Test
 	public void sunLatitudeLocation() throws Exception {
 		LocalDateTime date = LocalDateTime.parse("2017-06-22T00:00:00");

@@ -1,15 +1,14 @@
 package models;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import config.CarConfig;
 
 public class Solar {
 	static double sunrise = 6.6167;
 	static double dayLength = 12.6167;
 	//	static double noonAngle = 22;
-	static double maxPower = 1300;
-	static double charging = 0.3;
-	static double driving = 1.3;
+	static double maxPower = CarConfig.getSolarMaxPower();
+	static double charging = CarConfig.getSolarCharging();
+	static double driving = CarConfig.getSolarDriving();
 	
 	public static double solarPower(int dayOfYear, double time, double latitude, double cloudCover) {
 		return maxPower * Math.pow(Math.cos(Math.toRadians(getAngle(dayOfYear, time, latitude))), driving) * (1 - cloudCover);

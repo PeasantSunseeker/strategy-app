@@ -1,7 +1,9 @@
 package models;
 
+import config.CarConfig;
+
 public class Aerodynamic {
-	static double dragArea = 0.12;
+	static double dragArea = CarConfig.getDragArea();
 	static double unitConversion = 0.0125;
 	
 	public static double aerodynamicPower(double velocity) {

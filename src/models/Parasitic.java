@@ -1,8 +1,10 @@
 package models;
 
+import config.CarConfig;
+
 public class Parasitic {
-	static double charging = 10;
-	static double driving = 30;
+	static double charging = CarConfig.getParasiticCharging();
+	static double driving = CarConfig.getParasiticDriving();
 	
 	public static double getPowerLossCharging() {
 		return charging;
