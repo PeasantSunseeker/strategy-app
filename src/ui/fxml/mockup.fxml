@@ -71,7 +71,7 @@
                   <Label prefHeight="27.0" prefWidth="316.0" text="Shade Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label prefHeight="27.0" prefWidth="324.0" text="Cloud Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label prefHeight="27.0" prefWidth="318.0" text="Speed Limit (MPH)" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="cloudPctOverride" onKeyPressed="#overrideClouds" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="cloudPctOverride" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label text="Settings Current" />
                   <Label prefHeight="27.0" prefWidth="167.0" text="Settings Overrides" textAlignment="CENTER" GridPane.columnIndex="2" />
                   <Label fx:id="currentCloudPct" prefHeight="27.0" prefWidth="209.0" text="10%" GridPane.rowIndex="1" />
