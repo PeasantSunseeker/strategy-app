@@ -10,10 +10,13 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * PROJECT: seniordesign
@@ -27,11 +30,29 @@ import java.util.ArrayList;
  *
  *
  * OUTPUTS:
+ *
+ * WeatherCurrent:
+ *
+ * Latitude,Longitude,CloudPct,WindSpeed,WindDir,Sunrise,Sunset,LastUpdated,TimeRetrieved
+ *
+ *
+ * WeatherForecast:
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * All times are stored in UTC as ZonedDateTimes.
  */
 public class WeatherCaching {
 	
+	private final static String OWM_DATE_PATTERN = "EEE MMM dd HH:mm:ss zzz yyyy";
+	
 	private static Position[] positions;
 	private static ArrayList<WeatherForecast> forecasts;
+	
 	
 	/**
 	 * @param args
@@ -75,7 +96,7 @@ public class WeatherCaching {
 		}
 		
 		//try and find a forecast in the file, 2017-02-21	00:00
-		LocalDateTime search = LocalDateTime.of(2017, Month.FEBRUARY, 21, 0, 0);
+		LocalDateTime search = LocalDateTime.of(2017, Month.MARCH, 8, 0, 0);
 		AveragedWeather a = findForecastAtTime(search);
 		a.printOut();
 		
@@ -105,25 +126,46 @@ public class WeatherCaching {
 			float windDirection;
 			String sunrise;
 			String sunset;
+			String lastUpdated;
+			ZonedDateTime retrievedAt;
 			
 			bufferedWriter.write(String.format("%d\n", positions.length));
 			for (int i = 0; i < positions.length; i++) {
 				
 				latitude = positions[i].getLatitude();
 				longitude = positions[i].getLongitude();
-				System.out.println(latitude + " " + longitude);
+				
 				
 				cw = owm.currentWeatherByCoordinates(latitude, longitude);
 				cloudsPercentage = cw.getCloudsInstance().getPercentageOfClouds();
 				windSpeed = cw.getWindInstance().getWindSpeed();
 				windDirection = cw.getWindInstance().getWindDegree();
+				
+				
 				sunrise = cw.getSysInstance().getSunriseTime().toString();
 				sunset = cw.getSysInstance().getSunsetTime().toString();
+				lastUpdated = cw.getDateTime().toString();
 				
-				bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s,%s,%s\n", latitude, longitude, cloudsPercentage, windSpeed, windDirection,
-						sunrise, sunset, Flag.RETRIEVED));
+				//convert times incoming from OpenWeatherMap to UTC ZonedDateTime, and get current time in UTC as ZonedDateTime
 				
-				System.out.println(cw.getCityName().toString());
+				ZonedDateTime rise;
+				ZonedDateTime set;
+				ZonedDateTime updated;
+				
+				rise = toZonedDateTime(sunrise);
+				set = toZonedDateTime(sunset);
+				updated = toZonedDateTime(lastUpdated);
+				
+				
+				retrievedAt = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
+				//System.out.println("Retrieved at" + retrievedAt.toString());
+				
+				bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s,%s,%s,%s,%s\n", latitude, longitude, cloudsPercentage, windSpeed, windDirection,
+						rise, set, updated, retrievedAt, Flag.RETRIEVED));
+				
+				
+				//System.out.println(latitude + " " + longitude);
+				//System.out.println(cw.getCityName().toString());
 			}
 			
 			bufferedWriter.close();
@@ -167,11 +209,14 @@ public class WeatherCaching {
 						Float.valueOf(items[2]),
 						Float.valueOf(items[3]),
 						Float.valueOf(items[4]),
-						items[5],
-						items[6]
+						ZonedDateTime.parse(items[5]),
+						ZonedDateTime.parse(items[6]),
+						ZonedDateTime.parse(items[7]),
+						ZonedDateTime.parse(items[8])
+				
 				);
 				
-				weatherCurrents[i].setFlag(Flag.valueOf(items[7]));
+				weatherCurrents[i].setFlag(Flag.valueOf(items[9]));
 				weatherCurrents[i].printOut();
 			}
 			
@@ -346,6 +391,8 @@ public class WeatherCaching {
 		
 		while (notFound) {
 			
+			notFound = true;
+			
 			wf = forecasts.get(i);
 			
 			for (int j = 0; j < wf.getTime().size(); j++) {
@@ -379,6 +426,7 @@ public class WeatherCaching {
 		LocalDateTime firstForecast;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
 		
+		
 		try {
 			firstForecast = LocalDateTime.parse(forecasts.get(0).getTime().get(0), dtf);
 		} catch (Exception e) {
@@ -394,6 +442,30 @@ public class WeatherCaching {
 		
 		
 		return false;
+	}
+	
+	
+	/**
+	 * @param input
+	 * @return the input time as a zoned datetime
+	 */
+	private static ZonedDateTime toZonedDateTime(String input) {
+		
+		
+		DateFormat sdf = new SimpleDateFormat(OWM_DATE_PATTERN);
+		try {
+			Date date = sdf.parse(input);
+			ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.of("UTC"));
+			//System.out.println(zdt.toString());
+			return zdt;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+		//ZonedDateTime zoned = ZonedDateTime.
+		
+		
+		return null;
 	}
 	
 }

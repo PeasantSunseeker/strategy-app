@@ -22,13 +22,20 @@ import java.time.format.DateTimeFormatter;
  */
 public class WeatherCurrent {
 	
-	float latitude;
-	float longitude;
-	float cloudsPercentage;
-	float windSpeed;
-	float windDirection;
-	String sunrise;
-	String sunset;
+	private float latitude;
+	private float longitude;
+	private float cloudsPercentage;
+	private float windSpeed;
+	private float windDirection;
+	
+	
+	//adding updated utc time fields
+	private ZonedDateTime sunrise;
+	private ZonedDateTime sunset;
+	private ZonedDateTime lastUpdated;
+	private ZonedDateTime retrievedAt;
+	
+	
 	private Flag flag;
 	
 	/**
@@ -41,7 +48,11 @@ public class WeatherCurrent {
 	 * @param sunset
 	 */
 	public WeatherCurrent(float latitude, float longitude, float cloudsPercentage,
-						  float windSpeed, float windDirection, String sunrise, String sunset) {
+						  float windSpeed, float windDirection,
+						  ZonedDateTime sunrise, ZonedDateTime sunset,
+						  ZonedDateTime lastUpdated, ZonedDateTime retrievedAt) {
+		
+		
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.cloudsPercentage = cloudsPercentage;
@@ -49,9 +60,38 @@ public class WeatherCurrent {
 		this.windDirection = windDirection;
 		this.sunrise = sunrise;
 		this.sunset = sunset;
+		this.lastUpdated = lastUpdated;
+		this.retrievedAt = retrievedAt;
 		this.flag = Flag.EMPTY;
 		//if debugging
 		//printOut();
+	}
+	
+	
+	/**
+	 * Use if debugging
+	 */
+	public void printOut() {
+		System.out.println(String.format("Lat: %f \nLong: %f \nCloudPct: %f \nWindspeed: %f\n" +
+						"Windegrees: %f \nSunrise: %s \nSunset: %s \nLast Updated %s \nRetrieved %s \n%s\n", getLatitude(), getLongitude(), getCloudsPercentage()
+				, getWindSpeed(), getWindDirection(), getSunrise(), getSunset(), getLastUpdated(), getRetrievedAt(),getFlag()));
+		
+		/*
+		System.out.println("=== datetime stuff ===");
+		
+		LocalDateTime rightNow = LocalDateTime.now();
+		
+		//sunrise/sunset time stamp pattern
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MMM dd kk:mm:ss zzz uuuu");
+		LocalDateTime sunrise = LocalDateTime.parse(getSunrise(), dtf);
+		LocalDateTime sunset = LocalDateTime.parse(getSunset(), dtf);
+		
+		System.out.println("Original sunrise in EST is " + sunrise);
+		System.out.println("Two days from now is " + sunrise.plusDays(2));
+		
+		//TODO: find a way to do this by specifying time zone instead of just subtracting
+		System.out.println("Sunrise time converted to PST is " + sunrise.minusHours(3));
+		*/
 	}
 	
 	
@@ -75,12 +115,20 @@ public class WeatherCurrent {
 		return windDirection;
 	}
 	
-	public String getSunrise() {
+	public ZonedDateTime getSunrise() {
 		return sunrise;
 	}
 	
-	public String getSunset() {
+	public ZonedDateTime getSunset() {
 		return sunset;
+	}
+	
+	public ZonedDateTime getLastUpdated() {
+		return lastUpdated;
+	}
+	
+	public ZonedDateTime getRetrievedAt() {
+		return retrievedAt;
 	}
 	
 	public Flag getFlag() {
@@ -89,29 +137,6 @@ public class WeatherCurrent {
 	
 	public void setFlag(Flag flag) {
 		this.flag = flag;
-	}
-	
-	/**
-	 * Use if debugging
-	 */
-	public void printOut() {
-		System.out.println(String.format("%f,%f,%f,%f,%f,%s,%s,%s\n", getLatitude(), getLongitude(), getCloudsPercentage()
-				, getWindSpeed(), getWindDirection(), getSunrise(), getSunset(), getFlag()));
-		
-		System.out.println("=== datetime stuff ===");
-		
-		LocalDateTime rightNow = LocalDateTime.now();
-		
-		//sunrise/sunset time stamp pattern
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MMM dd kk:mm:ss zzz uuuu");
-		LocalDateTime sunrise = LocalDateTime.parse(getSunrise(), dtf);
-		LocalDateTime sunset = LocalDateTime.parse(getSunset(), dtf);
-		
-		System.out.println("Original sunrise in EST is " + sunrise);
-		System.out.println("Two days from now is " + sunrise.plusDays(2));
-		
-		//TODO: find a way to do this by specifying time zone instead of just subtracting
-		System.out.println("Sunrise time converted to PST is " + sunrise.minusHours(3));
 	}
 	
 }
