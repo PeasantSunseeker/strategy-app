@@ -53,7 +53,7 @@ public class WeatherCaching {
 	private static Position[] positions;
 	private static ArrayList<WeatherForecast> forecasts;
 	
-	private static ZonedDateTime now = ZonedDateTime.now();
+	private static ZonedDateTime now = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
 	
 	
 	/**
@@ -99,10 +99,15 @@ public class WeatherCaching {
 			System.out.println("No need to refresh forecasts");
 		}
 		
-		//try and find a forecast in the file, 2017-02-21	00:00
-		LocalDateTime search = LocalDateTime.of(2017, Month.MARCH, 8, 0, 0);
-//		AveragedWeather a = findForecastAtTime(search);
-//		a.printOut();
+		
+	
+		ZonedDateTime search = ZonedDateTime.parse("2017-03-08T08:00Z[UTC]");
+		AveragedWeather a = findForecastAtTime(search, positions[0].getLatitude(), positions[0].getLongitude());
+		
+		if(a != null) {
+			a.printOut();
+		}
+	
 		
 	}
 	
@@ -161,7 +166,7 @@ public class WeatherCaching {
 				updated = toZonedDateTime(lastUpdated);
 				
 				
-				retrievedAt = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
+				retrievedAt = now;
 				//System.out.println("Retrieved at" + retrievedAt.toString());
 				
 				bufferedWriter.write(String.format("%f,%f,%f,%f,%f,%s,%s,%s,%s,%s\n", latitude, longitude, cloudsPercentage, windSpeed, windDirection,
@@ -329,7 +334,7 @@ public class WeatherCaching {
 					weatherForecasts.get(curIndex).setCloudPercentages(new ArrayList<Float>());
 					weatherForecasts.get(curIndex).setWindSpeeds(new ArrayList<Float>());
 					weatherForecasts.get(curIndex).setWindDegrees(new ArrayList<Float>());
-					weatherForecasts.get(curIndex).setTime(new ArrayList<ZonedDateTime>());
+					weatherForecasts.get(curIndex).setTimes(new ArrayList<ZonedDateTime>());
 				} else {
 					
 					//a line with data
@@ -339,7 +344,7 @@ public class WeatherCaching {
 					weatherForecasts.get(curIndex).getCloudPercentages().add(Float.valueOf(items[0]));
 					weatherForecasts.get(curIndex).getWindSpeeds().add(Float.valueOf(items[1]));
 					weatherForecasts.get(curIndex).getWindDegrees().add(Float.valueOf(items[2]));
-					weatherForecasts.get(curIndex).getTime().add(ZonedDateTime.parse(items[3]));
+					weatherForecasts.get(curIndex).getTimes().add(ZonedDateTime.parse(items[3]));
 					
 					
 				}
@@ -367,7 +372,7 @@ public class WeatherCaching {
 	 * @param wanted
 	 * @return an AveragedWeather, it will be null if something went wrong
 	 */
-	public static AveragedWeather findForecastAtTime(LocalDateTime wanted) {
+	public static AveragedWeather findForecastAtTime(ZonedDateTime wanted, float lat, float lon) {
 		//TODO: workflow on current vs future
 		
 		//Wanted: February 09 2017, 8:00am
@@ -381,10 +386,38 @@ public class WeatherCaching {
 		//average them
 		//else
 		
+		int startIndex = 0;
+		WeatherForecast currentLocation;
 		
 		System.out.println("Looking for forecast at " + wanted);
 		
 		boolean notFound = true;
+		
+		while(notFound && startIndex < forecasts.size()) {
+			
+			currentLocation = forecasts.get(startIndex);
+			
+			//if we have the forecast at wanted time for this lat,lon we are done
+			for(int i = 0; i < currentLocation.getTimes().size(); i++) {
+				if(currentLocation.getLatitude() == lat && currentLocation.getLongitude() == lon) {
+					if(currentLocation.getTimes().get(i).equals(wanted)){
+						notFound = false;
+						
+						System.out.println("Found forecast");
+						
+						AveragedWeather avgd = new AveragedWeather(0,0,0);
+						
+						return avgd;
+						
+					}
+				}
+			}
+			
+			startIndex++;
+			
+		}
+		
+		System.out.println("Forecast not found");
 		
 		return null;
 	}
@@ -401,7 +434,7 @@ public class WeatherCaching {
 		
 		
 		try {
-			firstForecast = forecasts.get(0).getTime().get(0);
+			firstForecast = forecasts.get(0).getTimes().get(0);
 		} catch (Exception e) {
 			System.out.println(e);
 			return true;

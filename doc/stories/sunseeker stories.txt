@@ -11,7 +11,7 @@ UI
 	-Read estimation of energy saved by regenerative braking
 	-Read wind heading and velocity along route
 	-Graph of elevation
-	-Real-time charts of car data
+	-Real-times charts of car data
 
 
 

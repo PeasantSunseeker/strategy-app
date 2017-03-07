@@ -6,7 +6,7 @@ For 4 months CS4900 and 4 months CS 4910 make a Gantt chart,
 clearly showing what is expected at the end of CS 4900.
 Items with an (s) may be more then on item.  
 
-Using Weeks as the time unit, make a simple Gantt Chart for your project.
+Using Weeks as the times unit, make a simple Gantt Chart for your project.
 
 Background
   Security needs
