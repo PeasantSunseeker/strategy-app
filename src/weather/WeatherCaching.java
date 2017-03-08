@@ -52,6 +52,7 @@ public class WeatherCaching {
 	
 	private static Position[] positions;
 	private static ArrayList<WeatherForecast> forecasts;
+	private static WeatherCurrent[] weatherCurrents;
 	
 	private static ZonedDateTime now = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
 	
@@ -71,7 +72,7 @@ public class WeatherCaching {
 			saveCurrent("weather-10_locations");
 		}
 		
-		loadCurrent("weather-10_locations");
+		weatherCurrents = loadCurrent("weather-10_locations");
 		
 		saveForecast("weather-forecast-10_locations");
 		
@@ -95,19 +96,20 @@ public class WeatherCaching {
 		if (refreshForecasts() == true) {
 			System.out.println("Weather forecasts either missing or outdated. Getting new forecasts...");
 			saveForecast("weather-forecast-10_locations");
-		}else{
+		} else {
 			System.out.println("No need to refresh forecasts");
 		}
 		
 		
-	
-		ZonedDateTime search = ZonedDateTime.parse("2017-03-08T08:00Z[UTC]");
-		AveragedWeather a = findForecastAtTime(search, positions[0].getLatitude(), positions[0].getLongitude());
+		ZonedDateTime search = ZonedDateTime.parse("2017-03-09T01:00Z[UTC]");
 		
-		if(a != null) {
+		AveragedWeather a = findForecastAtTime(search, positions[0].getLatitude(), positions[0].getLongitude());
+		//AveragedWeather a = findForecastAtTime(now, positions[1].getLatitude(), positions[1].getLongitude());
+		
+		if (a != null) {
 			a.printOut();
 		}
-	
+		
 		
 	}
 	
@@ -393,19 +395,77 @@ public class WeatherCaching {
 		
 		boolean notFound = true;
 		
-		while(notFound && startIndex < forecasts.size()) {
+		AveragedWeather avgd;
+		
+		//find index of weather data at the lat,lon passed in
+		int index = findIndexOf(lat, lon);
+		
+		if (index < 0) {
+			System.out.println("findForecastAtTime(): No data found for this latitude and longitude");
+		}
+		
+		
+		//our target is within the next six hours. Take the current data, and the nearest forecast, and average them.
+		if (wanted.isBefore(now.plusHours(6))) {
+			
+			System.out.println("Getting current and first forecast...");
+			float avgClouds = calculateAverage(forecasts.get(index).getCloudPercentages().get(0), weatherCurrents[index].getCloudsPercentage());
+			
+			float avgWindDegrees = calculateAverage(forecasts.get(index).getWindDegrees().get(0), weatherCurrents[index].getWindDirection());
+			
+			float avgWindSpeed = calculateAverage(forecasts.get(index).getWindSpeeds().get(0), weatherCurrents[index].getWindSpeed());
+			//System.out.println("Average clouds is " + avgClouds);
+			
+			avgd = new AveragedWeather(avgClouds, avgWindDegrees, avgWindSpeed);
+			return avgd;
+		} else if (wanted.isBefore(now.plusDays(3))) {
+			
+			//not within the next six hours. Take the two closest forecasts to wanted (previous and next), and avg them
+			
+			
+			System.out.println("Searching next 3 days worth of forecasts...");
+			
+			int i = 0;
+			
+			while (wanted.isAfter(forecasts.get(index).getTimes().get(i))) {
+				System.out.println("i = " + i);
+				i++;
+			}
+			
+			System.out.println("The next nearest forecast time is " + forecasts.get(index).getTimes().get(i));
+			
+			//get the next forecast and the one before it, and average the two
+			
+			float avgClouds = calculateAverage(forecasts.get(index).getCloudPercentages().get(i), forecasts.get(index).getCloudPercentages().get(i - 1));
+			
+			float avgWindDegrees = calculateAverage(forecasts.get(index).getWindDegrees().get(i), forecasts.get(index).getWindDegrees().get(i - 1));
+			
+			float avgWindSpeed = calculateAverage(forecasts.get(index).getWindSpeeds().get(i), forecasts.get(index).getWindSpeeds().get(i - 1));
+			//System.out.println("Average clouds is " + avgClouds);
+			
+			avgd = new AveragedWeather(avgClouds, avgWindDegrees, avgWindSpeed);
+			return avgd;
+			
+			
+		} else {
+			System.out.println("ERROR: forecast only available for 3 days");
+			return null;
+		}
+		
+		/*
+		while (notFound && startIndex < forecasts.size()) {
 			
 			currentLocation = forecasts.get(startIndex);
 			
 			//if we have the forecast at wanted time for this lat,lon we are done
-			for(int i = 0; i < currentLocation.getTimes().size(); i++) {
-				if(currentLocation.getLatitude() == lat && currentLocation.getLongitude() == lon) {
-					if(currentLocation.getTimes().get(i).equals(wanted)){
+			for (int i = 0; i < currentLocation.getTimes().size(); i++) {
+				if (currentLocation.getLatitude() == lat && currentLocation.getLongitude() == lon) {
+					if (currentLocation.getTimes().get(i).equals(wanted)) {
 						notFound = false;
 						
 						System.out.println("Found forecast");
 						
-						AveragedWeather avgd = new AveragedWeather(0,0,0);
+						avgd = new AveragedWeather(0, 0, 0);
 						
 						return avgd;
 						
@@ -416,10 +476,10 @@ public class WeatherCaching {
 			startIndex++;
 			
 		}
+		*/
+		//System.out.println("Forecast not found");
 		
-		System.out.println("Forecast not found");
-		
-		return null;
+		//return null;
 	}
 	
 	
@@ -428,7 +488,7 @@ public class WeatherCaching {
 	 */
 	public static boolean refreshForecasts() {
 		
-	
+		
 		ZonedDateTime firstForecast;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd kk:mm:ss");
 		
@@ -440,7 +500,7 @@ public class WeatherCaching {
 			return true;
 		}
 		
-		System.out.println("Time of first forecast is " + firstForecast);
+		//System.out.println("Time of first forecast is " + firstForecast);
 		if (now.isAfter(firstForecast.plusDays(1))) {
 			//get new forecasts
 			return true;
@@ -472,6 +532,31 @@ public class WeatherCaching {
 		
 		
 		return null;
+	}
+	
+	private static int findIndexOf(float latitude, float longitude) {
+		int index = 0;
+		boolean found = false;
+		
+		while (!found) {
+			
+			if (forecasts.get(index).getLatitude() == latitude && forecasts.get(index).getLongitude() == longitude) {
+				found = true;
+				System.out.println("Data found at index " + index);
+				return index;
+			} else {
+				index++;
+			}
+		}
+		
+		index = -1;
+		System.out.println("Data not found");
+		return index;
+	}
+	
+	private static float calculateAverage(Float a, Float b) {
+		return (float) ((a + b) / 2.0);
+		
 	}
 	
 }
