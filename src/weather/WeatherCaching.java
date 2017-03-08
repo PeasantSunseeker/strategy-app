@@ -48,6 +48,11 @@ import java.util.Date;
  */
 public class WeatherCaching {
 	
+	private final static String POSITION_FILE = "leg-1-10_items";
+	private final static String CURRENT_OUTPUT_FILE = "current_weather-10_locations";
+	private final static String FORECAST_OUTPUT_FILE = "weather-forecast-10_locations";
+	
+	
 	private final static String OWM_DATE_PATTERN = "EEE MMM dd HH:mm:ss zzz yyyy";
 	
 	private static Position[] positions;
@@ -65,19 +70,19 @@ public class WeatherCaching {
 		//get current weather conditions
 		
 		
-		positions = Position.loadPositions("leg-1-10_items");
+		positions = Position.loadPositions(POSITION_FILE);
 		if (positions == null) {
 			System.out.println("Error loading positions");
 		} else {
-			saveCurrent("weather-10_locations");
+			saveCurrentWeather(CURRENT_OUTPUT_FILE);
 		}
 		
-		weatherCurrents = loadCurrent("weather-10_locations");
+		weatherCurrents = getCurrentWeather(CURRENT_OUTPUT_FILE);
 		
-		saveForecast("weather-forecast-10_locations");
+		saveWeatherForecast(FORECAST_OUTPUT_FILE);
 		
 		
-		forecasts = loadForecast("weather-forecast-10_locations");
+		forecasts = getWeatherForecast(FORECAST_OUTPUT_FILE);
 		
 		if (forecasts != null) {
 			for (int i = 0; i < forecasts.size(); i++) {
@@ -88,14 +93,14 @@ public class WeatherCaching {
 		}
 		
 		
-		positions = Position.loadPositions("leg-1-10_items");
+		positions = Position.loadPositions(POSITION_FILE);
 		
 		
-		forecasts = loadForecast("weather-forecast-10_locations");
+		forecasts = getWeatherForecast(FORECAST_OUTPUT_FILE);
 		
 		if (refreshForecasts() == true) {
 			System.out.println("Weather forecasts either missing or outdated. Getting new forecasts...");
-			saveForecast("weather-forecast-10_locations");
+			saveWeatherForecast(FORECAST_OUTPUT_FILE);
 		} else {
 			System.out.println("No need to refresh forecasts");
 		}
@@ -103,8 +108,8 @@ public class WeatherCaching {
 		
 		ZonedDateTime search = ZonedDateTime.parse("2017-03-09T01:00Z[UTC]");
 		
-		AveragedWeather a = findForecastAtTime(search, positions[0].getLatitude(), positions[0].getLongitude());
-		//AveragedWeather a = findForecastAtTime(now, positions[1].getLatitude(), positions[1].getLongitude());
+		AveragedWeather a = weatherSearch(search, positions[0].getLatitude(), positions[0].getLongitude());
+		//AveragedWeather a = weatherSearch(now, positions[1].getLatitude(), positions[1].getLongitude());
 		
 		if (a != null) {
 			a.printOut();
@@ -117,7 +122,7 @@ public class WeatherCaching {
 	 * @param outFileName name of the .csv file to save to
 	 * @return false if there was an error
 	 */
-	public static boolean saveCurrent(String outFileName) {
+	public static boolean saveCurrentWeather(String outFileName) {
 		
 		outFileName += ".csv";
 		OpenWeatherMap owm = new OpenWeatherMap(ApiKey.getApiKey());
@@ -194,7 +199,7 @@ public class WeatherCaching {
 	 * @param fileName the .csv file to load from
 	 * @return array of WeatherCurrent objects. Will be null if there was an error
 	 */
-	public static WeatherCurrent[] loadCurrent(String fileName) {
+	public static WeatherCurrent[] getCurrentWeather(String fileName) {
 		fileName = fileName + ".csv";
 		WeatherCurrent[] weatherCurrents;
 		
@@ -241,7 +246,7 @@ public class WeatherCaching {
 		}
 	}
 	
-	public static boolean saveForecast(String outFileName) {
+	public static boolean saveWeatherForecast(String outFileName) {
 		
 		int count = 0;
 		outFileName += ".csv";
@@ -266,7 +271,7 @@ public class WeatherCaching {
 				
 				latitude = positions[i].getLatitude();
 				longitude = positions[i].getLongitude();
-				System.out.println(latitude + " " + longitude);
+				//System.out.println(latitude + " " + longitude);
 				bufferedWriter.write(String.format("%d,%f,%f,%s\n", (i + 1), latitude, longitude, retrieved));
 				hf = owm.hourlyForecastByCoordinates(latitude, longitude);
 				
@@ -291,7 +296,7 @@ public class WeatherCaching {
 				}
 				
 				
-				System.out.println(hf.getCityInstance().getCityName());
+				//System.out.println(hf.getCityInstance().getCityName());
 			}
 			
 			bufferedWriter.close();
@@ -305,7 +310,7 @@ public class WeatherCaching {
 	}
 	
 	
-	public static ArrayList<WeatherForecast> loadForecast(String fileName) {
+	public static ArrayList<WeatherForecast> getWeatherForecast(String fileName) {
 		
 		
 		fileName = fileName + ".csv";
@@ -374,7 +379,7 @@ public class WeatherCaching {
 	 * @param wanted
 	 * @return an AveragedWeather, it will be null if something went wrong
 	 */
-	public static AveragedWeather findForecastAtTime(ZonedDateTime wanted, float lat, float lon) {
+	public static AveragedWeather weatherSearch(ZonedDateTime wanted, float lat, float lon) {
 		//TODO: workflow on current vs future
 		
 		//Wanted: February 09 2017, 8:00am
@@ -387,6 +392,11 @@ public class WeatherCaching {
 		//get the closest two forecasts (6:00am and 9:00am)
 		//average them
 		//else
+		
+		//get forecast if we don't have it
+		if (forecasts == null) {
+			
+		}
 		
 		int startIndex = 0;
 		WeatherForecast currentLocation;
@@ -401,20 +411,27 @@ public class WeatherCaching {
 		int index = findIndexOf(lat, lon);
 		
 		if (index < 0) {
-			System.out.println("findForecastAtTime(): No data found for this latitude and longitude");
+			System.out.println("weatherSearch(): No data found for this latitude and longitude");
 		}
 		
 		
 		//our target is within the next six hours. Take the current data, and the nearest forecast, and average them.
 		if (wanted.isBefore(now.plusHours(6))) {
 			
-			System.out.println("Getting current and first forecast...");
+			System.out.println("Getting current weather and nearest forecast...");
 			float avgClouds = calculateAverage(forecasts.get(index).getCloudPercentages().get(0), weatherCurrents[index].getCloudsPercentage());
 			
 			float avgWindDegrees = calculateAverage(forecasts.get(index).getWindDegrees().get(0), weatherCurrents[index].getWindDirection());
 			
 			float avgWindSpeed = calculateAverage(forecasts.get(index).getWindSpeeds().get(0), weatherCurrents[index].getWindSpeed());
-			//System.out.println("Average clouds is " + avgClouds);
+			
+			
+			System.out.format("\nCurrent Weather:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
+					weatherCurrents[index].getCloudsPercentage(), weatherCurrents[index].getWindDirection(), weatherCurrents[index].getWindSpeed());
+			System.out.println();
+			System.out.format("Nearest Forecast:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
+					forecasts.get(index).getCloudPercentages().get(0), forecasts.get(index).getWindDegrees().get(0), forecasts.get(index).getWindSpeeds().get(0));
+			
 			
 			avgd = new AveragedWeather(avgClouds, avgWindDegrees, avgWindSpeed);
 			return avgd;
@@ -427,6 +444,7 @@ public class WeatherCaching {
 			
 			int i = 0;
 			
+			//go to the index of the forecast just before wanted
 			while (wanted.isAfter(forecasts.get(index).getTimes().get(i))) {
 				System.out.println("i = " + i);
 				i++;
@@ -434,7 +452,7 @@ public class WeatherCaching {
 			
 			System.out.println("The next nearest forecast time is " + forecasts.get(index).getTimes().get(i));
 			
-			//get the next forecast and the one before it, and average the two
+			//take the average between the closest forecast before, and after wanted
 			
 			float avgClouds = calculateAverage(forecasts.get(index).getCloudPercentages().get(i), forecasts.get(index).getCloudPercentages().get(i - 1));
 			
@@ -542,7 +560,7 @@ public class WeatherCaching {
 			
 			if (forecasts.get(index).getLatitude() == latitude && forecasts.get(index).getLongitude() == longitude) {
 				found = true;
-				System.out.println("Data found at index " + index);
+				System.out.println("Weather found at index " + index);
 				return index;
 			} else {
 				index++;
