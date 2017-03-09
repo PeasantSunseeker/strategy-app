@@ -106,14 +106,14 @@ public class WeatherCaching {
 		}
 		
 		
-		ZonedDateTime search = ZonedDateTime.parse("2017-03-09T01:00Z[UTC]");
+		//ZonedDateTime search = ZonedDateTime.parse("2017-03-09T01:00Z[UTC]");
 		
-		AveragedWeather a = weatherSearch(search, positions[0].getLatitude(), positions[0].getLongitude());
+		//AveragedWeather a = weatherSearch(search, positions[0].getLatitude(), positions[0].getLongitude());
 		//AveragedWeather a = weatherSearch(now, positions[1].getLatitude(), positions[1].getLongitude());
 		
-		if (a != null) {
-			a.printOut();
-		}
+		//if (a != null) {
+		//	a.printOut();
+		//}
 		
 		
 	}
@@ -567,7 +567,7 @@ public class WeatherCaching {
 			}
 		}
 		
-		index = -1;
+		index = 0;
 		System.out.println("Data not found");
 		return index;
 	}
