@@ -24,15 +24,16 @@ import utilities.MasterData;
  * OUTPUTS:
  */
 public class DataTable {
+	static TableView table;
 	
-	public Stage fillDataTable() {
+	public Stage showDataTable() {
 		Stage dataTableStage = new Stage();
 		
-		TableView table = new TableView();
+		table = new TableView();
 		
 		table.setEditable(false);
 		
-		ObservableList<MasterData> data = Data.getData();
+//		ObservableList<MasterData> data = Data.getData(20);
 		
 		TableColumn<MasterData, String> startTimeColumn = new TableColumn("Start Time");
 		startTimeColumn.setCellValueFactory(temp -> temp.getValue().getStartTime());
@@ -58,7 +59,7 @@ public class DataTable {
 		TableColumn<MasterData, String> totalChargeColumn = new TableColumn("Total Charge Used");
 		totalChargeColumn.setCellValueFactory(temp -> temp.getValue().getTotalCharge());
 		
-		table.setItems(data);
+//		table.setItems(data);
 		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, elevationColumn, roadAngleColumn, batteryChargeColumn, totalChargeColumn);
 		
 		Screen screen = Screen.getPrimary();
@@ -74,4 +75,7 @@ public class DataTable {
 		return dataTableStage;
 	}
 	
+	public void fillDataTable(ObservableList<MasterData> data){
+		table.setItems(data);
+	}
 }

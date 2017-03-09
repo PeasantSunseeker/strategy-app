@@ -51,7 +51,7 @@ public class EnergyGraphController {
 		assert xAxis != null : "fx:id=\"xAxis\" was not injected: check your FXML file 'energygraph.fxml'.";
 		assert energyGraph != null : "fx:id=\"energyGraph\" was not injected: check your FXML file 'energygraph.fxml'.";
 		
-		ObservableList<MasterData> data = Data.getData();
+		ObservableList<MasterData> data = Data.getData(20);
 		
 		
 		//the data

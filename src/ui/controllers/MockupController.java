@@ -30,13 +30,13 @@ import java.io.IOException;
  * PROJECT: seniordesign
  * AUTHOR: aaron  2/22/2017.
  * DATE: 2/22/2017
- *
+ * <p>
  * DESCRIPTION:
- *
- *
+ * <p>
+ * <p>
  * INPUTS:
- *
- *
+ * <p>
+ * <p>
  * OUTPUTS:
  */
 public class MockupController {
@@ -44,6 +44,8 @@ public class MockupController {
 	private StringProperty clouds;
 	private StringProperty shade;
 	private StringProperty speedLimit;
+	private StringProperty endingEnergyString;
+	private int endingEnergy = 20;
 	
 	ObservableList<MasterData> data;
 	private WeatherCurrent[] currentWeather;
@@ -105,6 +107,15 @@ public class MockupController {
 	private TableView table;
 	
 	@FXML
+	private Label currentEndingEnergy;
+	
+	@FXML
+	private TextField endingEnergyOverride;
+	
+	@FXML
+	private Button runSimulation;
+	
+	@FXML
 	void editCarConfig(ActionEvent event) {
 		
 		Parent root;
@@ -124,6 +135,13 @@ public class MockupController {
 	@FXML
 	void overrideClouds(ActionEvent event) {
 		
+	}
+	
+	@FXML
+	protected void runSimulationAction(ActionEvent event) {
+		data = Data.getData(endingEnergy);
+		fillDataTable(data);
+		updateEnergyGraph();
 	}
 	
 	//endregion
@@ -150,11 +168,14 @@ public class MockupController {
 		assert currentShadePct != null : "fx:id=\"currentShadePct\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert energyChart != null : "fx:id=\"energyChart\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
 		CarConfig.loadCarConfig();
 		
-		data = Data.getData();
+		data = Data.getData(endingEnergy);
 		currentWeather = WeatherCaching.loadCurrent("weather-10_locations");
 		
 		energyGraphData = new XYChart.Series();
@@ -233,6 +254,32 @@ public class MockupController {
 			
 		});
 		
+		endingEnergyOverride.setOnKeyPressed(event -> {
+			if (event.getCode() == KeyCode.ENTER) {
+				
+				System.out.println("override ending energy");
+				
+				if (validatePercentage(endingEnergyOverride.textProperty())) {
+					endingEnergyString = endingEnergyOverride.textProperty();
+					System.out.println(endingEnergyString.getValue());
+					endingEnergy = Integer.parseInt(endingEnergyString.getValue());
+					currentEndingEnergy.textProperty().setValue(endingEnergyString.getValue() + "%");
+					runSimulation.fire();
+					
+				} else {
+					System.out.println("Not a valid number");
+				}
+				
+				endingEnergyOverride.clear();
+				
+				
+			} else {
+				
+			}
+			
+			
+		});
+		
 		//endregion
 		
 		
@@ -266,33 +313,32 @@ public class MockupController {
 			}
 		});
 		//endregion
-		
+		initializeEnergyGraph();
+		updateEnergyGraph();
 		showDataTable();
+		
+		chartSelector.getSelectionModel().select("Energy");
 	}
 	
 	
 	private void showEnergyGraph() {
-		
+		energyChart.setVisible(true);
+		cloudChart.setVisible(false);
+	}
+	
+	private void updateEnergyGraph() {
 		assert (data != null);
 		
-		
+		energyGraphData.getData().clear();
+		for (int i = 0; i < data.size(); i++) {
+			energyGraphData.getData().add(new XYChart.Data(data.get(i).getStartTime().getValue(), Float.valueOf(data.get(i).getTotalCharge().getValue())));
+		}
+	}
+	
+	private void initializeEnergyGraph() {
 		energyXAxis.setLabel("Time");
 		energyYAxis.setLabel("Battery (%)");
-		
-		//add the data if we don't have it already
-		if (energyGraphData.getData().isEmpty()) {
-			
-			for (int i = 0; i < data.size(); i++) {
-				energyGraphData.getData().add(new XYChart.Data(data.get(i).getStartTime().getValue(), Float.valueOf(data.get(i).getTotalCharge().getValue())));
-			}
-			
-			energyChart.getData().add(energyGraphData);
-			
-		}
-		
-		
-		energyChart.setVisible(!energyChart.isVisible());
-		cloudChart.setVisible(false);
+		energyChart.getData().add(energyGraphData);
 	}
 	
 	private void showCloudCoverGraph() {
@@ -359,6 +405,10 @@ public class MockupController {
 		//Screen screen = Screen.getPrimary();
 		//Rectangle2D bounds = screen.getVisualBounds();
 		
+	}
+	
+	public void fillDataTable(ObservableList<MasterData> data) {
+		table.setItems(data);
 	}
 	
 	

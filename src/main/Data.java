@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-	static boolean debug = false;
+	static boolean debug = true;
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig();
-		getData();
+		getData(20);
 	}
 	
 	public static ObservableList<MasterData> getHourlyData() {
@@ -92,7 +92,7 @@ public class Data {
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 		
-		while(!equalTolerance(finalEnergy, endingEnergy, 1) && speedModified) {
+		while(!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
 			totalBatteryCharge = 100;
@@ -193,10 +193,10 @@ public class Data {
 		return rowData;
 	}
 	
-	public static ObservableList<MasterData> getData() {
+	public static ObservableList<MasterData> getData(int endingEnergy) {
 		Position[] positions = Position.loadPositions("leg-1-10_items");
 		
-		List<MasterData> rowData = optimizeRun(positions, 20);
+		List<MasterData> rowData = optimizeRun(positions, endingEnergy);
 		
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
 		

@@ -97,7 +97,7 @@ public class Controller {
 	void showDataTable(ActionEvent event) {
 		Stage stage = new Stage();
 		DataTable dt = new DataTable();
-		stage = dt.fillDataTable();
+		stage = dt.showDataTable();
 		stage.show();
 	}
 	
