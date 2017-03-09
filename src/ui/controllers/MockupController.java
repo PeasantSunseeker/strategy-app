@@ -176,7 +176,7 @@ public class MockupController {
 		CarConfig.loadCarConfig();
 		
 		data = Data.getData(endingEnergy);
-		currentWeather = WeatherCaching.loadCurrent("weather-10_locations");
+		currentWeather = WeatherCaching.getCurrentWeather("weather-10_locations");
 		
 		energyGraphData = new XYChart.Series();
 		cloudData = new XYChart.Series();
