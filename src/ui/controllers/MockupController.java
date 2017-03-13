@@ -16,15 +16,28 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.Data;
 import utilities.MasterData;
+import weather.AveragedWeather;
 import weather.WeatherCaching;
 import weather.WeatherCurrent;
+import weather.WeatherForecast;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * PROJECT: seniordesign
@@ -49,7 +62,7 @@ public class MockupController {
 	
 	ObservableList<MasterData> data;
 	private WeatherCurrent[] currentWeather;
-	
+	private ArrayList<WeatherForecast> forecasts;
 	
 	//data sets for charts
 	private XYChart.Series energyGraphData;
@@ -116,6 +129,9 @@ public class MockupController {
 	private Button runSimulation;
 	
 	@FXML
+	private ImageView mapDemoPic;
+	
+	@FXML
 	void editCarConfig(ActionEvent event) {
 		
 		Parent root;
@@ -171,15 +187,21 @@ public class MockupController {
 		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert mapDemoPic != null : "fx:id=\"mapDemoPic\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
 		CarConfig.loadCarConfig();
 		
 		data = Data.getData(endingEnergy);
-		currentWeather = WeatherCaching.getCurrentWeather("weather-10_locations");
+		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
+		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
 		
 		energyGraphData = new XYChart.Series();
 		cloudData = new XYChart.Series();
+		
+//		Image img = new Image("file:Map-Demo.png");
+//		ImageView mapDemoPic = new ImageView(img);
+//		mapDemoPic.setVisible(true);
 		
 		
 		//region Override TextView handlers
@@ -343,7 +365,11 @@ public class MockupController {
 	
 	private void showCloudCoverGraph() {
 		
+		WeatherCaching wc = new WeatherCaching();
+		wc.main(null);
+		AveragedWeather aw;
 		
+		//TODO Aaron: currently this shows the data for current weather. However we probably want to search for each time in the table/simulation and get the weather data for that time.
 		cloudXAxis.setLabel("Location");
 		cloudYAxis.setLabel("Current Cloud Cover (%)");
 		
@@ -353,8 +379,18 @@ public class MockupController {
 		
 		if (cloudData.getData().isEmpty()) {
 			//forecasted, current, by location... etc?
-			for (int i = 0; i < currentWeather.length; i++) {
-				cloudData.getData().add(new XYChart.Data(String.valueOf(i), currentWeather[i].getCloudsPercentage()));
+			for (int i = 0; i < data.size(); i++) {
+				
+				//convert time from table data to UTC, from decimal
+				String wanted = data.get(i).getStartTime().getValue();
+				float lat = currentWeather[i].getLatitude();
+				float lon = currentWeather[i].getLongitude();
+				
+				System.out.println("Searching with " + toUTC(wanted) + " ," + lat + " ," + lon);
+				aw = WeatherCaching.weatherSearch(toUTC(wanted), lat, lon);
+				
+				
+				cloudData.getData().add(new XYChart.Data(String.valueOf(i), aw.getAvgCloudPercentage()));
 			}
 			
 			
@@ -432,6 +468,26 @@ public class MockupController {
 		String s = text.getValue().trim();
 		System.out.println("-> " + s + " <-");
 		return (s.matches("[0-9]*") && Integer.valueOf(s) >= 0);
+		
+		
+	}
+	
+	private ZonedDateTime toUTC(String timeStr) {
+		
+		ZonedDateTime utc = null;
+		
+		String[] hoursMinutes = timeStr.split(":");
+
+		Calendar now = Calendar.getInstance();
+		
+		//System.out.println("Hours = "+Integer.valueOf(hoursMinutes[0]));
+		//System.out.println("Minutes = "+Integer.valueOf(hoursMinutes[1]));
+//			Date date = sdf.parse(timeStr);
+		utc = ZonedDateTime.of(now.get(Calendar.YEAR), now.get(Calendar.MONTH)+1, (now.get(Calendar.DAY_OF_MONTH)), 0, 0, 0, 0, ZoneId.of("UTC"));
+		utc = utc.plusHours(Integer.valueOf(hoursMinutes[0]) + 5);
+
+		System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
+		return utc;
 		
 		
 	}

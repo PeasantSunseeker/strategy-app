@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -53,11 +54,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Map" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="94.0" />
-               </font>
-            </Label>
             <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="555.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.0" minWidth="0.0" prefWidth="220.0" />
@@ -118,6 +114,15 @@
                         </LineChart>
                      </children>
                   </StackPane>
+               </children>
+            </VBox>
+            <VBox GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <children>
+                  <ImageView fx:id="mapDemoPic" fitHeight="344.0" fitWidth="646.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../controllers/Map-Demo.png" />
+                     </image>
+                  </ImageView>
                </children>
             </VBox>
          </children>
