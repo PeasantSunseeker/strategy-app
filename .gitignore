@@ -31,3 +31,4 @@
 
 # Serial files
 *.ser
+.DS_Store
