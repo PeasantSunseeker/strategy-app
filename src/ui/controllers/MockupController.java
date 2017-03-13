@@ -16,6 +16,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -127,6 +129,9 @@ public class MockupController {
 	private Button runSimulation;
 	
 	@FXML
+	private ImageView mapDemoPic;
+	
+	@FXML
 	void editCarConfig(ActionEvent event) {
 		
 		Parent root;
@@ -182,6 +187,7 @@ public class MockupController {
 		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert mapDemoPic != null : "fx:id=\"mapDemoPic\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
 		CarConfig.loadCarConfig();
@@ -192,6 +198,10 @@ public class MockupController {
 		
 		energyGraphData = new XYChart.Series();
 		cloudData = new XYChart.Series();
+		
+//		Image img = new Image("file:Map-Demo.png");
+//		ImageView mapDemoPic = new ImageView(img);
+//		mapDemoPic.setVisible(true);
 		
 		
 		//region Override TextView handlers

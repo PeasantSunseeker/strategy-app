@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-	static boolean debug = true;
+	static boolean debug = false;
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig();
