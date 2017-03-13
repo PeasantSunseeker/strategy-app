@@ -74,7 +74,7 @@ public class Data {
 		return returnData;
 	}
 	
-	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy){
+	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy) {
 		double weight = CarConfig.getCarWeight(); // Newtons
 		double totalPower; // Segment power usage
 		double startTime; // Start time
@@ -92,7 +92,7 @@ public class Data {
 		
 		List<MasterData> rowData = new ArrayList<MasterData>();
 		
-		while(!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
+		while (!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
 			totalBatteryCharge = 100;
@@ -100,7 +100,7 @@ public class Data {
 			totalDistance = 0;
 			rowData = new ArrayList<MasterData>();
 			
-			if(debug) {
+			if (debug) {
 				System.out.format("Speed Guess: %f\n", speedGuess);
 				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
@@ -160,7 +160,7 @@ public class Data {
 				String segmentStartTime = String.format("%02.0f:%02.0f", Math.floor(previousTime), previousTime % 1 * 60);
 				String segmentStopTime = String.format("%02.0f:%02.0f", Math.floor(previousTime + deltaTime), (previousTime + deltaTime) % 1 * 60);
 				
-				if(debug) {
+				if (debug) {
 					System.out.format("%8.2f | %5.1f | %6.1f | %6.0f | %5.0f | %5.0f | %4.0f | %6.0f | %s | %s | %5.0f | %8.1f | %8.1f | %11.2f | %7.2f\n",
 							totalDistance, roadAngle, averageVelocity, gravPower, kineticPower, aeroPower, rollingPower, totalPower, segmentStartTime, segmentStopTime,
 							solarPower, batteryPower, batteryCapacity, batteryCharge, totalBatteryCharge);
@@ -179,10 +179,9 @@ public class Data {
 				rowData.add(myData);
 			}
 			finalEnergy = totalBatteryCharge;
-			if(finalEnergy < endingEnergy){
+			if (finalEnergy < endingEnergy) {
 				speedGuess -= 1;
-			}
-			else{
+			} else {
 				speedGuess += 1;
 			}
 //			if(Double.isNaN(finalEnergy)){
