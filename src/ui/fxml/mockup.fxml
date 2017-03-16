@@ -29,14 +29,7 @@
             <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem fx:id="carConfig" mnemonicParsing="false" onAction="#editCarConfig" text="Car Configuration..." />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-          </items>
-        </Menu>
+        <Menu fx:id="carConfigMenu" mnemonicParsing="false" text="Car Config" />
         <Menu mnemonicParsing="false" text="Help">
           <items>
             <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
@@ -127,5 +120,6 @@
             </VBox>
          </children>
       </GridPane>
+      <ToggleButton mnemonicParsing="false" text="ToggleButton" />
   </children>
 </VBox>

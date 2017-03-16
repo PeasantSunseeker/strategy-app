@@ -8,19 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import main.Data;
 import utilities.MasterData;
 import weather.AveragedWeather;
@@ -28,16 +23,11 @@ import weather.WeatherCaching;
 import weather.WeatherCurrent;
 import weather.WeatherForecast;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Year;
+import java.io.File;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * PROJECT: seniordesign
@@ -53,6 +43,8 @@ import java.util.Date;
  * OUTPUTS:
  */
 public class MockupController {
+	
+	private final String CONFIG_FILE_PATH = "carconfig";
 	
 	private StringProperty clouds;
 	private StringProperty shade;
@@ -79,9 +71,6 @@ public class MockupController {
 	
 	@FXML
 	private NumberAxis energyYAxis;
-	
-	@FXML
-	private MenuItem carConfig;
 	
 	@FXML
 	private TextField cloudPctOverride;
@@ -122,6 +111,8 @@ public class MockupController {
 	@FXML
 	private Label currentEndingEnergy;
 	
+	
+	
 	@FXML
 	private TextField endingEnergyOverride;
 	
@@ -131,22 +122,8 @@ public class MockupController {
 	@FXML
 	private ImageView mapDemoPic;
 	
-	@FXML
-	void editCarConfig(ActionEvent event) {
-		
-		Parent root;
-		try {
-			root = FXMLLoader.load(getClass().getResource("/ui/fxml/configEditor.fxml"));
-			Stage stage = new Stage();
-			stage.setTitle("Car Configuration");
-			stage.setScene(new Scene(root, 450, 450));
-			stage.show();
-			// Hide this current window (if this is what you want)
-			//((Node)(event.getSource())).getScene().getWindow().hide();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	@FXML // fx:id="carConfigMenu"
+	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
 	@FXML
 	void overrideClouds(ActionEvent event) {
@@ -188,17 +165,29 @@ public class MockupController {
 		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert mapDemoPic != null : "fx:id=\"mapDemoPic\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
+		
+		//region load carconfig and carconfig menu
 		CarConfig.loadCarConfig();
+
+		initializeCarConfigMenu();
+		//endregion
+		
 		
 		data = Data.getData(endingEnergy);
+		
+		//TODO: Aaron- moved this to initialize, seems to still work
+		WeatherCaching wc = new WeatherCaching();
+		wc.main(null);
+		
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
 		
 		energyGraphData = new XYChart.Series();
 		cloudData = new XYChart.Series();
-		
+
 //		Image img = new Image("file:Map-Demo.png");
 //		ImageView mapDemoPic = new ImageView(img);
 //		mapDemoPic.setVisible(true);
@@ -342,6 +331,41 @@ public class MockupController {
 		chartSelector.getSelectionModel().select("Energy");
 	}
 	
+	private void initializeCarConfigMenu() {
+		
+		
+		
+		ToggleGroup toggleGroup = new ToggleGroup();
+		
+		String[] configFileNames = getConfigFiles();
+		if (configFileNames == null) {
+			
+			carConfigMenu.getItems().add(new MenuItem("No car config files found"));
+		} else {
+			RadioMenuItem current;
+			
+			for (int i = 0; i < configFileNames.length; i++) {
+				
+				current = new RadioMenuItem(configFileNames[i]);
+				current.setToggleGroup(toggleGroup);
+				carConfigMenu.getItems().add(current);
+				
+			}
+		}
+		
+		
+		toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
+				
+				RadioMenuItem selected = (RadioMenuItem)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
+				//System.out.println("Selected Radio Button - "+selected.getText());
+				
+			}
+		});
+		
+	}
+	
 	
 	private void showEnergyGraph() {
 		energyChart.setVisible(true);
@@ -363,10 +387,20 @@ public class MockupController {
 		energyChart.getData().add(energyGraphData);
 	}
 	
+	
+	private String[] getConfigFiles() {
+		
+		ObservableList<RadioMenuItem> fileNames = null;
+		
+		File configFileFolder = new File(CONFIG_FILE_PATH);
+		String[] listOfFiles = configFileFolder.list();
+		
+		return listOfFiles;
+	}
+	
 	private void showCloudCoverGraph() {
 		
-		WeatherCaching wc = new WeatherCaching();
-		wc.main(null);
+		
 		AveragedWeather aw;
 		
 		//TODO Aaron: currently this shows the data for current weather. However we probably want to search for each time in the table/simulation and get the weather data for that time.
@@ -477,15 +511,15 @@ public class MockupController {
 		ZonedDateTime utc = null;
 		
 		String[] hoursMinutes = timeStr.split(":");
-
+		
 		Calendar now = Calendar.getInstance();
 		
 		//System.out.println("Hours = "+Integer.valueOf(hoursMinutes[0]));
 		//System.out.println("Minutes = "+Integer.valueOf(hoursMinutes[1]));
 //			Date date = sdf.parse(timeStr);
-		utc = ZonedDateTime.of(now.get(Calendar.YEAR), now.get(Calendar.MONTH)+1, (now.get(Calendar.DAY_OF_MONTH)), 0, 0, 0, 0, ZoneId.of("UTC"));
+		utc = ZonedDateTime.of(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, (now.get(Calendar.DAY_OF_MONTH)), 0, 0, 0, 0, ZoneId.of("UTC"));
 		utc = utc.plusHours(Integer.valueOf(hoursMinutes[0]) + 5);
-
+		
 		System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
 		return utc;
 		
