@@ -21,5 +21,6 @@
     <orderEntry type="library" name="owm-japis-2.5.0.3" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="com.mashape.unirest:unirest-java:1.4.9" level="project" />
+    <orderEntry type="library" name="GMapsFX" level="project" />
   </component>
 </module>
