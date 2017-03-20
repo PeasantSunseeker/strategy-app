@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.lynden.gmapsfx.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
@@ -111,15 +112,9 @@
             </VBox>
             <VBox GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <children>
-                  <ImageView fx:id="mapDemoPic" fitHeight="344.0" fitWidth="646.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../controllers/Map-Demo.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
+                  <GoogleMapView fx:id="mapView" />
+               </children></VBox>
          </children>
       </GridPane>
-      <ToggleButton mnemonicParsing="false" text="ToggleButton" />
   </children>
 </VBox>
