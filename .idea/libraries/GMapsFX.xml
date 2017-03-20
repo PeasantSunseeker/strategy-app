@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GMapsFX">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/GMapsFX.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

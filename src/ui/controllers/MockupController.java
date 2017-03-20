@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import com.lynden.gmapsfx.GoogleMapView;
 import config.CarConfig;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -119,7 +120,7 @@ public class MockupController {
 	private Button runSimulation;
 	
 	@FXML
-	private ImageView mapDemoPic;
+	private GoogleMapView mapView;
 	
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
@@ -163,7 +164,7 @@ public class MockupController {
 		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert mapDemoPic != null : "fx:id=\"mapDemoPic\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mockup.fxml'.";
 		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mockup.fxml'.";
 		
 		//endregion
