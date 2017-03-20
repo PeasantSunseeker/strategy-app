@@ -384,6 +384,7 @@ public class MockupController {
 	
 	private void showEnergyGraph() {
 		
+		//TODO: Aaron- turned off animation from energy graph when I was testing car config switcher
 		energyChart.setAnimated(false);
 		energyChart.setVisible(true);
 		cloudChart.setVisible(false);
