@@ -112,7 +112,6 @@ public class MockupController {
 	private Label currentEndingEnergy;
 	
 	
-	
 	@FXML
 	private TextField endingEnergyOverride;
 	
@@ -170,8 +169,8 @@ public class MockupController {
 		//endregion
 		
 		//region load carconfig and carconfig menu
-		CarConfig.loadCarConfig();
-
+		CarConfig.loadCarConfig("config.properties");
+		
 		initializeCarConfigMenu();
 		//endregion
 		
@@ -334,7 +333,6 @@ public class MockupController {
 	private void initializeCarConfigMenu() {
 		
 		
-		
 		ToggleGroup toggleGroup = new ToggleGroup();
 		
 		String[] configFileNames = getConfigFiles();
@@ -358,9 +356,26 @@ public class MockupController {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
 				
-				RadioMenuItem selected = (RadioMenuItem)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
+				RadioMenuItem selected = (RadioMenuItem) t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
 				//System.out.println("Selected Radio Button - "+selected.getText());
+				CarConfig.loadCarConfig(selected.getText());
+				//System.out.println("Switching to car config " + selected.getText());
+				//System.out.println("New config: ");
+				//CarConfig.printConfig();
 				
+				//TODO: Aaron showing alert window when config changed. If too annoying scrap it
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("Car Configuration");
+				alert.setHeaderText(null);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("Car Configuration changed to ");
+				sb.append(selected.getText());
+				sb.append("\n\n" + CarConfig.asString() + "\n\n");
+				sb.append("Please rerun simulation to use new config.");
+				
+				alert.setContentText(sb.toString());
+				alert.showAndWait();
 			}
 		});
 		
@@ -368,6 +383,8 @@ public class MockupController {
 	
 	
 	private void showEnergyGraph() {
+		
+		energyChart.setAnimated(false);
 		energyChart.setVisible(true);
 		cloudChart.setVisible(false);
 	}
@@ -420,11 +437,11 @@ public class MockupController {
 				float lat = currentWeather[i].getLatitude();
 				float lon = currentWeather[i].getLongitude();
 				
-				System.out.println("Searching with " + toUTC(wanted) + " ," + lat + " ," + lon);
+				//System.out.println("Searching with " + toUTC(wanted) + " ," + lat + " ," + lon);
 				aw = WeatherCaching.weatherSearch(toUTC(wanted), lat, lon);
 				
 				
-				cloudData.getData().add(new XYChart.Data(String.valueOf(i), aw.getAvgCloudPercentage()));
+				cloudData.getData().add(new XYChart.Data(data.get(i).getStartTime().getValue(), aw.getAvgCloudPercentage()));
 			}
 			
 			

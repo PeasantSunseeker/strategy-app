@@ -65,7 +65,7 @@ public class CarConfig {
 		CarConfig c = new CarConfig(0.12, 8078, 1.08, 0.94,
 				10, 30, 0.0055, 1300, 0.3, 1.3, 2700);
 		c.saveCarConfig();
-		c.loadCarConfig();
+		c.loadCarConfig("carconfig/config.properties");
 		c.printConfig();
 	}
 	
@@ -111,13 +111,14 @@ public class CarConfig {
 		}
 	}
 	
-	public static Properties loadCarConfig() {
+	public static Properties loadCarConfig(String fileName) {
 		Properties prop = new Properties();
 		InputStream input = null;
 		
 		try {
 			
-			input = new FileInputStream("config.properties");
+			fileName = "carconfig/" + fileName;
+			input = new FileInputStream(fileName);
 			
 			// load properties file
 			prop.load(input);
@@ -261,5 +262,54 @@ public class CarConfig {
 		System.out.println("solarDriving=" + solarDriving);
 		System.out.println("batteryC=" + batteryC);
 		System.out.println("carWeight=" + carWeight);
+	}
+	
+	public static String asString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("dragArea=");
+		sb.append(dragArea);
+		sb.append("\n");
+		
+		sb.append("peukert=");
+		sb.append(peukert);
+		sb.append("\n");
+		
+		sb.append("motorEfficiency=");
+		sb.append(motorEfficiency);
+		sb.append("\n");
+		
+		sb.append("parasiticCharging=");
+		sb.append(parasiticCharging);
+		sb.append("\n");
+		
+		sb.append("parasiticDriving=");
+		sb.append(parasiticDriving);
+		sb.append("\n");
+		
+		sb.append("rollingCoefficient=");
+		sb.append(rollingCoefficient);
+		sb.append("\n");
+		
+		sb.append("solarMaxPower=");
+		sb.append(solarMaxPower);
+		sb.append("\n");
+		
+		sb.append("solarCharging=");
+		sb.append(solarCharging);
+		sb.append("\n");
+		
+		sb.append("solarDriving=");
+		sb.append(solarDriving);
+		sb.append("\n");
+		
+		sb.append("batteryC=");
+		sb.append(batteryC);
+		sb.append("\n");
+		
+		sb.append("carWeight=");
+		sb.append(carWeight);
+		sb.append("\n");
+		
+		return sb.toString();
 	}
 }

@@ -12,7 +12,7 @@ import org.junit.Test;
 public class BatteryTest {
 	@Before
 	public void create() {
-		CarConfig.loadCarConfig();
+		CarConfig.loadCarConfig("config.properties");
 	}
 	
 	@Test
