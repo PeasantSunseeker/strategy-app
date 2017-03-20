@@ -177,7 +177,7 @@ public class MockupController {
 		
 		data = Data.getData(endingEnergy);
 		
-		//TODO: Aaron- moved this to initialize, seems to still work
+		
 		WeatherCaching wc = new WeatherCaching();
 		wc.main(null);
 		
@@ -192,7 +192,7 @@ public class MockupController {
 //		mapDemoPic.setVisible(true);
 		
 		
-		//region Override TextView handlers
+		//region TextView handlers for manual override fields
 		cloudPctOverride.setOnKeyReleased(event -> {
 			if (event.getCode() == KeyCode.ENTER) {
 				
@@ -323,13 +323,20 @@ public class MockupController {
 			}
 		});
 		//endregion
+		
+		
 		initializeEnergyGraph();
 		updateEnergyGraph();
 		showDataTable();
 		
+		//display energy graph by default
 		chartSelector.getSelectionModel().select("Energy");
 	}
 	
+	/**
+	 * Scans the carconfig directory for config files. Puts config files in a toggle-able group,
+	 * and implements a listener to update car configuration when a new config file is selected.
+	 */
 	private void initializeCarConfigMenu() {
 		
 		
@@ -351,7 +358,9 @@ public class MockupController {
 			}
 		}
 		
-		
+		/**
+		 * When a configuration file is selected, load that car configuration.
+		 */
 		toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
@@ -502,7 +511,7 @@ public class MockupController {
 	
 	/**
 	 * @param text
-	 * @return true if text is integer, false if not
+	 * @return true if text is integer 0-100, false if not
 	 */
 	private boolean validatePercentage(StringProperty text) {
 		
@@ -524,6 +533,11 @@ public class MockupController {
 		
 	}
 	
+	/**
+	 *
+	 * @param timeStr a string in the format HH:MM where HH is an hour 00-23
+	 * @return timeStr as a ZonedDateTime in UTC with today's date
+	 */
 	private ZonedDateTime toUTC(String timeStr) {
 		
 		ZonedDateTime utc = null;
@@ -538,7 +552,7 @@ public class MockupController {
 		utc = ZonedDateTime.of(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, (now.get(Calendar.DAY_OF_MONTH)), 0, 0, 0, 0, ZoneId.of("UTC"));
 		utc = utc.plusHours(Integer.valueOf(hoursMinutes[0]) + 5);
 		
-		System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
+		//System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
 		return utc;
 		
 		
