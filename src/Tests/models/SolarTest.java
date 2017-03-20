@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class SolarTest {
 	@Before
 	public void create() {
-		CarConfig.loadCarConfig();
+		CarConfig.loadCarConfig("config.properties");
 	}
 	
 	@Test

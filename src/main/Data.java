@@ -15,7 +15,7 @@ public class Data {
 	static boolean debug = false;
 	
 	public static void main(String[] args) {
-		CarConfig.loadCarConfig();
+		CarConfig.loadCarConfig("config.properties");
 		getData(20);
 	}
 	
