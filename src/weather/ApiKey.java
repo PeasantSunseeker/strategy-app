@@ -4,8 +4,8 @@ package weather;
  * PROJECT: seniordesign
  * AUTHOR: aaron
  * DATE: 1/22/17
- * <p>
- * DESCRIPTION:
+ *
+ * DESCRIPTION: Here is the API key for OpenWeatherMap. You can change the API_KEY if you get a new one.
  */
 public class ApiKey {
 	
