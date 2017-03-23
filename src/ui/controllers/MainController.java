@@ -43,7 +43,7 @@ import java.util.Calendar;
  * <p>
  * OUTPUTS:
  */
-public class MockupController {
+public class MainController {
 	
 	private final String CONFIG_FILE_PATH = "carconfig";
 	
@@ -146,26 +146,26 @@ public class MockupController {
 		
 		//region assertions
 		
-		assert currentSpeedLimit != null : "fx:id=\"currentSpeedLimit\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert tablePane != null : "fx:id=\"tablePane\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyYAxis != null : "fx:id=\"energyYAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudPctOverride != null : "fx:id=\"cloudPctOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert chartSelector != null : "fx:id=\"chartSelector\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert shadePctOverride != null : "fx:id=\"shadePctOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudYAxis != null : "fx:id=\"cloudYAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert speedLimitOverride != null : "fx:id=\"speedLimitOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudChart != null : "fx:id=\"cloudChart\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyXAxis != null : "fx:id=\"energyXAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentCloudPct != null : "fx:id=\"currentCloudPct\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudXAxis != null : "fx:id=\"cloudXAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentShadePct != null : "fx:id=\"currentShadePct\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyChart != null : "fx:id=\"energyChart\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert currentSpeedLimit != null : "fx:id=\"currentSpeedLimit\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert tablePane != null : "fx:id=\"tablePane\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyYAxis != null : "fx:id=\"energyYAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudPctOverride != null : "fx:id=\"cloudPctOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert chartSelector != null : "fx:id=\"chartSelector\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert shadePctOverride != null : "fx:id=\"shadePctOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudYAxis != null : "fx:id=\"cloudYAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert speedLimitOverride != null : "fx:id=\"speedLimitOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudChart != null : "fx:id=\"cloudChart\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyXAxis != null : "fx:id=\"energyXAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentCloudPct != null : "fx:id=\"currentCloudPct\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudXAxis != null : "fx:id=\"cloudXAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentShadePct != null : "fx:id=\"currentShadePct\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyChart != null : "fx:id=\"energyChart\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mainPage.fxml'.";
 		
 		//endregion
 		
