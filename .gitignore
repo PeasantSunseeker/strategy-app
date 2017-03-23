@@ -32,3 +32,5 @@
 # Serial files
 *.ser
 .DS_Store
+current_weather-10_locations.csv
+weather-forecast-10_locations.csv
