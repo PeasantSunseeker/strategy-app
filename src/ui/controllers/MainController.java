@@ -43,7 +43,7 @@ import java.util.Calendar;
  * <p>
  * OUTPUTS:
  */
-public class MockupController {
+public class MainController {
 	
 	private final String CONFIG_FILE_PATH = "carconfig";
 	
@@ -146,26 +146,26 @@ public class MockupController {
 		
 		//region assertions
 		
-		assert currentSpeedLimit != null : "fx:id=\"currentSpeedLimit\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert tablePane != null : "fx:id=\"tablePane\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyYAxis != null : "fx:id=\"energyYAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudPctOverride != null : "fx:id=\"cloudPctOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert chartSelector != null : "fx:id=\"chartSelector\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert shadePctOverride != null : "fx:id=\"shadePctOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudYAxis != null : "fx:id=\"cloudYAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert speedLimitOverride != null : "fx:id=\"speedLimitOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudChart != null : "fx:id=\"cloudChart\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyXAxis != null : "fx:id=\"energyXAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentCloudPct != null : "fx:id=\"currentCloudPct\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert cloudXAxis != null : "fx:id=\"cloudXAxis\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentShadePct != null : "fx:id=\"currentShadePct\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert energyChart != null : "fx:id=\"energyChart\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mockup.fxml'.";
-		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mockup.fxml'.";
+		assert currentSpeedLimit != null : "fx:id=\"currentSpeedLimit\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert tablePane != null : "fx:id=\"tablePane\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyYAxis != null : "fx:id=\"energyYAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudPctOverride != null : "fx:id=\"cloudPctOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert chartSelector != null : "fx:id=\"chartSelector\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert shadePctOverride != null : "fx:id=\"shadePctOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudYAxis != null : "fx:id=\"cloudYAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert speedLimitOverride != null : "fx:id=\"speedLimitOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudChart != null : "fx:id=\"cloudChart\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyXAxis != null : "fx:id=\"energyXAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentCloudPct != null : "fx:id=\"currentCloudPct\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert cloudXAxis != null : "fx:id=\"cloudXAxis\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentShadePct != null : "fx:id=\"currentShadePct\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert energyChart != null : "fx:id=\"energyChart\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert currentEndingEnergy != null : "fx:id=\"currentEndingEnergy\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert endingEnergyOverride != null : "fx:id=\"endingEnergyOverride\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mainPage.fxml'.";
 		
 		//endregion
 		
@@ -178,7 +178,7 @@ public class MockupController {
 		
 		data = Data.getData(endingEnergy);
 		
-		//TODO: Aaron- moved this to initialize, seems to still work
+		
 		WeatherCaching wc = new WeatherCaching();
 		wc.main(null);
 		
@@ -193,7 +193,7 @@ public class MockupController {
 //		mapDemoPic.setVisible(true);
 		
 		
-		//region Override TextView handlers
+		//region TextView handlers for manual override fields
 		cloudPctOverride.setOnKeyReleased(event -> {
 			if (event.getCode() == KeyCode.ENTER) {
 				
@@ -324,13 +324,20 @@ public class MockupController {
 			}
 		});
 		//endregion
+		
+		
 		initializeEnergyGraph();
 		updateEnergyGraph();
 		showDataTable();
 		
+		//display energy graph by default
 		chartSelector.getSelectionModel().select("Energy");
 	}
 	
+	/**
+	 * Scans the carconfig directory for config files. Puts config files in a toggle-able group,
+	 * and implements a listener to update car configuration when a new config file is selected.
+	 */
 	private void initializeCarConfigMenu() {
 		
 		
@@ -352,7 +359,9 @@ public class MockupController {
 			}
 		}
 		
-		
+		/**
+		 * When a configuration file is selected, load that car configuration.
+		 */
 		toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
@@ -503,7 +512,7 @@ public class MockupController {
 	
 	/**
 	 * @param text
-	 * @return true if text is integer, false if not
+	 * @return true if text is integer 0-100, false if not
 	 */
 	private boolean validatePercentage(StringProperty text) {
 		
@@ -525,6 +534,11 @@ public class MockupController {
 		
 	}
 	
+	/**
+	 *
+	 * @param timeStr a string in the format HH:MM where HH is an hour 00-23
+	 * @return timeStr as a ZonedDateTime in UTC with today's date
+	 */
 	private ZonedDateTime toUTC(String timeStr) {
 		
 		ZonedDateTime utc = null;
@@ -539,7 +553,7 @@ public class MockupController {
 		utc = ZonedDateTime.of(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, (now.get(Calendar.DAY_OF_MONTH)), 0, 0, 0, 0, ZoneId.of("UTC"));
 		utc = utc.plusHours(Integer.valueOf(hoursMinutes[0]) + 5);
 		
-		System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
+		//System.out.println("Converted " + timeStr + " to UTC format" + utc.toString());
 		return utc;
 		
 		
