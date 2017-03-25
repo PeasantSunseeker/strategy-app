@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class AerodynamicTest {
 	@Before
 	public void create() {
-		CarConfig.loadCarConfig();
+		CarConfig.loadCarConfig("config.properties");
 	}
 	
 	@Test

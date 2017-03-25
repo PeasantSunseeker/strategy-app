@@ -159,7 +159,7 @@ public class ConfigEditorController {
 		
 		//load current config and display on left side
 		currentConfig = new Properties();
-		currentConfig = CarConfig.loadCarConfig();
+		currentConfig = CarConfig.loadCarConfig("carconfig/config.properties");
 		
 		//region initialize left side values to current config values
 		
