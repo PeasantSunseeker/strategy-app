@@ -1,6 +1,11 @@
 package ui.controllers;
 
 import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import config.CarConfig;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -9,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -25,10 +31,12 @@ import weather.WeatherCurrent;
 import weather.WeatherForecast;
 
 import java.io.File;
+import java.net.URL;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ResourceBundle;
 
 /**
  * PROJECT: seniordesign
@@ -43,7 +51,7 @@ import java.util.Calendar;
  * <p>
  * OUTPUTS:
  */
-public class MainController {
+public class MainController implements Initializable, MapComponentInitializedListener {
 	
 	private final String CONFIG_FILE_PATH = "carconfig";
 	
@@ -122,6 +130,8 @@ public class MainController {
 	@FXML
 	private GoogleMapView mapView;
 	
+	private GoogleMap map;
+	
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
@@ -139,10 +149,31 @@ public class MainController {
 	
 	//endregion
 	
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		mapView.addMapInializedListener(this);
+		initializeForm();
+	}
 	
-	@FXML
+	@Override
+	public void mapInitialized() {
+		MapOptions mapOptions = new MapOptions();
+		
+		mapOptions.center(new LatLong(41.31823 ,-81.58775))
+				.mapType(MapTypeIdEnum.ROADMAP)
+				.overviewMapControl(false)
+				.panControl(false)
+				.rotateControl(false)
+				.scaleControl(false)
+				.streetViewControl(false)
+				.zoomControl(false)
+				.zoom(8);
+		
+		map = mapView.createMap(mapOptions);
+	}
+	
 		// This method is called by the FXMLLoader when initialization is complete
-	void initialize() {
+	void initializeForm() {
 		
 		//region assertions
 		
