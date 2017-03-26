@@ -2,10 +2,11 @@ package ui.controllers;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
-import com.lynden.gmapsfx.javascript.object.GoogleMap;
-import com.lynden.gmapsfx.javascript.object.LatLong;
-import com.lynden.gmapsfx.javascript.object.MapOptions;
-import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.event.UIEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
+import com.lynden.gmapsfx.javascript.object.*;
+import com.lynden.gmapsfx.shapes.Polyline;
+import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -24,7 +25,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
+import net.aksingh.owmjapis.CurrentWeather;
+import netscape.javascript.JSObject;
 import utilities.MasterData;
+import utilities.Position;
 import weather.AveragedWeather;
 import weather.WeatherCaching;
 import weather.WeatherCurrent;
@@ -37,6 +41,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+
+import static java.lang.Thread.sleep;
 
 /**
  * PROJECT: seniordesign
@@ -132,6 +138,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	private GoogleMap map;
 	
+	private Polyline polyline;
+	
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
@@ -151,8 +159,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		mapView.addMapInializedListener(this);
 		initializeForm();
+		mapView.addMapInializedListener(this);
 	}
 	
 	@Override
@@ -170,6 +178,35 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				.zoom(8);
 		
 		map = mapView.createMap(mapOptions);
+		
+		UIEventHandler clickEvent = new UIEventHandler() {
+			@Override
+			public void handle(JSObject jsObject) {
+//				map.removeMapShape(polyline);
+//				map.setZoom(map.getZoom()+1);
+//				map.setZoom(map.getZoom()-1);
+//				System.out.println("Adding polyline");
+//				map.addMapShape(polyline);
+			}
+		};
+		
+		map.addUIEventHandler(UIEventType.click, clickEvent);
+		
+		Position[] positions = Position.loadPositions("leg-1-10_items");
+		
+		MVCArray path = new MVCArray();
+		for(int i = 0; i < positions.length; i+=1){
+			path.push(new LatLong(positions[i].getLatitude(),positions[i].getLongitude()));
+		}
+		
+		PolylineOptions polylineOptions = new PolylineOptions();
+		polylineOptions.strokeColor("#ff0000");
+		polylineOptions.strokeOpacity(1.0);
+		polylineOptions.strokeWeight(2);
+		polylineOptions.path(path);
+		
+		polyline = new Polyline(polylineOptions);
+		map.addMapShape(polyline);
 	}
 	
 		// This method is called by the FXMLLoader when initialization is complete
