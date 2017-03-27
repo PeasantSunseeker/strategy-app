@@ -31,6 +31,7 @@ import javafx.scene.layout.StackPane;
 import main.Data;
 import net.aksingh.owmjapis.CurrentWeather;
 import netscape.javascript.JSObject;
+import utilities.GPS;
 import utilities.MasterData;
 import utilities.Position;
 import weather.AveragedWeather;
@@ -144,7 +145,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	private Polyline polyline;
 
-	private Circle positionCircle;
+	public static Circle positionCircle;
 
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
@@ -185,12 +186,16 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		map = mapView.createMap(mapOptions);
 		
-		UIEventHandler clickEvent = jsObject -> {
-//			map.removeMapShape(polyline);
-//			map.setZoom(map.getZoom()+1);
-//			map.setZoom(map.getZoom()-1);
-//			System.out.println("Adding polyline");
-//			map.addMapShape(polyline);
+		UIEventHandler clickEvent = new UIEventHandler() {
+			@Override
+			public void handle(JSObject jsObject) {
+				GPS.updateLocation(new LatLong((JSObject)jsObject.getMember("latLng")));
+//			    map.removeMapShape(polyline);
+//			    map.setZoom(map.getZoom()+1);
+//			    map.setZoom(map.getZoom()-1);
+//			    System.out.println("Adding polyline");
+//			    map.addMapShape(polyline);
+			}
 		};
 		
 		StateEventHandler zoomEvent = () -> {
@@ -207,6 +212,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
 		
 		Position[] positions = Position.loadPositions("leg-1-10_items");
+//		Position[] positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {
