@@ -2,9 +2,13 @@ package ui.controllers;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.event.MapStateEventType;
+import com.lynden.gmapsfx.javascript.event.StateEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.*;
+import com.lynden.gmapsfx.shapes.Circle;
+import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
@@ -139,13 +143,15 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private GoogleMap map;
 	
 	private Polyline polyline;
-	
+
+	private Circle positionCircle;
+
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
 	@FXML
 	void overrideClouds(ActionEvent event) {
-		
+	
 	}
 	
 	@FXML
@@ -167,7 +173,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	public void mapInitialized() {
 		MapOptions mapOptions = new MapOptions();
 		
-		mapOptions.center(new LatLong(41.31823 ,-81.58775))
+		mapOptions.center(new LatLong(41.31823, -81.58775))
 				.mapType(MapTypeIdEnum.ROADMAP)
 				.overviewMapControl(false)
 				.panControl(false)
@@ -179,24 +185,32 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		map = mapView.createMap(mapOptions);
 		
-		UIEventHandler clickEvent = new UIEventHandler() {
-			@Override
-			public void handle(JSObject jsObject) {
-//				map.removeMapShape(polyline);
-//				map.setZoom(map.getZoom()+1);
-//				map.setZoom(map.getZoom()-1);
-//				System.out.println("Adding polyline");
-//				map.addMapShape(polyline);
-			}
+		UIEventHandler clickEvent = jsObject -> {
+//			map.removeMapShape(polyline);
+//			map.setZoom(map.getZoom()+1);
+//			map.setZoom(map.getZoom()-1);
+//			System.out.println("Adding polyline");
+//			map.addMapShape(polyline);
+		};
+		
+		StateEventHandler zoomEvent = () -> {
+//			System.out.printf("zoomEvent\n");
+			LatLongBounds bounds = map.getBounds();
+			LatLong latLong = bounds.getNorthEast();
+			double distance = latLong.distanceFrom(bounds.getSouthWest());
+			positionCircle.setRadius(distance * .01);
+//			positionCircle.setRadius(17.7 * Math.pow(2, (21 - map.getZoom())) * 0.1);
 		};
 		
 		map.addUIEventHandler(UIEventType.click, clickEvent);
 		
+		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
+		
 		Position[] positions = Position.loadPositions("leg-1-10_items");
 		
 		MVCArray path = new MVCArray();
-		for(int i = 0; i < positions.length; i+=1){
-			path.push(new LatLong(positions[i].getLatitude(),positions[i].getLongitude()));
+		for (Position position : positions) {
+			path.push(new LatLong(position.getLatitude(), position.getLongitude()));
 		}
 		
 		PolylineOptions polylineOptions = new PolylineOptions();
@@ -207,10 +221,23 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		polyline = new Polyline(polylineOptions);
 		map.addMapShape(polyline);
+		
+		CircleOptions circleOptions = new CircleOptions();
+		circleOptions.center(new LatLong(positions[0].getLatitude(), positions[0].getLongitude()));
+		circleOptions.radius(17.712 * Math.pow(2, (21 - map.getZoom() + 1)) * 0.01);
+		circleOptions.strokeColor("#000000");
+		circleOptions.strokeOpacity(1);
+		circleOptions.strokeWeight(2);
+		circleOptions.fillColor("#498dfc");
+		circleOptions.fillOpacity(1);
+		
+		positionCircle = new Circle(circleOptions);
+		
+		map.addMapShape(positionCircle);
 	}
 	
 		// This method is called by the FXMLLoader when initialization is complete
-	void initializeForm() {
+		private void initializeForm() {
 		
 		//region assertions
 		
@@ -246,9 +273,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		data = Data.getData(endingEnergy);
 		
-		
-		WeatherCaching wc = new WeatherCaching();
-		wc.main(null);
+		WeatherCaching.main(null);
 		
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
@@ -279,7 +304,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				
 				
 			} else {
-				
+			
 			}
 		});
 		
@@ -302,7 +327,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				
 				shadePctOverride.clear();
 			} else {
-				
+			
 			}
 			
 			
@@ -327,7 +352,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				
 				
 			} else {
-				
+			
 			}
 			
 			
@@ -353,7 +378,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				
 				
 			} else {
-				
+			
 			}
 			
 			
