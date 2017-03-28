@@ -224,6 +224,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		polylineOptions.strokeOpacity(1.0);
 		polylineOptions.strokeWeight(2);
 		polylineOptions.path(path);
+		polylineOptions.clickable(false);
 		
 		polyline = new Polyline(polylineOptions);
 		map.addMapShape(polyline);
@@ -236,6 +237,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		circleOptions.strokeWeight(2);
 		circleOptions.fillColor("#498dfc");
 		circleOptions.fillOpacity(1);
+		circleOptions.clickable(false);
 		
 		positionCircle = new Circle(circleOptions);
 		
