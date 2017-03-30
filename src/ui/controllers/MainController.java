@@ -1,6 +1,16 @@
 package ui.controllers;
 
 import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.event.MapStateEventType;
+import com.lynden.gmapsfx.javascript.event.StateEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
+import com.lynden.gmapsfx.javascript.object.*;
+import com.lynden.gmapsfx.shapes.Circle;
+import com.lynden.gmapsfx.shapes.CircleOptions;
+import com.lynden.gmapsfx.shapes.Polyline;
+import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -9,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -18,17 +29,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
+import net.aksingh.owmjapis.CurrentWeather;
+import netscape.javascript.JSObject;
+import utilities.GPS;
 import utilities.MasterData;
+import utilities.Position;
 import weather.AveragedWeather;
 import weather.WeatherCaching;
 import weather.WeatherCurrent;
 import weather.WeatherForecast;
 
 import java.io.File;
+import java.net.URL;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ResourceBundle;
+
+import static java.lang.Thread.sleep;
 
 /**
  * PROJECT: seniordesign
@@ -43,7 +62,7 @@ import java.util.Calendar;
  * <p>
  * OUTPUTS:
  */
-public class MainController {
+public class MainController implements Initializable, MapComponentInitializedListener {
 	
 	private final String CONFIG_FILE_PATH = "carconfig";
 	
@@ -122,12 +141,18 @@ public class MainController {
 	@FXML
 	private GoogleMapView mapView;
 	
+	private GoogleMap map;
+	
+	private Polyline polyline;
+
+	public static Circle positionCircle;
+
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
 	@FXML
 	void overrideClouds(ActionEvent event) {
-		
+	
 	}
 	
 	@FXML
@@ -139,10 +164,88 @@ public class MainController {
 	
 	//endregion
 	
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		initializeForm();
+		mapView.addMapInializedListener(this);
+	}
 	
-	@FXML
+	@Override
+	public void mapInitialized() {
+		MapOptions mapOptions = new MapOptions();
+		
+		mapOptions.center(new LatLong(41.31823, -81.58775))
+				.mapType(MapTypeIdEnum.ROADMAP)
+				.overviewMapControl(false)
+				.panControl(false)
+				.rotateControl(false)
+				.scaleControl(false)
+				.streetViewControl(false)
+				.zoomControl(false)
+				.zoom(8);
+		
+		map = mapView.createMap(mapOptions);
+		
+		UIEventHandler clickEvent = new UIEventHandler() {
+			@Override
+			public void handle(JSObject jsObject) {
+				GPS.updateLocation(new LatLong((JSObject)jsObject.getMember("latLng")));
+//			    map.removeMapShape(polyline);
+//			    map.setZoom(map.getZoom()+1);
+//			    map.setZoom(map.getZoom()-1);
+//			    System.out.println("Adding polyline");
+//			    map.addMapShape(polyline);
+			}
+		};
+		
+		StateEventHandler zoomEvent = () -> {
+//			System.out.printf("zoomEvent\n");
+			LatLongBounds bounds = map.getBounds();
+			LatLong latLong = bounds.getNorthEast();
+			double distance = latLong.distanceFrom(bounds.getSouthWest());
+			positionCircle.setRadius(distance * .01);
+//			positionCircle.setRadius(17.7 * Math.pow(2, (21 - map.getZoom())) * 0.1);
+		};
+		
+		map.addUIEventHandler(UIEventType.click, clickEvent);
+		
+		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
+		
+		Position[] positions = Position.loadPositions("leg-1-10_items");
+//		Position[] positions = Position.loadPositions("leg-1-complete");
+		
+		MVCArray path = new MVCArray();
+		for (Position position : positions) {
+			path.push(new LatLong(position.getLatitude(), position.getLongitude()));
+		}
+		
+		PolylineOptions polylineOptions = new PolylineOptions();
+		polylineOptions.strokeColor("#ff0000");
+		polylineOptions.strokeOpacity(1.0);
+		polylineOptions.strokeWeight(2);
+		polylineOptions.path(path);
+		polylineOptions.clickable(false);
+		
+		polyline = new Polyline(polylineOptions);
+		map.addMapShape(polyline);
+		
+		CircleOptions circleOptions = new CircleOptions();
+		circleOptions.center(new LatLong(positions[0].getLatitude(), positions[0].getLongitude()));
+		circleOptions.radius(17.712 * Math.pow(2, (21 - map.getZoom() + 1)) * 0.01);
+		circleOptions.strokeColor("#000000");
+		circleOptions.strokeOpacity(1);
+		circleOptions.strokeWeight(2);
+		circleOptions.fillColor("#498dfc");
+		circleOptions.fillOpacity(1);
+		circleOptions.clickable(false);
+		
+		positionCircle = new Circle(circleOptions);
+		
+		map.addMapShape(positionCircle);
+	}
+	
 		// This method is called by the FXMLLoader when initialization is complete
-	void initialize() {
+		private void initializeForm() {
 		
 		//region assertions
 		
@@ -178,9 +281,7 @@ public class MainController {
 		
 		data = Data.getData(endingEnergy);
 		
-		
-		WeatherCaching wc = new WeatherCaching();
-		wc.main(null);
+		WeatherCaching.main(null);
 		
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
@@ -211,7 +312,7 @@ public class MainController {
 				
 				
 			} else {
-				
+			
 			}
 		});
 		
@@ -234,7 +335,7 @@ public class MainController {
 				
 				shadePctOverride.clear();
 			} else {
-				
+			
 			}
 			
 			
@@ -259,7 +360,7 @@ public class MainController {
 				
 				
 			} else {
-				
+			
 			}
 			
 			
@@ -285,7 +386,7 @@ public class MainController {
 				
 				
 			} else {
-				
+			
 			}
 			
 			
