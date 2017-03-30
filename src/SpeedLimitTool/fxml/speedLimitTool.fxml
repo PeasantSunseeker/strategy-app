@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import com.lynden.gmapsfx.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="SpeedLimitTool.SpeedLimitToolController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Open" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox prefHeight="390.0" prefWidth="600.0">
+         <children>
+            <AnchorPane prefHeight="371.0" prefWidth="456.0">
+               <children>
+                  <GoogleMapView fx:id="mapView" layoutY="-1.0" prefHeight="396.0" prefWidth="467.0" />
+                  <TextField fx:id="speedField" promptText="Enter speed limit"/>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Enter" AnchorPane.bottomAnchor="346.0" AnchorPane.topAnchor="25.0" />
+               </children>
+            </AnchorPane>
+            <ListView prefHeight="368.0" prefWidth="133.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
