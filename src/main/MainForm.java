@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import utilities.GPS;
 
 import java.io.IOException;
 
@@ -34,6 +35,12 @@ public class MainForm extends Application {
 		primaryStage.setTitle("Solar Car Performance Application");
 		primaryStage.setScene(new Scene(root, 1024, 768));
 		primaryStage.show();
+	}
+	
+	@Override
+	public void stop(){
+		System.out.println("Exiting Form");
+		GPS.killTask();
 	}
 	
 	public static void main(String[] args) {

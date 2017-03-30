@@ -12,11 +12,13 @@ import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -146,6 +148,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private Polyline polyline;
 
 	public static Circle positionCircle;
+	
+	public static Position[] positions;
 
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
@@ -189,7 +193,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		UIEventHandler clickEvent = new UIEventHandler() {
 			@Override
 			public void handle(JSObject jsObject) {
-				GPS.updateLocation(new LatLong((JSObject)jsObject.getMember("latLng")));
+//				GPS.updateLocation(new LatLong((JSObject)jsObject.getMember("latLng")));
 //			    map.removeMapShape(polyline);
 //			    map.setZoom(map.getZoom()+1);
 //			    map.setZoom(map.getZoom()-1);
@@ -211,8 +215,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
 		
-		Position[] positions = Position.loadPositions("leg-1-10_items");
-//		Position[] positions = Position.loadPositions("leg-1-complete");
+//		positions = Position.loadPositions("leg-1-10_items");
+		positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {
@@ -242,6 +246,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		positionCircle = new Circle(circleOptions);
 		
 		map.addMapShape(positionCircle);
+		
+		GPS.startTask();
 	}
 	
 		// This method is called by the FXMLLoader when initialization is complete
