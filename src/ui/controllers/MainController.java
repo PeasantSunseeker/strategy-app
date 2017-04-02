@@ -32,6 +32,7 @@ import netscape.javascript.JSObject;
 import utilities.GPS;
 import utilities.MasterData;
 import utilities.Position;
+import utilities.Telemetry;
 import weather.AveragedWeather;
 import weather.WeatherCaching;
 import weather.WeatherCurrent;
@@ -249,6 +250,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		gps = new GPS(this);
 		
 		gps.startTask();
+		
+		Telemetry.startTask();
 	}
 	
 		// This method is called by the FXMLLoader when initialization is complete

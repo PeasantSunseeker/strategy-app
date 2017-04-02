@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import utilities.GPS;
+import utilities.Telemetry;
 
 import java.io.IOException;
 
@@ -41,6 +42,7 @@ public class MainForm extends Application {
 	public void stop(){
 		System.out.println("Exiting Form");
 		GPS.killTask();
+		Telemetry.killTask();
 	}
 	
 	public static void main(String[] args) {

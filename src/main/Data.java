@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Data {
 	static boolean debug = false;
+	static List<MasterData> rowData = new ArrayList<MasterData>();
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig("config.properties");
@@ -75,6 +76,8 @@ public class Data {
 	}
 	
 	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy) {
+//		System.out.println("optimizeRun");
+//		System.out.println(endingEnergy);
 		double weight = CarConfig.getCarWeight(); // Newtons
 		double totalPower; // Segment power usage
 		double startTime; // Start time
@@ -90,7 +93,12 @@ public class Data {
 		double finalEnergy = 100;
 		boolean speedModified = true;
 		
-		List<MasterData> rowData = new ArrayList<MasterData>();
+		if(rowData.size() == 0) {
+			for (index = 0; index < positions.length; index++) {
+				MasterData myData = new MasterData();
+				rowData.add(myData);
+			}
+		}
 		
 		while (!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
 			//Reset run calculations
@@ -98,7 +106,7 @@ public class Data {
 			totalBatteryCharge = 100;
 			startTime = 9;
 			totalDistance = 0;
-			rowData = new ArrayList<MasterData>();
+//			rowData = new ArrayList<MasterData>();
 			
 			if (debug) {
 				System.out.format("Speed Guess: %f\n", speedGuess);
@@ -167,7 +175,8 @@ public class Data {
 				}
 				
 				// Insert segment data into array
-				MasterData myData = new MasterData();
+//				MasterData myData = new MasterData();
+				MasterData myData = rowData.get(index);
 				myData.setStartTime(previousTime);
 				myData.setEndTime(previousTime + deltaTime);
 				myData.setBatteryCharge(batteryCharge);
@@ -179,9 +188,9 @@ public class Data {
 //				myData.setActualBatteryCharge(batteryCharge * 1.15);
 //				myData.setActualTotalCharge(totalBatteryCharge * 1.15);
 				myData.setPosition(pos);
-				rowData.add(myData);
+//				rowData.add(myData);
 			}
-			MasterData firstItem = rowData.get(0);
+			MasterData firstItem = rowData.get(1);
 			firstItem.setActualTotalCharge(Double.parseDouble(firstItem.getTotalCharge().getValue()));
 			
 			finalEnergy = totalBatteryCharge;

@@ -22,7 +22,7 @@ import static ui.controllers.MainController.positions;
  * DESCRIPTION:
  */
 public class GPS{
-	private static int positionIndex = 1;
+	private static int positionIndex = 2;
 	private static Task task;
 	
 	private MainController mainController;
@@ -36,7 +36,6 @@ public class GPS{
 	}
 	
 	public void startTask(){
-		
 		task = new Task<Void>() {
 			@Override public Void call() {
 				System.out.println("Start GPS Task");
@@ -47,7 +46,7 @@ public class GPS{
 						return null;
 					}
 					try {
-						sleep(1 * 10 * 1000 / positions.length);
+						sleep(1 * 40 * 1000 / positions.length);
 					} catch (InterruptedException e) {
 						if(task.isCancelled()){
 							return null;
@@ -73,7 +72,17 @@ public class GPS{
 		MasterData data = displayData.get(positionIndex);
 		Position position = data.getPosition();
 		String totalCharge = data.getTotalCharge().getValue();
-		double newCharge = Double.parseDouble(totalCharge) * 1.15;
+		String prevTotalCharge = displayData.get(positionIndex-1).getActualTotalCharge().getValue();
+		String batteryCharge = data.getBatteryCharge().getValue();
+		double newCharge = Double.parseDouble(batteryCharge);
+		if(newCharge > 0){
+			newCharge *= .85;
+		}
+		else{
+			newCharge *= 1.15;
+		}
+		newCharge += Double.parseDouble(prevTotalCharge);
+
 		data.setActualTotalCharge(newCharge);
 		mainController.updateEnergyGraph();
 		
