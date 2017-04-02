@@ -12,13 +12,11 @@ import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,11 +25,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
-import net.aksingh.owmjapis.CurrentWeather;
 import netscape.javascript.JSObject;
 import utilities.GPS;
 import utilities.MasterData;
@@ -74,12 +70,13 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private StringProperty endingEnergyString;
 	private int endingEnergy = 20;
 	
-	ObservableList<MasterData> data;
+	public static ObservableList<MasterData> displayData;
 	private WeatherCurrent[] currentWeather;
 	private ArrayList<WeatherForecast> forecasts;
 	
 	//data sets for charts
 	private XYChart.Series energyGraphData;
+	private XYChart.Series actualEnergyGraphData;
 	private XYChart.Series cloudData;
 	
 	
@@ -150,6 +147,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	public static Circle positionCircle;
 	
 	public static Position[] positions;
+	
+	GPS gps;
 
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
@@ -161,8 +160,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@FXML
 	protected void runSimulationAction(ActionEvent event) {
-		data = Data.getData(endingEnergy);
-		fillDataTable(data);
+		displayData = Data.getData(endingEnergy);
+		fillDataTable(displayData);
 		updateEnergyGraph();
 	}
 	
@@ -215,8 +214,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
 		
-//		positions = Position.loadPositions("leg-1-10_items");
-		positions = Position.loadPositions("leg-1-complete");
+		positions = Position.loadPositions("leg-1-10_items");
+//		positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {
@@ -247,7 +246,9 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		map.addMapShape(positionCircle);
 		
-		GPS.startTask();
+		gps = new GPS(this);
+		
+		gps.startTask();
 	}
 	
 		// This method is called by the FXMLLoader when initialization is complete
@@ -285,7 +286,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		//endregion
 		
 		
-		data = Data.getData(endingEnergy);
+		displayData = Data.getData(endingEnergy);
 		
 		WeatherCaching.main(null);
 		
@@ -293,6 +294,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
 		
 		energyGraphData = new XYChart.Series();
+		actualEnergyGraphData = new XYChart.Series();
 		cloudData = new XYChart.Series();
 
 //		Image img = new Image("file:Map-Demo.png");
@@ -507,19 +509,34 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		cloudChart.setVisible(false);
 	}
 	
-	private void updateEnergyGraph() {
-		assert (data != null);
+	public void updateEnergyGraph() {
+		assert (displayData != null);
 		
 		energyGraphData.getData().clear();
-		for (int i = 0; i < data.size(); i++) {
-			energyGraphData.getData().add(new XYChart.Data(data.get(i).getStartTime().getValue(), Float.valueOf(data.get(i).getTotalCharge().getValue())));
+		actualEnergyGraphData.getData().clear();
+		for (int i = 0; i < displayData.size(); i++) {
+			String totalCharge = displayData.get(i).getTotalCharge().getValue();
+			String startTime = displayData.get(i).getStartTime().getValue();
+			if(startTime != null && !startTime.isEmpty()) {
+				if (totalCharge != null && !totalCharge.isEmpty()) {
+					energyGraphData.getData().add(new XYChart.Data(startTime, Float.valueOf(totalCharge)));
+				}
+				
+				String actualTotalCharge = displayData.get(i).getActualTotalCharge().getValue();
+				if (actualTotalCharge != null && !actualTotalCharge.isEmpty()) {
+					actualEnergyGraphData.getData().add(new XYChart.Data(startTime, Float.valueOf(actualTotalCharge)));
+				}
+			}
 		}
 	}
 	
 	private void initializeEnergyGraph() {
 		energyXAxis.setLabel("Time");
 		energyYAxis.setLabel("Battery (%)");
+		energyGraphData.setName("Estimated Energy");
+		actualEnergyGraphData.setName("Recorded Energy");
 		energyChart.getData().add(energyGraphData);
+		energyChart.getData().add(actualEnergyGraphData);
 	}
 	
 	
@@ -548,10 +565,10 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		if (cloudData.getData().isEmpty()) {
 			//forecasted, current, by location... etc?
-			for (int i = 0; i < data.size(); i++) {
+			for (int i = 0; i < displayData.size(); i++) {
 				
 				//convert time from table data to UTC, from decimal
-				String wanted = data.get(i).getStartTime().getValue();
+				String wanted = displayData.get(i).getStartTime().getValue();
 				float lat = currentWeather[i].getLatitude();
 				float lon = currentWeather[i].getLongitude();
 				
@@ -559,7 +576,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				aw = WeatherCaching.weatherSearch(toUTC(wanted), lat, lon);
 				
 				
-				cloudData.getData().add(new XYChart.Data(data.get(i).getStartTime().getValue(), aw.getAvgCloudPercentage()));
+				cloudData.getData().add(new XYChart.Data(displayData.get(i).getStartTime().getValue(), aw.getAvgCloudPercentage()));
 			}
 			
 			
@@ -604,7 +621,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		TableColumn<MasterData, String> totalChargeColumn = new TableColumn("Total Charge Used");
 		totalChargeColumn.setCellValueFactory(temp -> temp.getValue().getTotalCharge());
 		
-		table.setItems(data);
+		table.setItems(displayData);
 		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, elevationColumn, roadAngleColumn, batteryChargeColumn, totalChargeColumn);
 		
 		//Screen screen = Screen.getPrimary();

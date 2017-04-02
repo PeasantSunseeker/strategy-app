@@ -176,8 +176,14 @@ public class Data {
 				myData.setVelocity(averageVelocity);
 				myData.setRoadAngle(roadAngle);
 				myData.setElevation(pos.getElevation());
+//				myData.setActualBatteryCharge(batteryCharge * 1.15);
+//				myData.setActualTotalCharge(totalBatteryCharge * 1.15);
+				myData.setPosition(pos);
 				rowData.add(myData);
 			}
+			MasterData firstItem = rowData.get(0);
+			firstItem.setActualTotalCharge(Double.parseDouble(firstItem.getTotalCharge().getValue()));
+			
 			finalEnergy = totalBatteryCharge;
 			if (finalEnergy < endingEnergy) {
 				speedGuess -= 1;

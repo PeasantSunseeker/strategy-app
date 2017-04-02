@@ -2,6 +2,7 @@ package utilities;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Pos;
 
 /**
  * PROJECT: seniorDesign
@@ -11,14 +12,18 @@ import javafx.beans.property.StringProperty;
  * DESCRIPTION:
  */
 public class MasterData {
-	public SimpleStringProperty startTime;
-	public SimpleStringProperty endTime;
-	public SimpleStringProperty batteryCharge;
-	public SimpleStringProperty totalCharge;
-	public SimpleStringProperty distance;
-	public SimpleStringProperty velocity;
-	public SimpleStringProperty roadAngle;
-	public SimpleStringProperty elevation;
+	private SimpleStringProperty startTime;
+	private SimpleStringProperty endTime;
+	private SimpleStringProperty batteryCharge;
+	private SimpleStringProperty totalCharge;
+	private SimpleStringProperty distance;
+	private SimpleStringProperty velocity;
+	private SimpleStringProperty roadAngle;
+	private SimpleStringProperty elevation;
+	private SimpleStringProperty actualBatteryCharge;
+	private SimpleStringProperty actualTotalCharge;
+	private Position position;
+	
 	
 	public void setStartTime(double startTime) {
 		String formatted = String.format("%02.0f:%02.0f", Math.floor(startTime), startTime % 1 * 60);
@@ -60,6 +65,20 @@ public class MasterData {
 		this.elevation.set(formatted);
 	}
 	
+	public void setActualBatteryCharge(double actualBatteryCharge) {
+		String formatted = String.format("%4.2f", actualBatteryCharge);
+		this.actualBatteryCharge.set(formatted);
+	}
+	
+	public void setActualTotalCharge(double actualTotalCharge) {
+		String formatted = String.format("%4.2f", actualTotalCharge);
+		this.actualTotalCharge.set(formatted);
+	}
+	
+	public void setPosition(Position position){
+		this.position = position;
+	}
+	
 	public StringProperty getStartTime() {
 		return startTime;
 	}
@@ -92,6 +111,16 @@ public class MasterData {
 		return elevation;
 	}
 	
+	public StringProperty getActualBatteryCharge() {
+		return actualBatteryCharge;
+	}
+	
+	public StringProperty getActualTotalCharge() {
+		return actualTotalCharge;
+	}
+	
+	public Position getPosition(){return position;}
+	
 	public MasterData(){
 		this.startTime = new SimpleStringProperty("");
 		this.endTime = new SimpleStringProperty("");
@@ -101,5 +130,7 @@ public class MasterData {
 		this.velocity = new SimpleStringProperty("");
 		this.roadAngle = new SimpleStringProperty("");
 		this.elevation = new SimpleStringProperty("");
+		this.actualBatteryCharge = new SimpleStringProperty("");
+		this.actualTotalCharge = new SimpleStringProperty("");
 	}
 }
