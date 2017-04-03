@@ -177,8 +177,9 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	@Override
 	public void mapInitialized() {
 		MapOptions mapOptions = new MapOptions();
-		
-		mapOptions.center(new LatLong(41.31823, -81.58775))
+//		39.4999  ,-84.41028
+//		41.31823, -81.58775
+		mapOptions.center(new LatLong(39.4999, -84.41028))
 				.mapType(MapTypeIdEnum.ROADMAP)
 				.overviewMapControl(false)
 				.panControl(false)
@@ -186,7 +187,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 				.scaleControl(false)
 				.streetViewControl(false)
 				.zoomControl(false)
-				.zoom(8);
+				.zoom(6);
 		
 		map = mapView.createMap(mapOptions);
 		
