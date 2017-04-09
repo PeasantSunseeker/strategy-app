@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static ui.controllers.MainController.positions;
+
 /**
  * PROJECT: seniordesign
  * AUTHOR: aaron  2/4/2017.
@@ -55,7 +57,6 @@ public class WeatherCaching {
 	
 	private final static String OWM_DATE_PATTERN = "EEE MMM dd HH:mm:ss zzz yyyy";
 	
-	private static Position[] positions;
 	private static ArrayList<WeatherForecast> forecasts;
 	private static WeatherCurrent[] weatherCurrents;
 	
@@ -68,14 +69,7 @@ public class WeatherCaching {
 	public static void main(String[] args) {
 		
 		//get current weather conditions
-		
-		
-		positions = Position.loadPositions(POSITION_FILE);
-		if (positions == null) {
-			System.out.println("Error loading positions");
-		} else {
-			saveCurrentWeather(CURRENT_OUTPUT_FILE);
-		}
+		saveCurrentWeather(CURRENT_OUTPUT_FILE);
 		
 		weatherCurrents = getCurrentWeather(CURRENT_OUTPUT_FILE);
 		
@@ -93,12 +87,9 @@ public class WeatherCaching {
 		}
 		
 		
-		positions = Position.loadPositions(POSITION_FILE);
-		
-		
 		forecasts = getWeatherForecast(FORECAST_OUTPUT_FILE);
 		
-		if (refreshForecasts() == true) {
+		if (refreshForecasts()) {
 			System.out.println("Weather forecasts either missing or outdated. Getting new forecasts...");
 			saveWeatherForecast(FORECAST_OUTPUT_FILE);
 		} else {

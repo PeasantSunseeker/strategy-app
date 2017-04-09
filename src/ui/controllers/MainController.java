@@ -216,9 +216,6 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		map.addUIEventHandler(UIEventType.click, clickEvent);
 		
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
-
-//		positions = Position.loadPositions("leg-1-10_items");
-//		positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {

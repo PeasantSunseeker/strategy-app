@@ -12,13 +12,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ui.controllers.MainController.positions;
+
 public class Data {
 	static boolean debug = false;
 	static List<MasterData> rowData = new ArrayList<MasterData>();
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig("config.properties");
-		getData(20);
+//		getData(20);
 	}
 	
 	public static ObservableList<MasterData> getHourlyData() {
@@ -76,7 +78,7 @@ public class Data {
 		return returnData;
 	}
 	
-	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy) {
+	public static List<MasterData> optimizeRun(double endingEnergy) {
 //		System.out.println("optimizeRun");
 //		System.out.println(endingEnergy);
 		double weight = CarConfig.getCarWeight(); // Newtons
@@ -214,9 +216,7 @@ public class Data {
 	}
 	
 	public static ObservableList<MasterData> getData(int endingEnergy) {
-		Position[] positions = Position.loadPositions("leg-1-10_items");
-		
-		List<MasterData> rowData = optimizeRun(positions, endingEnergy);
+		List<MasterData> rowData = optimizeRun(endingEnergy);
 		
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
 		
