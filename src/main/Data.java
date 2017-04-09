@@ -4,6 +4,7 @@ import config.CarConfig;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.*;
+import utilities.GPS;
 import utilities.MasterData;
 import utilities.Position;
 
@@ -11,13 +12,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ui.controllers.MainController.positions;
+
 public class Data {
 	static boolean debug = false;
 	static List<MasterData> rowData = new ArrayList<MasterData>();
 	
 	public static void main(String[] args) {
 		CarConfig.loadCarConfig("config.properties");
-		getData(20);
+//		getData(20);
 	}
 	
 	public static ObservableList<MasterData> getHourlyData() {
@@ -75,7 +78,7 @@ public class Data {
 		return returnData;
 	}
 	
-	public static List<MasterData> optimizeRun(Position[] positions, double endingEnergy) {
+	public static List<MasterData> optimizeRun(double endingEnergy) {
 //		System.out.println("optimizeRun");
 //		System.out.println(endingEnergy);
 		double weight = CarConfig.getCarWeight(); // Newtons
@@ -93,23 +96,28 @@ public class Data {
 		double finalEnergy = 100;
 		boolean speedModified = true;
 		
-		if(rowData.size() == 0) {
-			for (index = 0; index < positions.length; index++) {
+		if (rowData.size() == 0) {
+			for (index = 0; index < positions.length - 1; index++) {
 				MasterData myData = new MasterData();
 				rowData.add(myData);
 			}
 		}
 		
-		while (!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
+		while (!equalTolerance(finalEnergy, endingEnergy, 5) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
-			totalBatteryCharge = 100;
+//			totalBatteryCharge = 100;
 			startTime = 9;
+			if (GPS.positionIndex == 1) {
+				totalBatteryCharge = 90;
+			} else {
+				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex - 1).getActualTotalCharge().getValue());
+			}
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			
+//			System.out.format("Speed Guess: %f\n", speedGuess);
 			if (debug) {
-				System.out.format("Speed Guess: %f\n", speedGuess);
 				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
 						"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
@@ -176,7 +184,7 @@ public class Data {
 				
 				// Insert segment data into array
 //				MasterData myData = new MasterData();
-				MasterData myData = rowData.get(index);
+				MasterData myData = rowData.get(index - 1);
 				myData.setStartTime(previousTime);
 				myData.setEndTime(previousTime + deltaTime);
 				myData.setBatteryCharge(batteryCharge);
@@ -190,7 +198,7 @@ public class Data {
 				myData.setPosition(pos);
 //				rowData.add(myData);
 			}
-			MasterData firstItem = rowData.get(1);
+			MasterData firstItem = rowData.get(0);
 			firstItem.setActualTotalCharge(Double.parseDouble(firstItem.getTotalCharge().getValue()));
 			
 			finalEnergy = totalBatteryCharge;
@@ -199,6 +207,9 @@ public class Data {
 			} else {
 				speedGuess += 1;
 			}
+			
+//			System.out.println("Final Energy: " + finalEnergy);
+
 //			if(Double.isNaN(finalEnergy)){
 //				finalEnergy = 100;
 //			}
@@ -208,9 +219,7 @@ public class Data {
 	}
 	
 	public static ObservableList<MasterData> getData(int endingEnergy) {
-		Position[] positions = Position.loadPositions("leg-1-10_items");
-		
-		List<MasterData> rowData = optimizeRun(positions, endingEnergy);
+		List<MasterData> rowData = optimizeRun(endingEnergy);
 		
 		ObservableList<MasterData> returnData = FXCollections.observableArrayList(rowData);
 		

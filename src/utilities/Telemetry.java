@@ -12,13 +12,14 @@ import static ui.controllers.MainController.positions;
 public class Telemetry {
 	private static Task task;
 	
-	public static void startTask(){
+	public static void startTask() {
 		task = new Task<Void>() {
-			@Override public Void call() {
+			@Override
+			public Void call() {
 				System.out.println("Start Telemetry Task");
 //				updateGPS();
 //				for(int i = 1; i < positions.length - 1; i++) {
-				while(true){
+				while (true) {
 ////					System.out.println("Sleep");
 //					if(task.isCancelled()){
 //						return null;
@@ -26,7 +27,7 @@ public class Telemetry {
 					try {
 						sleep(1 * 5 * 1000);
 					} catch (InterruptedException e) {
-						if(task.isCancelled()){
+						if (task.isCancelled()) {
 							return null;
 						}
 						e.printStackTrace();
@@ -38,11 +39,13 @@ public class Telemetry {
 //				return null;
 			}
 		};
-		
+
 //		new Thread(task).start();
 	}
 	
-	public static void killTask(){
-		task.cancel();
+	public static void killTask() {
+		if (task != null) {
+			task.cancel();
+		}
 	}
 }

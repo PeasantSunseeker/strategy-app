@@ -22,5 +22,6 @@
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="com.mashape.unirest:unirest-java:1.4.9" level="project" />
     <orderEntry type="library" name="GMapsFX" level="project" />
+    <orderEntry type="library" name="de.micromata.jak:JavaAPIforKml:2.2.1" level="project" />
   </component>
 </module>

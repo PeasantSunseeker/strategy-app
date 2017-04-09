@@ -12,6 +12,8 @@ import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
+import google.Elevation;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,6 +30,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
+import main.MainForm;
+import models.Solar;
 import netscape.javascript.JSObject;
 import utilities.GPS;
 import utilities.MasterData;
@@ -40,11 +44,11 @@ import weather.WeatherForecast;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -72,14 +76,18 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private int endingEnergy = 20;
 	
 	public static ObservableList<MasterData> displayData;
-	private WeatherCurrent[] currentWeather;
-	private ArrayList<WeatherForecast> forecasts;
+	private static WeatherCurrent[] currentWeather;
+	private static ArrayList<WeatherForecast> forecasts;
+	
+	public static Position[] positions;
+	public static String positionsFile;
 	
 	//data sets for charts
 	private XYChart.Series energyGraphData;
 	private XYChart.Series actualEnergyGraphData;
 	private XYChart.Series cloudData;
 	
+	GPS gps;
 	
 	//region FXML declarations
 	
@@ -144,13 +152,9 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private GoogleMap map;
 	
 	private Polyline polyline;
-
+	
 	public static Circle positionCircle;
 	
-	public static Position[] positions;
-	
-	GPS gps;
-
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
@@ -170,6 +174,11 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		positionsFile = String.format("legs/%s/%s", MainForm.raceChoice, MainForm.legChoice);
+		positions = Position.loadPositions(positionsFile);
+		Elevation.retrieve(positionsFile);
+		
+		
 		initializeForm();
 		mapView.addMapInializedListener(this);
 	}
@@ -179,7 +188,10 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		MapOptions mapOptions = new MapOptions();
 //		39.4999  ,-84.41028
 //		41.31823, -81.58775
-		mapOptions.center(new LatLong(39.4999, -84.41028))
+		float centerLatitude = (positions[0].getLatitude() + positions[positions.length - 1].getLatitude()) / 2;
+		float centerLongitude = (positions[0].getLongitude() + positions[positions.length - 1].getLongitude()) / 2;
+		
+		mapOptions.center(new LatLong(centerLatitude, centerLongitude))
 				.mapType(MapTypeIdEnum.ROADMAP)
 				.overviewMapControl(false)
 				.panControl(false)
@@ -215,9 +227,6 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		map.addUIEventHandler(UIEventType.click, clickEvent);
 		
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
-		
-		positions = Position.loadPositions("leg-1-10_items");
-//		positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {
@@ -255,8 +264,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		Telemetry.startTask();
 	}
 	
-		// This method is called by the FXMLLoader when initialization is complete
-		private void initializeForm() {
+	// This method is called by the FXMLLoader when initialization is complete
+	private void initializeForm() {
 		
 		//region assertions
 		
@@ -290,12 +299,24 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		//endregion
 		
 		
-		displayData = Data.getData(endingEnergy);
-		
 		WeatherCaching.main(null);
 		
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
+		
+		ZoneId zoneId = ZoneId.of("America/New_York");
+		ZonedDateTime sunriseZoned = currentWeather[0].getSunrise().withZoneSameInstant(zoneId);
+		ZonedDateTime sunsetZoned = currentWeather[currentWeather.length - 1].getSunset().withZoneSameInstant(zoneId);
+//		System.out.println(LocalDateTime);
+//		System.out.println(sunriseZoned);
+//		System.out.println(sunsetZoned);
+		double sunrise = sunriseZoned.getHour() + (sunriseZoned.getMinute() / 60.0) + (sunriseZoned.getSecond() / 3600.0);
+		double sunset = sunsetZoned.getHour() + (sunsetZoned.getMinute() / 60.0) + (sunsetZoned.getSecond() / 3600.0);
+//		System.out.println(sunrise);
+//		System.out.println(sunset);
+		Solar.setDayLength(sunrise, sunset);
+		
+		displayData = Data.getData(endingEnergy);
 		
 		energyGraphData = new XYChart.Series();
 		actualEnergyGraphData = new XYChart.Series();
@@ -521,7 +542,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		for (int i = 0; i < displayData.size(); i++) {
 			String totalCharge = displayData.get(i).getTotalCharge().getValue();
 			String startTime = displayData.get(i).getStartTime().getValue();
-			if(startTime != null && !startTime.isEmpty()) {
+			if (startTime != null && !startTime.isEmpty()) {
 				if (totalCharge != null && !totalCharge.isEmpty()) {
 					energyGraphData.getData().add(new XYChart.Data(startTime, Float.valueOf(totalCharge)));
 				}
@@ -663,16 +684,15 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	}
 	
 	/**
-	 *
 	 * @param timeStr a string in the format HH:MM where HH is an hour 00-23
 	 * @return timeStr as a ZonedDateTime in UTC with today's date
 	 */
 	private ZonedDateTime toUTC(String timeStr) {
 		
 		ZonedDateTime utc = null;
-		
+//		System.out.println(timeStr);
 		String[] hoursMinutes = timeStr.split(":");
-		
+//		System.out.println(hoursMinutes);
 		Calendar now = Calendar.getInstance();
 		
 		//System.out.println("Hours = "+Integer.valueOf(hoursMinutes[0]));

@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ui.controllers.MainController;
 import utilities.Flag;
 import utilities.Position;
 
@@ -14,6 +15,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ui.controllers.MainController.positions;
+import static utilities.Position.calculateAngle;
 
 /**
  * PROJECT: seniorDesign
@@ -26,8 +30,11 @@ public class Elevation {
 	
 	public static void main(String[] args) {
 		String fileName = "leg-1-10_items";
-		Position[] positions = Position.loadPositions(fileName);
-		
+		positions = Position.loadPositions(fileName);
+		retrieve(fileName);
+	}
+	
+	public static void retrieve(String fileName) {
 		if (positions.length >= 512) {
 			//TODO make multiple calls to handle high amounts of positions
 			System.out.println("Too many positions");
@@ -106,6 +113,10 @@ public class Elevation {
 					
 					if (matchCount == results.length()) {
 						System.out.println("All results matched");
+						for (int i = 1; i < positions.length; i++) {
+							positions[i - 1].setAngle(calculateAngle(positions[i - 1], positions[i]));
+						}
+						
 						Position.savePositions(positions, fileName);
 					} else {
 						System.out.println("Position mismatch");
