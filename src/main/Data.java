@@ -116,7 +116,7 @@ public class Data {
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			
-			System.out.format("Speed Guess: %f\n", speedGuess);
+//			System.out.format("Speed Guess: %f\n", speedGuess);
 			if (debug) {
 				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
@@ -208,7 +208,7 @@ public class Data {
 				speedGuess += 1;
 			}
 			
-			System.out.println("Final Energy: " + finalEnergy);
+//			System.out.println("Final Energy: " + finalEnergy);
 
 //			if(Double.isNaN(finalEnergy)){
 //				finalEnergy = 100;

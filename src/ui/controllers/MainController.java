@@ -31,6 +31,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
 import main.MainForm;
+import models.Solar;
 import netscape.javascript.JSObject;
 import utilities.GPS;
 import utilities.MasterData;
@@ -43,7 +44,9 @@ import weather.WeatherForecast;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -175,6 +178,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		positions = Position.loadPositions(positionsFile);
 		Elevation.retrieve(positionsFile);
 		
+		
 		initializeForm();
 		mapView.addMapInializedListener(this);
 	}
@@ -295,12 +299,24 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		//endregion
 		
 		
-		displayData = Data.getData(endingEnergy);
-		
 		WeatherCaching.main(null);
 		
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
+		
+		ZoneId zoneId = ZoneId.of("America/New_York");
+		ZonedDateTime sunriseZoned = currentWeather[0].getSunrise().withZoneSameInstant(zoneId);
+		ZonedDateTime sunsetZoned = currentWeather[currentWeather.length - 1].getSunset().withZoneSameInstant(zoneId);
+//		System.out.println(LocalDateTime);
+//		System.out.println(sunriseZoned);
+//		System.out.println(sunsetZoned);
+		double sunrise = sunriseZoned.getHour() + (sunriseZoned.getMinute() / 60.0) + (sunriseZoned.getSecond() / 3600.0);
+		double sunset = sunsetZoned.getHour() + (sunsetZoned.getMinute() / 60.0) + (sunsetZoned.getSecond() / 3600.0);
+//		System.out.println(sunrise);
+//		System.out.println(sunset);
+		Solar.setDayLength(sunrise, sunset);
+		
+		displayData = Data.getData(endingEnergy);
 		
 		energyGraphData = new XYChart.Series();
 		actualEnergyGraphData = new XYChart.Series();

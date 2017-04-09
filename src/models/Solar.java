@@ -25,4 +25,12 @@ public class Solar {
 //		System.out.println(noonAngle);
 		return noonAngle;
 	}
+	
+	public static void setDayLength(double rise, double set) {
+		sunrise = rise;
+		dayLength = set - rise;
+//		System.out.printf("Sunrise: %2.4f\n", rise);
+//		System.out.printf("Sunset: %2.4f\n", set);
+//		System.out.printf("Daylength: %2.4f\n", dayLength);
+	}
 }
