@@ -92,7 +92,8 @@ public class WeatherCaching {
 			//System.out.println("Error loading forecasts");
 		}
 		
-		
+
+		//TODO: use static positions in memory instead of reading from file
 		positions = Position.loadPositions(POSITION_FILE);
 		
 		
