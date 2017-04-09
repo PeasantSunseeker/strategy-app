@@ -4,6 +4,7 @@ import config.CarConfig;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.*;
+import utilities.GPS;
 import utilities.MasterData;
 import utilities.Position;
 
@@ -103,8 +104,14 @@ public class Data {
 		while (!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
-			totalBatteryCharge = 100;
+//			totalBatteryCharge = 100;
 			startTime = 9;
+			if(GPS.positionIndex == 1){
+				totalBatteryCharge = 90;
+			}
+			else{
+				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex-1).getActualTotalCharge().getValue());
+			}
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			
@@ -176,7 +183,7 @@ public class Data {
 				
 				// Insert segment data into array
 //				MasterData myData = new MasterData();
-				MasterData myData = rowData.get(index);
+				MasterData myData = rowData.get(index-1);
 				myData.setStartTime(previousTime);
 				myData.setEndTime(previousTime + deltaTime);
 				myData.setBatteryCharge(batteryCharge);
@@ -190,7 +197,7 @@ public class Data {
 				myData.setPosition(pos);
 //				rowData.add(myData);
 			}
-			MasterData firstItem = rowData.get(1);
+			MasterData firstItem = rowData.get(0);
 			firstItem.setActualTotalCharge(Double.parseDouble(firstItem.getTotalCharge().getValue()));
 			
 			finalEnergy = totalBatteryCharge;

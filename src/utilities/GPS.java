@@ -22,7 +22,7 @@ import static ui.controllers.MainController.positions;
  * DESCRIPTION:
  */
 public class GPS{
-	private static int positionIndex = 2;
+	public static int positionIndex = 1;
 	private static Task task;
 	
 	private MainController mainController;
@@ -70,19 +70,27 @@ public class GPS{
 		positionCircle.setCenter(new LatLong(next.getLatitude(),next.getLongitude()));
 //		displayData.get(positionIndex).getBatteryCharge();
 		MasterData data = displayData.get(positionIndex);
+		MasterData prevData = displayData.get(positionIndex-1);
 		Position position = data.getPosition();
 		String totalCharge = data.getTotalCharge().getValue();
-		String prevTotalCharge = displayData.get(positionIndex-1).getActualTotalCharge().getValue();
+//		String prevTotalCharge = displayData.get(positionIndex-1).getActualTotalCharge().getValue();
+		String prevActualTotalCharge = prevData.getActualTotalCharge().getValue();
 		String batteryCharge = data.getBatteryCharge().getValue();
 		double newCharge = Double.parseDouble(batteryCharge);
 		if(newCharge > 0){
-			newCharge *= .85;
+			newCharge *= .90;
 		}
 		else{
-			newCharge *= 1.15;
+			newCharge *= 1.1;
 		}
-		newCharge += Double.parseDouble(prevTotalCharge);
+//		newCharge += Double.parseDouble(prevTotalCharge);
 
+		if(!prevActualTotalCharge.isEmpty()){
+			newCharge += Double.parseDouble(prevActualTotalCharge);
+		}else{
+			newCharge += Double.parseDouble(totalCharge);
+		}
+		
 		data.setActualTotalCharge(newCharge);
 		mainController.updateEnergyGraph();
 		
