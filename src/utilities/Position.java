@@ -1,5 +1,8 @@
 package utilities;
 
+import de.micromata.opengis.kml.v_2_2_0.Coordinate;
+import javafx.geometry.Pos;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,50 +116,41 @@ public class Position {
 		resave();
 	}
 	
-	public static void makeSmall() {
-		List<Position> positionList = new ArrayList<Position>();
-		String line;
-		String[] items;
-		String fileName = "leg-1";
-		int counter = 0;
+	public static void convertCoordinatesToPosition(List<Coordinate> coordinates, String fileName) {
+		int count = 10;
+		String smallExtension = String.format("-%d_items",count);
+		String newFileName = String.format("%s%s.csv",fileName,smallExtension);
 		
-		try {
-			FileReader fileReader = new FileReader(fileName + ".csv");
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
-			while ((line = bufferedReader.readLine()) != null) {
-//				System.out.println(line);
-				items = line.split(",");
-				positionList.add(new Position(Float.valueOf(items[1]), Float.valueOf(items[0]), Float.valueOf(items[2])));
-//				if (counter > 0) {
-//					positionList.get(counter-1).setHeading(calculateHeading(positionList.get(counter-1),positionList.get(counter)));
-//				}
-				counter++;
-			}
-			
-			fileReader.close();
-			bufferedReader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		File file = new File(newFileName);
+		if(file.exists()){
+			return;
+		}
+		System.out.println("convert "+fileName);
+		
+		Position[] positions = new Position[coordinates.size()];
+		for(int i = 0; i < coordinates.size(); i++){
+			Coordinate coord = coordinates.get(i);
+			positions[i] = new Position((float)coord.getLatitude(),(float)coord.getLongitude(),(float)coord.getAltitude());
 		}
 		
-		Position[] positions = positionList.toArray(new Position[positionList.size()]);
-		
-		int count = 10;
 		Position[] positionsSmall = new Position[count];
 		for (int i = 0; i < count; i++) {
-			positionsSmall[i] = positions[i * (positions.length / count)];
+			if(i != count-1) {
+				positionsSmall[i] = positions[i * (positions.length / count)];
+			}else{
+				positionsSmall[count-1] = positions[positions.length-1];
+			}
 			positionsSmall[i].elevation = 0;
 			if (i > 0) {
 				positionsSmall[i - 1].setHeading(calculateHeading(positionsSmall[i - 1], positionsSmall[i]));
 			}
 		}
 		for (Position pos : positionsSmall) {
-			System.out.println(pos);
+//			System.out.println(pos);
 		}
 		
-		savePositions(positions, fileName + "-complete");
-		savePositions(positionsSmall, fileName + "-10_items");
+//		savePositions(positions, fileName + "-complete");
+		savePositions(positionsSmall, fileName + smallExtension);
 	}
 	
 	public static void resave() {
