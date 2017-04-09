@@ -215,7 +215,7 @@ public class Position {
 			for (int i = 0; i < positions.length; i++) {
 				Position pos = positions[i];
 				
-				String line = String.format("%-9s,%-10s,%-10s,%-19s,%-5s,%-5s,%-10s,%-10s\n", pos.latitude, pos.longitude, pos.elevation, pos.heading, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
+				String line = String.format("%-9s,%-10s,%-10s,%-15.14s,%-13.12s,%-5s,%-10s,%-10s\n", pos.latitude, pos.longitude, pos.elevation, pos.heading, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
 				bufferedWriter.write(line);
 			}
 			
@@ -274,6 +274,12 @@ public class Position {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void printPositions(Position[] positions) {
+		for (int i = 0; i < positions.length; i++) {
+			System.out.println(positions[i]);
 		}
 	}
 }

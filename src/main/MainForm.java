@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import ui.controllers.MainController;
 import utilities.GPS;
+import utilities.Position;
 import utilities.Telemetry;
 
 import java.io.File;
@@ -87,6 +89,7 @@ public class MainForm extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Exiting Form");
+		Position.savePositions(MainController.positions, MainController.positionsFile);
 		GPS.killTask();
 		Telemetry.killTask();
 	}

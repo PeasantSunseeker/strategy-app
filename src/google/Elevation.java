@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ui.controllers.MainController.positions;
+import static utilities.Position.calculateAngle;
 
 /**
  * PROJECT: seniorDesign
@@ -112,6 +113,10 @@ public class Elevation {
 					
 					if (matchCount == results.length()) {
 						System.out.println("All results matched");
+						for (int i = 1; i < positions.length; i++) {
+							positions[i - 1].setAngle(calculateAngle(positions[i - 1], positions[i]));
+						}
+						
 						Position.savePositions(positions, fileName);
 					} else {
 						System.out.println("Position mismatch");

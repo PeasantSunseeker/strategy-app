@@ -12,6 +12,7 @@ import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
+import google.Elevation;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -149,6 +150,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	public static Position[] positions;
 	
+	public static String positionsFile;
+	
 	GPS gps;
 	
 	@FXML // fx:id="carConfigMenu"
@@ -170,7 +173,10 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		positions = Position.loadPositions("legs/" + MainForm.raceChoice + "/" + MainForm.legChoice);
+		positionsFile = String.format("legs/%s/%s", MainForm.raceChoice, MainForm.legChoice);
+		positions = Position.loadPositions(positionsFile);
+		Elevation.retrieve(positionsFile);
+
 		initializeForm();
 		mapView.addMapInializedListener(this);
 	}
@@ -180,7 +186,10 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		MapOptions mapOptions = new MapOptions();
 //		39.4999  ,-84.41028
 //		41.31823, -81.58775
-		mapOptions.center(new LatLong(39.4999, -84.41028))
+		float centerLatitude = (positions[0].getLatitude() + positions[positions.length - 1].getLatitude()) / 2;
+		float centerLongitude = (positions[0].getLongitude() + positions[positions.length - 1].getLongitude()) / 2;
+		
+		mapOptions.center(new LatLong(centerLatitude, centerLongitude))
 				.mapType(MapTypeIdEnum.ROADMAP)
 				.overviewMapControl(false)
 				.panControl(false)
