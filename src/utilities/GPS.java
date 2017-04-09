@@ -46,7 +46,7 @@ public class GPS{
 						return null;
 					}
 					try {
-						sleep(1 * 40 * 1000 / positions.length);
+						sleep(5 * 60 * 1000 / positions.length);
 					} catch (InterruptedException e) {
 						if(task.isCancelled()){
 							return null;
@@ -60,7 +60,7 @@ public class GPS{
 			}
 		};
 		
-		new Thread(task).start();
+//		new Thread(task).start();
 	}
 	
 	private void updateGPS() {

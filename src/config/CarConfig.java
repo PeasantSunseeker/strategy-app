@@ -22,7 +22,7 @@ public class CarConfig {
 	private static double dragArea;
 	
 	/********** Battery **********/
-	static double batteryC;
+	static double batteryCapacity;
 	private static double peukert;
 	
 	/********** Motor **********/
@@ -46,7 +46,7 @@ public class CarConfig {
 	/**
 	 *
 	 * @param dragArea
-	 * @param batteryC
+	 * @param batteryCapacity
 	 * @param peukert
 	 * @param motorEfficiency
 	 * @param parasiticCharging
@@ -57,13 +57,13 @@ public class CarConfig {
 	 * @param solarDriving
 	 * @param carWeight
 	 */
-	public CarConfig(double dragArea, double batteryC, double peukert, double motorEfficiency,
-					 double parasiticCharging, double parasiticDriving, double rollingCoefficient,
-					 double solarMaxPower, double solarCharging, double solarDriving, double carWeight) {
+	public CarConfig(double dragArea, double batteryCapacity, double peukert, double motorEfficiency,
+	                 double parasiticCharging, double parasiticDriving, double rollingCoefficient,
+	                 double solarMaxPower, double solarCharging, double solarDriving, double carWeight) {
 		
 		this.dragArea = dragArea;
 		
-		this.batteryC = batteryC;
+		this.batteryCapacity = batteryCapacity;
 		this.peukert = peukert;
 		this.motorEfficiency = motorEfficiency;
 		this.parasiticCharging = parasiticCharging;
@@ -113,7 +113,7 @@ public class CarConfig {
 			properties.setProperty("solarMaxPower", Double.toString(solarMaxPower));
 			properties.setProperty("solarCharging", Double.toString(solarCharging));
 			properties.setProperty("solarDriving", Double.toString(solarDriving));
-			properties.setProperty("batteryC", Double.toString(batteryC));
+			properties.setProperty("batteryCapacity", Double.toString(batteryCapacity));
 			properties.setProperty("carWeight", Double.toString(carWeight));
 			
 			properties.store(output, null);
@@ -159,7 +159,7 @@ public class CarConfig {
 			solarMaxPower = Double.parseDouble(prop.getProperty("solarMaxPower"));
 			solarCharging = Double.parseDouble(prop.getProperty("solarCharging"));
 			solarDriving = Double.parseDouble(prop.getProperty("solarDriving"));
-			batteryC = Double.parseDouble(prop.getProperty("batteryC"));
+			batteryCapacity = Double.parseDouble(prop.getProperty("batteryCapacity"));
 			carWeight = Double.parseDouble(prop.getProperty("carWeight"));
 			
 			
@@ -256,12 +256,12 @@ public class CarConfig {
 		CarConfig.solarDriving = solarDriving;
 	}
 	
-	public static double getBatteryC() {
-		return batteryC;
+	public static double getBatteryCapacity() {
+		return batteryCapacity;
 	}
 	
-	public static void setBatteryC(double batteryC) {
-		CarConfig.batteryC = batteryC;
+	public static void setBatteryCapacity(double batteryCapacity) {
+		CarConfig.batteryCapacity = batteryCapacity;
 	}
 	
 	public static double getCarWeight() {
@@ -286,7 +286,7 @@ public class CarConfig {
 		System.out.println("solarMaxPower=" + solarMaxPower);
 		System.out.println("solarCharging=" + solarCharging);
 		System.out.println("solarDriving=" + solarDriving);
-		System.out.println("batteryC=" + batteryC);
+		System.out.println("batteryCapacity=" + batteryCapacity);
 		System.out.println("carWeight=" + carWeight);
 	}
 	
@@ -333,8 +333,8 @@ public class CarConfig {
 		sb.append(solarDriving);
 		sb.append("\n");
 		
-		sb.append("batteryC=");
-		sb.append(batteryC);
+		sb.append("batteryCapacity=");
+		sb.append(batteryCapacity);
 		sb.append("\n");
 		
 		sb.append("carWeight=");
