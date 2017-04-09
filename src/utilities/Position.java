@@ -118,27 +118,27 @@ public class Position {
 	
 	public static void convertCoordinatesToPosition(List<Coordinate> coordinates, String fileName) {
 		int count = 10;
-		String smallExtension = String.format("-%d_items",count);
-		String newFileName = String.format("%s%s.csv",fileName,smallExtension);
+		String smallExtension = String.format("-%d_items", count);
+		String newFileName = String.format("%s%s.csv", fileName, smallExtension);
 		
 		File file = new File(newFileName);
-		if(file.exists()){
+		if (file.exists()) {
 			return;
 		}
-		System.out.println("convert "+fileName);
+		System.out.println("convert " + fileName);
 		
 		Position[] positions = new Position[coordinates.size()];
-		for(int i = 0; i < coordinates.size(); i++){
+		for (int i = 0; i < coordinates.size(); i++) {
 			Coordinate coord = coordinates.get(i);
-			positions[i] = new Position((float)coord.getLatitude(),(float)coord.getLongitude(),(float)coord.getAltitude());
+			positions[i] = new Position((float) coord.getLatitude(), (float) coord.getLongitude(), (float) coord.getAltitude());
 		}
 		
 		Position[] positionsSmall = new Position[count];
 		for (int i = 0; i < count; i++) {
-			if(i != count-1) {
+			if (i != count - 1) {
 				positionsSmall[i] = positions[i * (positions.length / count)];
-			}else{
-				positionsSmall[count-1] = positions[positions.length-1];
+			} else {
+				positionsSmall[count - 1] = positions[positions.length - 1];
 			}
 			positionsSmall[i].elevation = 0;
 			if (i > 0) {
@@ -148,7 +148,7 @@ public class Position {
 		for (Position pos : positionsSmall) {
 //			System.out.println(pos);
 		}
-		
+
 //		savePositions(positions, fileName + "-complete");
 		savePositions(positionsSmall, fileName + smallExtension);
 	}
@@ -191,20 +191,13 @@ public class Position {
 		double x = Math.cos(latitudeA) * Math.sin(latitudeB) - Math.sin(latitudeA) * Math.cos(latitudeB) * Math.cos(deltaLon);
 		
 		double heading = Math.toDegrees(Math.atan2(y, x));
-		
+
 //		heading = Math.toDegrees(heading);
 		heading = (heading + 360) % 360;
 //        heading = 360 - heading; // count degrees counter-clockwise - remove to make clockwise
 		
 		return heading;
 	}
-	
-//	public static double calculateHeadingNew(Position a, Position b) {
-//
-//		double heading =
-//
-//		return heading;
-//	}
 	
 	public static boolean savePositions(Position[] positions, String fileName) {
 		fileName = fileName + ".csv";

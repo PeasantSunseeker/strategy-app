@@ -27,7 +27,10 @@ public class Elevation {
 	public static void main(String[] args) {
 		String fileName = "leg-1-10_items";
 		Position[] positions = Position.loadPositions(fileName);
-		
+		retrieve(fileName, positions);
+	}
+	
+	public static void retrieve(String fileName, Position[] positions) {
 		if (positions.length >= 512) {
 			//TODO make multiple calls to handle high amounts of positions
 			System.out.println("Too many positions");

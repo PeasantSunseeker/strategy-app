@@ -12,6 +12,7 @@ import com.lynden.gmapsfx.shapes.CircleOptions;
 import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import config.CarConfig;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,6 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import main.Data;
+import main.MainForm;
 import netscape.javascript.JSObject;
 import utilities.GPS;
 import utilities.MasterData;
@@ -42,9 +44,7 @@ import java.io.File;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -144,13 +144,13 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private GoogleMap map;
 	
 	private Polyline polyline;
-
+	
 	public static Circle positionCircle;
 	
 	public static Position[] positions;
 	
 	GPS gps;
-
+	
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
@@ -170,6 +170,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		positions = Position.loadPositions("legs/" + MainForm.raceChoice + "/" + MainForm.legChoice);
 		initializeForm();
 		mapView.addMapInializedListener(this);
 	}
@@ -215,8 +216,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		map.addUIEventHandler(UIEventType.click, clickEvent);
 		
 		map.addStateEventHandler(MapStateEventType.zoom_changed, zoomEvent);
-		
-		positions = Position.loadPositions("leg-1-10_items");
+
+//		positions = Position.loadPositions("leg-1-10_items");
 //		positions = Position.loadPositions("leg-1-complete");
 		
 		MVCArray path = new MVCArray();
@@ -255,8 +256,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		Telemetry.startTask();
 	}
 	
-		// This method is called by the FXMLLoader when initialization is complete
-		private void initializeForm() {
+	// This method is called by the FXMLLoader when initialization is complete
+	private void initializeForm() {
 		
 		//region assertions
 		
@@ -521,7 +522,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		for (int i = 0; i < displayData.size(); i++) {
 			String totalCharge = displayData.get(i).getTotalCharge().getValue();
 			String startTime = displayData.get(i).getStartTime().getValue();
-			if(startTime != null && !startTime.isEmpty()) {
+			if (startTime != null && !startTime.isEmpty()) {
 				if (totalCharge != null && !totalCharge.isEmpty()) {
 					energyGraphData.getData().add(new XYChart.Data(startTime, Float.valueOf(totalCharge)));
 				}
@@ -663,7 +664,6 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	}
 	
 	/**
-	 *
 	 * @param timeStr a string in the format HH:MM where HH is an hour 00-23
 	 * @return timeStr as a ZonedDateTime in UTC with today's date
 	 */

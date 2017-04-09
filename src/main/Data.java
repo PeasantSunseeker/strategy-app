@@ -94,7 +94,7 @@ public class Data {
 		double finalEnergy = 100;
 		boolean speedModified = true;
 		
-		if(rowData.size() == 0) {
+		if (rowData.size() == 0) {
 			for (index = 0; index < positions.length; index++) {
 				MasterData myData = new MasterData();
 				rowData.add(myData);
@@ -106,11 +106,10 @@ public class Data {
 			speedModified = false;
 //			totalBatteryCharge = 100;
 			startTime = 9;
-			if(GPS.positionIndex == 1){
+			if (GPS.positionIndex == 1) {
 				totalBatteryCharge = 90;
-			}
-			else{
-				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex-1).getActualTotalCharge().getValue());
+			} else {
+				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex - 1).getActualTotalCharge().getValue());
 			}
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
@@ -183,7 +182,7 @@ public class Data {
 				
 				// Insert segment data into array
 //				MasterData myData = new MasterData();
-				MasterData myData = rowData.get(index-1);
+				MasterData myData = rowData.get(index - 1);
 				myData.setStartTime(previousTime);
 				myData.setEndTime(previousTime + deltaTime);
 				myData.setBatteryCharge(batteryCharge);
