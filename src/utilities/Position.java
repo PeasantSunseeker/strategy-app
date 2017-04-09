@@ -26,7 +26,7 @@ public class Position {
 	private float elevation = 0f;
 	private double heading = 0f; //degrees clockwise from due north
 	private double angle = 0f; //angle of the road 0 is flat, 40 is a steep uphill, -40 is a steep downhill
-	private float velocity = 80f;
+	private float velocity = 115f;
 	
 	private Flag elevationFlag;
 	private Flag velocityFlag;
@@ -251,7 +251,7 @@ public class Position {
 				positions[i] = new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2]));
 				positions[i].heading = Float.valueOf(items[3]);
 				positions[i].angle = Float.valueOf(items[4]);
-				positions[i].velocity = Float.valueOf(items[5]);
+//				positions[i].velocity = Float.valueOf(items[5]);
 				positions[i].elevationFlag = Flag.valueOf(items[6].trim());
 				positions[i].velocityFlag = Flag.valueOf(items[7].trim());
 				if (i > 0) {

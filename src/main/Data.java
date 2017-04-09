@@ -97,13 +97,13 @@ public class Data {
 		boolean speedModified = true;
 		
 		if (rowData.size() == 0) {
-			for (index = 0; index < positions.length; index++) {
+			for (index = 0; index < positions.length - 1; index++) {
 				MasterData myData = new MasterData();
 				rowData.add(myData);
 			}
 		}
 		
-		while (!equalTolerance(finalEnergy, endingEnergy, 2) && speedModified) {
+		while (!equalTolerance(finalEnergy, endingEnergy, 5) && speedModified) {
 			//Reset run calculations
 			speedModified = false;
 //			totalBatteryCharge = 100;
@@ -116,8 +116,8 @@ public class Data {
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			
+			System.out.format("Speed Guess: %f\n", speedGuess);
 			if (debug) {
-				System.out.format("Speed Guess: %f\n", speedGuess);
 				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
 						"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
@@ -207,6 +207,9 @@ public class Data {
 			} else {
 				speedGuess += 1;
 			}
+			
+			System.out.println("Final Energy: " + finalEnergy);
+
 //			if(Double.isNaN(finalEnergy)){
 //				finalEnergy = 100;
 //			}

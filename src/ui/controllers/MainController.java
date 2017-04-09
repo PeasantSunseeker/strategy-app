@@ -73,14 +73,18 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private int endingEnergy = 20;
 	
 	public static ObservableList<MasterData> displayData;
-	private WeatherCurrent[] currentWeather;
-	private ArrayList<WeatherForecast> forecasts;
+	private static WeatherCurrent[] currentWeather;
+	private static ArrayList<WeatherForecast> forecasts;
+	
+	public static Position[] positions;
+	public static String positionsFile;
 	
 	//data sets for charts
 	private XYChart.Series energyGraphData;
 	private XYChart.Series actualEnergyGraphData;
 	private XYChart.Series cloudData;
 	
+	GPS gps;
 	
 	//region FXML declarations
 	
@@ -148,12 +152,6 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	public static Circle positionCircle;
 	
-	public static Position[] positions;
-	
-	public static String positionsFile;
-	
-	GPS gps;
-	
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
@@ -176,7 +174,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		positionsFile = String.format("legs/%s/%s", MainForm.raceChoice, MainForm.legChoice);
 		positions = Position.loadPositions(positionsFile);
 		Elevation.retrieve(positionsFile);
-
+		
 		initializeForm();
 		mapView.addMapInializedListener(this);
 	}
@@ -676,9 +674,9 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private ZonedDateTime toUTC(String timeStr) {
 		
 		ZonedDateTime utc = null;
-		
+//		System.out.println(timeStr);
 		String[] hoursMinutes = timeStr.split(":");
-		
+//		System.out.println(hoursMinutes);
 		Calendar now = Calendar.getInstance();
 		
 		//System.out.println("Hours = "+Integer.valueOf(hoursMinutes[0]));
