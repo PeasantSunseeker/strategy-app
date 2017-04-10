@@ -159,6 +159,8 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	@FXML // fx:id="carConfigMenu"
 	private Menu carConfigMenu; // Value injected by FXMLLoader
 	
+	private MenuItem aboutMenuItem;
+	
 	@FXML
 	void overrideClouds(ActionEvent event) {
 	
@@ -169,6 +171,17 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		displayData = Data.getData(endingEnergy);
 		fillDataTable(displayData);
 		updateEnergyGraph();
+	}
+	
+	@FXML
+	protected void showAboutAction(ActionEvent event) {
+//		System.out.println("Show About");
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("About");
+		alert.setHeaderText(null);
+		alert.setContentText("Created by:\nAaron Brainard, Adam Hubbell, Broderick Hyman");
+		
+		alert.showAndWait();
 	}
 	
 	//endregion
@@ -293,6 +306,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		assert runSimulation != null : "fx:id=\"runSimulation\" was not injected: check your FXML file 'mainPage.fxml'.";
 		assert mapView != null : "fx:id=\"mapView\" was not injected: check your FXML file 'mainPage.fxml'.";
 		assert carConfigMenu != null : "fx:id=\"carConfigMenu\" was not injected: check your FXML file 'mainPage.fxml'.";
+		assert aboutMenuItem != null : "fx:id=\"aboutMenuItem\" was not injected: check your FXML file 'mainPage.fxml'.";
 		
 		//endregion
 		
