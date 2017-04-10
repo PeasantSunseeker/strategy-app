@@ -88,6 +88,7 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	private XYChart.Series cloudData;
 	
 	GPS gps;
+	public static ZoneId zoneId;
 	
 	//region FXML declarations
 	
@@ -174,6 +175,9 @@ public class MainController implements Initializable, MapComponentInitializedLis
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		//TODO get zoneID from GPS
+		zoneId = ZoneId.of("America/New_York");
+		
 		positionsFile = String.format("legs/%s/%s", MainForm.raceChoice, MainForm.legChoice);
 		positions = Position.loadPositions(positionsFile);
 		Elevation.retrieve(positionsFile);
@@ -304,11 +308,10 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		currentWeather = WeatherCaching.getCurrentWeather("current_weather-10_locations");
 		forecasts = WeatherCaching.getWeatherForecast("weather-forecast-10_locations");
 		
-		ZoneId zoneId = ZoneId.of("America/New_York");
 		ZonedDateTime sunriseZoned = currentWeather[0].getSunrise().withZoneSameInstant(zoneId);
 		ZonedDateTime sunsetZoned = currentWeather[currentWeather.length - 1].getSunset().withZoneSameInstant(zoneId);
 //		System.out.println(LocalDateTime);
-//		System.out.println(sunriseZoned);
+		System.out.println(sunriseZoned);
 //		System.out.println(sunsetZoned);
 		double sunrise = sunriseZoned.getHour() + (sunriseZoned.getMinute() / 60.0) + (sunriseZoned.getSecond() / 3600.0);
 		double sunset = sunsetZoned.getHour() + (sunsetZoned.getMinute() / 60.0) + (sunsetZoned.getSecond() / 3600.0);

@@ -85,7 +85,7 @@ public class WeatherCaching {
 		} else {
 			//System.out.println("Error loading forecasts");
 		}
-
+		
 		
 		forecasts = getWeatherForecast(FORECAST_OUTPUT_FILE);
 		
@@ -391,8 +391,8 @@ public class WeatherCaching {
 		
 		int startIndex = 0;
 		WeatherForecast currentLocation;
-		
-		System.out.println("Looking for forecast at " + wanted);
+
+//		System.out.println("Looking for forecast at " + wanted);
 		
 		boolean notFound = true;
 		
@@ -408,20 +408,20 @@ public class WeatherCaching {
 		
 		//our target is within the next six hours. Take the current data, and the nearest forecast, and average them.
 		if (wanted.isBefore(now.plusHours(6))) {
-			
-			System.out.println("Getting current weather and nearest forecast...");
+
+//			System.out.println("Getting current weather and nearest forecast...");
 			float avgClouds = calculateAverage(forecasts.get(index).getCloudPercentages().get(0), weatherCurrents[index].getCloudsPercentage());
 			
 			float avgWindDegrees = calculateAverage(forecasts.get(index).getWindDegrees().get(0), weatherCurrents[index].getWindDirection());
 			
 			float avgWindSpeed = calculateAverage(forecasts.get(index).getWindSpeeds().get(0), weatherCurrents[index].getWindSpeed());
-			
-			
-			System.out.format("\nCurrent Weather:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
-					weatherCurrents[index].getCloudsPercentage(), weatherCurrents[index].getWindDirection(), weatherCurrents[index].getWindSpeed());
-			System.out.println();
-			System.out.format("Nearest Forecast:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
-					forecasts.get(index).getCloudPercentages().get(0), forecasts.get(index).getWindDegrees().get(0), forecasts.get(index).getWindSpeeds().get(0));
+
+
+//			System.out.format("\nCurrent Weather:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
+//					weatherCurrents[index].getCloudsPercentage(), weatherCurrents[index].getWindDirection(), weatherCurrents[index].getWindSpeed());
+//			System.out.println();
+//			System.out.format("Nearest Forecast:\nCloud Cover: %f \n Wind Direction: %f \n Wind Speed: %f\n",
+//					forecasts.get(index).getCloudPercentages().get(0), forecasts.get(index).getWindDegrees().get(0), forecasts.get(index).getWindSpeeds().get(0));
 			
 			
 			avgd = new AveragedWeather(avgClouds, avgWindDegrees, avgWindSpeed);
@@ -429,9 +429,9 @@ public class WeatherCaching {
 		} else if (wanted.isBefore(now.plusDays(3))) {
 			
 			//not within the next six hours. Take the two closest forecasts to wanted (previous and next), and avg them
-			
-			
-			System.out.println("Searching next 3 days worth of forecasts...");
+
+
+//			System.out.println("Searching next 3 days worth of forecasts...");
 			
 			int i = 0;
 			
@@ -440,8 +440,8 @@ public class WeatherCaching {
 				System.out.println("i = " + i);
 				i++;
 			}
-			
-			System.out.println("The next nearest forecast time is " + forecasts.get(index).getTimes().get(i));
+
+//			System.out.println("The next nearest forecast time is " + forecasts.get(index).getTimes().get(i));
 			
 			//take the average between the closest forecast before, and after wanted
 			
@@ -553,7 +553,7 @@ public class WeatherCaching {
 		
 		while (index < forecasts.size()) {
 			if (forecasts.get(index).getLatitude() == latitude && forecasts.get(index).getLongitude() == longitude) {
-				System.out.println("Weather found at index " + index);
+//				System.out.println("Weather found at index " + index);
 				return index;
 			} else {
 				index++;

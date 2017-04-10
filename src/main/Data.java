@@ -7,12 +7,17 @@ import models.*;
 import utilities.GPS;
 import utilities.MasterData;
 import utilities.Position;
+import weather.AveragedWeather;
+import weather.WeatherCaching;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static ui.controllers.MainController.positions;
+import static ui.controllers.MainController.zoneId;
 
 public class Data {
 	static boolean debug = false;
@@ -95,6 +100,7 @@ public class Data {
 		float currentVelocity, previousVelocity;
 		double finalEnergy = 100;
 		boolean speedModified = true;
+		int totalCounter = 0;
 		
 		if (rowData.size() == 0) {
 			for (index = 0; index < positions.length - 1; index++) {
@@ -103,7 +109,8 @@ public class Data {
 			}
 		}
 		
-		while (!equalTolerance(finalEnergy, endingEnergy, 5) && speedModified) {
+		while (!equalTolerance(finalEnergy, endingEnergy, 5) && speedModified && totalCounter < 150) {
+			totalCounter++;
 			//Reset run calculations
 			speedModified = false;
 //			totalBatteryCharge = 100;
@@ -116,8 +123,9 @@ public class Data {
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			
-//			System.out.format("Speed Guess: %f\n", speedGuess);
+			System.out.format("Speed Guess: %f\n", speedGuess);
 			if (debug) {
+//				System.out.format("Speed Guess: %f\n", speedGuess);
 				System.out.format("%5s | %5s | %6s | %6s | %5s | %5s | %4s | %6s | %5s | %5s | %5s | %8s | %5s | %5s | %5s\n",
 						"Distance", "Angle", "Speed", "Grav", "Kin", "Aero", "Roll", "Total", "Start", "Stop",
 						"Solar", "Batt Pow", "Batt Cap", "Batt Change", "Tot Chg");
@@ -149,13 +157,26 @@ public class Data {
 				double gravPower = Gravitational.gravityPower(averageVelocity, weight, roadAngle);
 				double kineticPower = Gravitational.kineticPower(currentVelocity, previousVelocity, distance, weight);
 				double deltaTime = (distance) / averageVelocity;
-				
 				double middleTime = previousTime + (deltaTime / 2);
+				
+				double tempTime = middleTime;
+				ZonedDateTime time = ZonedDateTime.now(zoneId);
+				int hours = (int) tempTime;
+				tempTime = tempTime - hours;
+				int minutes = (int) (tempTime * 60);
+				tempTime = tempTime - (minutes / 60.0);
+				int seconds = (int) (tempTime * 3600);
+				time = time.withHour(hours).withMinute(minutes).withSecond(seconds);
+				AveragedWeather averagedWeather = WeatherCaching.weatherSearch(time, pos.getLatitude(), pos.getLongitude());
+				
+				
 				double sunAngle = Solar.getAngle(dayOfYear, middleTime, pos.getLatitude());
-				//TODO Brodie: update solar power to use cloud cover when available
-				double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude(), 0);
-				//TODO Brodie: update aerodynamic power to use wind when available
-				double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
+
+//				double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude(), 0);
+				double solarPower = Solar.solarPower(dayOfYear, middleTime, pos.getLatitude(), averagedWeather.getAvgCloudPercentage());
+
+//				double aeroPower = Aerodynamic.aerodynamicPower(averageVelocity);
+				double aeroPower = Aerodynamic.aerodynamicPowerWind(averageVelocity, pos.getHeading(), averagedWeather.getAvgWindSpeed(), averagedWeather.getAvgWindDegrees());
 				double rollingPower = Rolling.rollingPower(averageVelocity, weight);
 				totalPower = (gravPower + kineticPower + aeroPower + rollingPower) / Motor.getEfficiency() + Parasitic.getPowerLossDriving();
 				double batteryPower = totalPower - solarPower;
@@ -208,12 +229,15 @@ public class Data {
 				speedGuess += 1;
 			}
 			
-//			System.out.println("Final Energy: " + finalEnergy);
+			if (debug) {
+				System.out.println("Final Energy: " + finalEnergy);
+			}
 
 //			if(Double.isNaN(finalEnergy)){
 //				finalEnergy = 100;
 //			}
 //			speedGuess = (float) (speedGuess * ((finalEnergy - endingEnergy) / endingEnergy));
+//			return rowData;
 		}
 		return rowData;
 	}

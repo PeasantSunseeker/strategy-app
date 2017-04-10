@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ui.controllers.MainController.positions;
+
 /**
  * PROJECT: seniorDesign
  * AUTHOR: Broderick
@@ -89,7 +91,9 @@ public class MainForm extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Exiting Form");
-		Position.savePositions(MainController.positions, MainController.positionsFile);
+		if (positions != null) {
+			Position.savePositions(positions, MainController.positionsFile);
+		}
 		GPS.killTask();
 		Telemetry.killTask();
 	}

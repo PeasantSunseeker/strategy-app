@@ -11,7 +11,10 @@ public class Solar {
 	static double driving = CarConfig.getSolarDriving();
 	
 	public static double solarPower(int dayOfYear, double time, double latitude, double cloudCover) {
-		return maxPower * Math.pow(Math.cos(Math.toRadians(getAngle(dayOfYear, time, latitude))), driving) * (1 - cloudCover);
+//		System.out.println("dayOfYear "+dayOfYear);
+//		System.out.println("time "+time);
+//		System.out.println("cloudCover "+cloudCover);
+		return maxPower * Math.pow(Math.cos(Math.toRadians(getAngle(dayOfYear, time, latitude))), driving) * (1 - (cloudCover / 100.0));
 	}
 	
 	public static double getAngle(int dayOfYear, double time, double latitude) {
