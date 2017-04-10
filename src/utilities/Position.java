@@ -214,7 +214,6 @@ public class Position {
 			
 			for (int i = 0; i < positions.length; i++) {
 				Position pos = positions[i];
-				
 				String line = String.format("%-9s,%-10s,%-10s,%-15.14s,%-13.12s,%-5s,%-10s,%-10s\n", pos.latitude, pos.longitude, pos.elevation, pos.heading, pos.angle, pos.velocity, pos.getElevationFlag(), pos.getVelocityFlag());
 				bufferedWriter.write(line);
 			}
@@ -251,7 +250,7 @@ public class Position {
 				positions[i] = new Position(Float.valueOf(items[0]), Float.valueOf(items[1]), Float.valueOf(items[2]));
 				positions[i].heading = Float.valueOf(items[3]);
 				positions[i].angle = Float.valueOf(items[4]);
-//				positions[i].velocity = Float.valueOf(items[5]);
+				positions[i].velocity = Float.valueOf(items[5]);
 				positions[i].elevationFlag = Flag.valueOf(items[6].trim());
 				positions[i].velocityFlag = Flag.valueOf(items[7].trim());
 				if (i > 0) {

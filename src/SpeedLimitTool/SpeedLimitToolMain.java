@@ -4,10 +4,12 @@ package SpeedLimitTool;
  * Created by adam on 3/25/17.
  */
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class SpeedLimitToolMain extends Application {
@@ -21,6 +23,7 @@ public class SpeedLimitToolMain extends Application {
         stage.setTitle("Speed Limit Tool");
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {
