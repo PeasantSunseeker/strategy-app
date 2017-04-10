@@ -180,7 +180,6 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		alert.setTitle("About");
 		alert.setHeaderText(null);
 		alert.setContentText("Created by:\nAaron Brainard, Adam Hubbell, Broderick Hyman");
-		
 		alert.showAndWait();
 	}
 	

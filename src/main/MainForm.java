@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import ui.controllers.MainController;
 import utilities.GPS;
+import utilities.KmlParser;
 import utilities.Position;
 import utilities.Telemetry;
 
@@ -35,9 +36,15 @@ public class MainForm extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
+		File legFolder = new File("legs");
+//		legFolder.delete();
+		if (!legFolder.exists()) {
+			legFolder.mkdir();
+		}
+		
+		KmlParser.checkLegs();
 		
 		List<String> choices = new ArrayList<>();
-		File legFolder = new File("legs");
 		File[] folders = legFolder.listFiles();
 		for (File folder : folders) {
 			if (folder.isDirectory()) {

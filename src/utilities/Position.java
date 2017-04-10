@@ -125,6 +125,7 @@ public class Position {
 		if (file.exists()) {
 			return;
 		}
+		System.out.println("Creating new file: " + newFileName);
 		System.out.println("convert " + fileName);
 		
 		Position[] positions = new Position[coordinates.size()];

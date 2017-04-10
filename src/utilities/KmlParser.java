@@ -1,6 +1,8 @@
 package utilities;
 
 import de.micromata.opengis.kml.v_2_2_0.*;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +18,14 @@ public class KmlParser {
 	
 	public static void checkLegs() {
 		File folder = new File("kml");
+		if (!folder.exists()) {
+			folder.mkdir();
+			kmlError();
+		}
 		File[] files = folder.listFiles();
+		if (files.length < 1) {
+			kmlError();
+		}
 		for (File file : files) {
 			String[] nameTokens = file.getName().split("\\.(?=[^\\.]+$)");
 			File testFolder = new File("legs/" + nameTokens[0]);
@@ -27,7 +36,7 @@ public class KmlParser {
 		}
 	}
 	
-	public static void getLegs(String filepath) {
+	private static void getLegs(String filepath) {
 		final Kml kml = Kml.unmarshal(new File(filepath));
 		final Document document = (Document) kml.getFeature();
 		String eventName = document.getName();
@@ -47,14 +56,25 @@ public class KmlParser {
 					List<Coordinate> coordinates = lineString.getCoordinates();
 					String newFolderName = String.format("legs/%s", eventName);
 					File directory = new File(newFolderName);
+//					System.out.println(newFolderName);
+//					if (!directory.exists()) {
 					directory.mkdir();
+//					}
 					String newFileName = String.format("legs/%s/%s", eventName, legName);
 					File file = new File(newFileName);
-					if (!file.exists()) {
-						Position.convertCoordinatesToPosition(coordinates, newFileName);
-					}
+					Position.convertCoordinatesToPosition(coordinates, newFileName);
 				}
 			}
 		}
+	}
+	
+	private static void kmlError() {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("KML Error");
+		alert.setHeaderText("KML Error");
+		alert.setContentText(".kml file must be placed inside kml folder");
+		alert.showAndWait();
+		Platform.exit();
+		System.exit(1);
 	}
 }

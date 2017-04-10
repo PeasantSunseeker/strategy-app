@@ -138,7 +138,7 @@ public class WeatherCaching {
 			
 			bufferedWriter.write(String.format("%d\n", positions.length));
 			for (int i = 0; i < positions.length; i++) {
-				
+				System.out.println("Get Current Weather");
 				latitude = positions[i].getLatitude();
 				longitude = positions[i].getLongitude();
 				
@@ -259,7 +259,7 @@ public class WeatherCaching {
 			ZonedDateTime retrieved = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("UTC"));
 			
 			for (int i = 0; i < positions.length; i++) {
-				
+				System.out.println("Get Forecast Weather");
 				latitude = positions[i].getLatitude();
 				longitude = positions[i].getLongitude();
 				//System.out.println(latitude + " " + longitude);
@@ -267,7 +267,7 @@ public class WeatherCaching {
 				hf = owm.hourlyForecastByCoordinates(latitude, longitude);
 				
 				for (int j = 0; j < hf.getForecastCount(); j++) {
-					
+					System.out.println("Forecast: " + j);
 					cloudsPercentage = hf.getForecastInstance(j).getCloudsInstance().getPercentageOfClouds();
 					windSpeed = hf.getForecastInstance(j).getWindInstance().getWindSpeed();
 					windDirection = hf.getForecastInstance(j).getWindInstance().getWindDegree();
