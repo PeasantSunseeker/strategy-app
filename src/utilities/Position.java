@@ -118,7 +118,7 @@ public class Position {
 	
 	public static void convertCoordinatesToPosition(List<Coordinate> coordinates, String fileName) {
 		int count = 10;
-		String smallExtension = String.format("-%d_items", count);
+		String smallExtension = "";//String.format("-%d_items", count);
 		String newFileName = String.format("%s%s.csv", fileName, smallExtension);
 		
 		File file = new File(newFileName);
