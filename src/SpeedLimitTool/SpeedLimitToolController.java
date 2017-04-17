@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * Created by adam on 3/25/17.
+ * Created by Adam on 3/25/17.
  */
 public class SpeedLimitToolController implements Initializable, MapComponentInitializedListener {
 	@FXML
@@ -164,13 +164,7 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 			positions[i].setVelocity(enteredSpeed);
 
 		}
-		String formattedSpeedLimit = String.format("from: %.3f,%.3f\n" +
-						"to: %.3f,%.3f\n" +
-						"Speed Limit: %.0f",
-				ll1.getLatitude(), ll1.getLongitude(), ll2.getLatitude(), ll2.getLongitude(), enteredSpeed
-		);
-		listEntries.add(formattedSpeedLimit);
-		enteredSpeeds.setItems(listEntries);
+		update_speed_list();
 		safeToClose = false;
 		
 		
@@ -189,8 +183,7 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 		fc.setTitle("Select Positions File");
 		File posFile = fc.showOpenDialog(null);
 
-
-		positions = Position.loadPositions(posFile.getName().replace(".csv",""));
+		positions = Position.loadPositions(posFile.getAbsolutePath().replace(".csv",""));
 
 		MVCArray path = new MVCArray();
 		for (Position position : positions) {
@@ -206,10 +199,17 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 
 		polyline = new Polyline(polylineOptions);
 		map.addMapShape(polyline);
+		update_speed_list();
 
+
+		enteredSpeeds.setItems(listEntries);
+	}
+
+	public void update_speed_list(){
 		LatLong start=new LatLong(positions[0].getLatitude(), positions[0].getLongitude());
 		LatLong end;
 		float speed;
+		listEntries.clear();
 		String formattedSpeedLimit;
 		for(int i=0;i<positions.length-1;i++){
 			if(positions[i].getVelocity() != positions[i+1].getVelocity()){
@@ -221,14 +221,18 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 				);
 				listEntries.add(formattedSpeedLimit);
 				start = new LatLong(positions[i+1].getLatitude(),positions[i+1].getLongitude());
-				System.out.println("found a change");
 
 			}
 
 		}
-
+		end = new LatLong(positions[positions.length-1].getLatitude(),positions[positions.length-1].getLongitude());
+		formattedSpeedLimit = String.format("from: %.3f,%.3f\n" +
+						"to: %.3f,%.3f\n" +
+						"Speed Limit: %.0f",
+				start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), positions[positions.length-1].getVelocity()
+		);
+		listEntries.add(formattedSpeedLimit);
 		enteredSpeeds.setItems(listEntries);
-		System.out.println("didit");
 	}
 
 	@FXML
