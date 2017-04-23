@@ -32,7 +32,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="555.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="117.0" prefWidth="555.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="292.0" minWidth="0.0" prefWidth="220.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="426.0" minWidth="10.0" prefWidth="201.0" />
@@ -42,26 +42,14 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label prefHeight="27.0" prefWidth="316.0" text="Shade Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label prefHeight="27.0" prefWidth="324.0" text="Cloud Percentage" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label prefHeight="27.0" prefWidth="318.0" text="Speed Limit (MPH)" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="cloudPctOverride" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Label text="Settings Current" />
                         <Label text="Settings Overrides" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Label fx:id="currentCloudPct" prefHeight="27.0" prefWidth="209.0" text="10%" GridPane.rowIndex="1" />
-                        <Label fx:id="currentShadePct" prefHeight="27.0" prefWidth="209.0" text="5%" GridPane.rowIndex="2" />
-                        <Label fx:id="currentSpeedLimit" prefHeight="27.0" prefWidth="209.0" text="55" GridPane.rowIndex="3" />
-                        <TextField fx:id="shadePctOverride" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="speedLimitOverride" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Label fx:id="currentEndingEnergy" text="20%" GridPane.rowIndex="4" />
-                        <Label text="Route Ending Energy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField fx:id="endingEnergyOverride" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Button fx:id="runSimulation" mnemonicParsing="false" onAction="#runSimulationAction" text="Rerun Simulation" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label fx:id="currentEndingEnergy" text="20%" GridPane.rowIndex="1" />
+                        <Label text="Route Ending Energy" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="endingEnergyOverride" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="runSimulation" mnemonicParsing="false" onAction="#runSimulationAction" text="Rerun Simulation" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                     </children>
                 </GridPane>
                 <TableView fx:id="table" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
