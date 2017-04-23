@@ -41,13 +41,18 @@ public class GPS {
 			public Void call() {
 				System.out.println("Start GPS Task");
 //				updateGPS();
+				try {
+					sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				for (int i = 1; i < positions.length - 1; i++) {
 //					System.out.println("Sleep");
 					if (task.isCancelled()) {
 						return null;
 					}
 					try {
-						sleep(5 * 30 * 100 / positions.length);
+						sleep(2 * 30 * 1000 / positions.length);
 					} catch (InterruptedException e) {
 						if (task.isCancelled()) {
 							return null;
@@ -61,7 +66,7 @@ public class GPS {
 			}
 		};
 
-//		new Thread(task).start();
+		new Thread(task).start();
 	}
 	
 	private void updateGPS() {

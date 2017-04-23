@@ -344,76 +344,76 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		
 		
 		//region TextView handlers for manual override fields
-		cloudPctOverride.setOnKeyReleased(event -> {
-			if (event.getCode() == KeyCode.ENTER) {
-				
-				System.out.println("override cloud percentage");
-				
-				if (validatePercentage(cloudPctOverride.textProperty())) {
-					clouds = cloudPctOverride.textProperty();
-					currentCloudPct.textProperty().setValue(clouds.getValue() + "%");
-					
-					//TODO Aaron: hook cloud pct value into model data
-					
-				}
-				
-				cloudPctOverride.clear();
-				
-				
-			} else {
-			
-			}
-		});
+//		cloudPctOverride.setOnKeyReleased(event -> {
+//			if (event.getCode() == KeyCode.ENTER) {
+//
+//				System.out.println("override cloud percentage");
+//
+//				if (validatePercentage(cloudPctOverride.textProperty())) {
+//					clouds = cloudPctOverride.textProperty();
+//					currentCloudPct.textProperty().setValue(clouds.getValue() + "%");
+//
+//					//TODO Aaron: hook cloud pct value into model data
+//
+//				}
+//
+//				cloudPctOverride.clear();
+//
+//
+//			} else {
+//
+//			}
+//		});
 		
-		shadePctOverride.setOnKeyPressed(event -> {
-			if (event.getCode() == KeyCode.ENTER) {
-				
-				System.out.println("override shade percentage");
-				
-				if (validatePercentage(shadePctOverride.textProperty())) {
-					shade = shadePctOverride.textProperty();
-					currentShadePct.textProperty().setValue(shade.getValue() + "%");
-					
-					//TODO Aaron: hook shade pct value into model data
-					
-					
-				} else {
-					System.out.println("Not a valid number");
-				}
-				
-				
-				shadePctOverride.clear();
-			} else {
-			
-			}
-			
-			
-		});
-		
-		speedLimitOverride.setOnKeyPressed(event -> {
-			if (event.getCode() == KeyCode.ENTER) {
-				
-				System.out.println("override speed limit");
-				
-				if (validatePercentage(speedLimitOverride.textProperty())) {
-					speedLimit = speedLimitOverride.textProperty();
-					currentSpeedLimit.textProperty().setValue(speedLimit.getValue());
-					
-					//TODO Aaron: hook speed limit value into simulation
-					
-				} else {
-					System.out.println("Not a valid number");
-				}
-				
-				speedLimitOverride.clear();
-				
-				
-			} else {
-			
-			}
-			
-			
-		});
+//		shadePctOverride.setOnKeyPressed(event -> {
+//			if (event.getCode() == KeyCode.ENTER) {
+//
+//				System.out.println("override shade percentage");
+//
+//				if (validatePercentage(shadePctOverride.textProperty())) {
+//					shade = shadePctOverride.textProperty();
+//					currentShadePct.textProperty().setValue(shade.getValue() + "%");
+//
+//					//TODO Aaron: hook shade pct value into model data
+//
+//
+//				} else {
+//					System.out.println("Not a valid number");
+//				}
+//
+//
+//				shadePctOverride.clear();
+//			} else {
+//
+//			}
+//
+//
+//		});
+//
+//		speedLimitOverride.setOnKeyPressed(event -> {
+//			if (event.getCode() == KeyCode.ENTER) {
+//
+//				System.out.println("override speed limit");
+//
+//				if (validatePercentage(speedLimitOverride.textProperty())) {
+//					speedLimit = speedLimitOverride.textProperty();
+//					currentSpeedLimit.textProperty().setValue(speedLimit.getValue());
+//
+//					//TODO Aaron: hook speed limit value into simulation
+//
+//				} else {
+//					System.out.println("Not a valid number");
+//				}
+//
+//				speedLimitOverride.clear();
+//
+//
+//			} else {
+//
+//			}
+//
+//
+//		});
 		
 		endingEnergyOverride.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.ENTER) {
@@ -650,20 +650,20 @@ public class MainController implements Initializable, MapComponentInitializedLis
 		TableColumn<MasterData, String> velocityColumn = new TableColumn("Speed (km/h)");
 		velocityColumn.setCellValueFactory(temp -> temp.getValue().getVelocity());
 		
-		TableColumn<MasterData, String> roadAngleColumn = new TableColumn("Road Angle");
-		roadAngleColumn.setCellValueFactory(temp -> temp.getValue().getRoadAngle());
+//		TableColumn<MasterData, String> roadAngleColumn = new TableColumn("Road Angle");
+//		roadAngleColumn.setCellValueFactory(temp -> temp.getValue().getRoadAngle());
 		
-		TableColumn<MasterData, String> elevationColumn = new TableColumn("Elevation");
-		elevationColumn.setCellValueFactory(temp -> temp.getValue().getElevation());
+//		TableColumn<MasterData, String> elevationColumn = new TableColumn("Elevation");
+//		elevationColumn.setCellValueFactory(temp -> temp.getValue().getElevation());
 		
 		TableColumn<MasterData, String> batteryChargeColumn = new TableColumn("Bat Charge");
 		batteryChargeColumn.setCellValueFactory(temp -> temp.getValue().getBatteryCharge());
 		
-		TableColumn<MasterData, String> totalChargeColumn = new TableColumn("Total Charge Used");
+		TableColumn<MasterData, String> totalChargeColumn = new TableColumn("Total Charge");
 		totalChargeColumn.setCellValueFactory(temp -> temp.getValue().getTotalCharge());
 		
 		table.setItems(displayData);
-		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, elevationColumn, roadAngleColumn, batteryChargeColumn, totalChargeColumn);
+		table.getColumns().addAll(startTimeColumn, endTimeColumn, velocityColumn, distanceColumn, batteryChargeColumn, totalChargeColumn);
 		
 		//Screen screen = Screen.getPrimary();
 		//Rectangle2D bounds = screen.getVisualBounds();
