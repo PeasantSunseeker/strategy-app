@@ -1,12 +1,21 @@
--JFreeChart: Free Java chart library
-	
-	http://www.jfree.org/jfreechart/
+Development Tools
+-IntelliJ IDEA
+	https://www.jetbrains.com/idea/
+-Oracle Java
+	http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html
 
--Sunseeker team's Java API
+APIs
+-Open Weather Map API key (free version)
+	https://openweathermap.org/api
+-Google Maps API (free version)
+	https://developers.google.com/maps/
 
-	-RXTXcomm.jar
-	-rxtxSerial.dll
-	-Telemetry.jar
-
--Weather Underground API key (free version)
-
+Libraries
+-GMapsFX
+	-For showing a Google Map in a JavaFX window
+	http://rterp.github.io/GMapsFX/
+-JavaAPIforKML
+	-For parsing the kml file
+	https://labs.micromata.de/projects/jak.html
+-Open Weather Map Java library
+	https://github.com/migtavares/owmClient

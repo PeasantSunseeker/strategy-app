@@ -1,9 +1,9 @@
--Ownership will be transferred to sunseeker team at completion.
+-Ownership will be transferred to Sunseeker RSO team at completion.
 
--This will allow for control of the code to be retained by the team. 
+-This will allow for control of the code to be retained by the team.
 
--This will allow for changes to be made over the course of the sunseeker lifetime by the team and possibly other senior design projects.
+-This will allow for changes to be made over the course of the Sunseeker lifetime by the team and possibly other senior design projects.
 
 -We have not chosen open-source as this tool will give a competitive edge to the WMU team.
 
--We do not believe an NDA is necessary as there is no market for the sale of this source-code. However, this needs to be discussed with the client.
+-No NDA is necessary.
