@@ -161,7 +161,7 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 		}
 
 		for (int i = Math.min(mark1idx, mark2idx); i <= Math.max(mark1idx, mark2idx); i++) {
-			positions[i].setVelocity(enteredSpeed);
+			positions[i].setVelocity(enteredSpeed*(float) 1.60934);
 
 		}
 		update_speed_list();
@@ -207,17 +207,17 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 
 	public void update_speed_list(){
 		LatLong start=new LatLong(positions[0].getLatitude(), positions[0].getLongitude());
-		LatLong end;
+		LatLong end = null;
 		float speed;
 		listEntries.clear();
 		String formattedSpeedLimit;
 		for(int i=0;i<positions.length-1;i++){
 			if(positions[i].getVelocity() != positions[i+1].getVelocity()){
-				end = new LatLong(positions[i].getLatitude(), positions[i].getLongitude());
+				end = new LatLong(positions[i+1].getLatitude(), positions[i+1].getLongitude());
 				formattedSpeedLimit = String.format("from: %.3f,%.3f\n" +
 								"to: %.3f,%.3f\n" +
 								"Speed Limit: %.0f",
-						start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), positions[i].getVelocity()
+						start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), positions[i].getVelocity()/1.60934
 				);
 				listEntries.add(formattedSpeedLimit);
 				start = new LatLong(positions[i+1].getLatitude(),positions[i+1].getLongitude());
@@ -225,13 +225,16 @@ public class SpeedLimitToolController implements Initializable, MapComponentInit
 			}
 
 		}
-		end = new LatLong(positions[positions.length-1].getLatitude(),positions[positions.length-1].getLongitude());
-		formattedSpeedLimit = String.format("from: %.3f,%.3f\n" +
-						"to: %.3f,%.3f\n" +
-						"Speed Limit: %.0f",
-				start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), positions[positions.length-1].getVelocity()
-		);
-		listEntries.add(formattedSpeedLimit);
+		if(start.getLatitude() == end.getLatitude() && start.getLongitude() == end.getLongitude()){}
+		else {
+			end = new LatLong(positions[positions.length - 1].getLatitude(), positions[positions.length - 1].getLongitude());
+			formattedSpeedLimit = String.format("from: %.3f,%.3f\n" +
+							"to: %.3f,%.3f\n" +
+							"Speed Limit: %.0f",
+					start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude(), positions[positions.length - 1].getVelocity() / 1.60934
+			);
+			listEntries.add(formattedSpeedLimit);
+		}
 		enteredSpeeds.setItems(listEntries);
 	}
 
