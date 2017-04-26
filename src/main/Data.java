@@ -115,11 +115,12 @@ public class Data {
 			speedModified = false;
 //			totalBatteryCharge = 100;
 			startTime = 9;
-			if (GPS.positionIndex == 1) {
-				totalBatteryCharge = 90;
-			} else {
-				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex - 1).getActualTotalCharge().getValue());
-			}
+//			if (GPS.positionIndex == 1) {
+//				totalBatteryCharge = 90;
+//			} else {
+//				totalBatteryCharge = Double.parseDouble(rowData.get(GPS.positionIndex - 1).getActualTotalCharge().getValue());
+//			}
+			totalBatteryCharge = 90;
 			totalDistance = 0;
 //			rowData = new ArrayList<MasterData>();
 			

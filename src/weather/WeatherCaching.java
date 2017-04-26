@@ -437,7 +437,7 @@ public class WeatherCaching {
 			
 			//go to the index of the forecast just before wanted
 			while (wanted.isAfter(forecasts.get(index).getTimes().get(i))) {
-				System.out.println("i = " + i);
+//				System.out.println("i = " + i);
 				i++;
 			}
 
