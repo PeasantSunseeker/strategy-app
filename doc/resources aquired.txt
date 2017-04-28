@@ -3,12 +3,16 @@ Development Tools
 	https://www.jetbrains.com/idea/
 -Oracle Java
 	http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html
+-Scenebuilder
+    http://www.oracle.com/technetwork/java/javase/downloads/javafxscenebuilder-1x-archive-2199384.html
+
 
 APIs
 -Open Weather Map API key (free version)
 	https://openweathermap.org/api
 -Google Maps API (free version)
 	https://developers.google.com/maps/
+
 
 Libraries
 -GMapsFX
